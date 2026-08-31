@@ -2,7 +2,7 @@
 
 > Merise-style conceptual data model for SynFactu, referenced by section 4 of `Spécification fonctionnelle v2.md`.
 >
-> V2 supersedes `MCD.md`. It applies the 40 decisions of `../work/Décisions v2.md`; decision references appear as *(D-nn)*. Domain terms with no clean English equivalent are kept as-is: TJM, URSSAF, portage, CFP, versement libératoire.
+> V2 supersedes `_hist/MCD.md`. It applies the 40 decisions of `../work/Décisions v2.md`; decision references appear as *(D-nn)*. Domain terms with no clean English equivalent are kept as-is: TJM, URSSAF, portage, CFP, versement libératoire.
 >
 > **Phase markers**: entities marked *(Phase 2)* are designed now and built later. They are part of the model from the start so nothing has to be retrofitted.
 

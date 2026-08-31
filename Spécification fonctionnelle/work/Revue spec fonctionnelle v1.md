@@ -1,6 +1,6 @@
 # SynFactu — Review of the Functional Specification (V1)
 
-> Review of `../docs/Spécification fonctionnelle v1.md`, `../docs/MCD.md` and `Bilan et points ouverts.md`, cross-checked against `Besoin/Description besoin.txt`, `Besoin/Questions-Réponses.md`, `Besoin/Backlog.md`, `Tech stack/synfactu tech stack.md` and the two example workbooks (`Exemple 2026-Comptabilité v2.xlsx`, `Exemple time Tracker - 2026.xlsx`).
+> Review of `../docs/_hist/Spécification fonctionnelle v1.md`, `../docs/_hist/MCD.md` and `Bilan et points ouverts.md`, cross-checked against `Besoin/Description besoin.txt`, `Besoin/Questions-Réponses.md`, `Besoin/Backlog.md`, `Tech stack/synfactu tech stack.md` and the two example workbooks (`Exemple 2026-Comptabilité v2.xlsx`, `Exemple time Tracker - 2026.xlsx`).
 >
 > Findings are graded: **[A] blocking** (the model cannot produce a stated feature — fix before coding), **[B] missing scope** (in the source need, absent from the spec), **[C] contradiction / ambiguity** (fixable by a sentence, but must be decided).
 
@@ -168,7 +168,7 @@ Phase 3, but zero functional content: what is imported, how events map to missio
 
 **C17. §11 "The V1 modeling round of open points is resolved" is too strong** given A1–A10 and B1–B15.
 
-**C18. Broken document references.** `Bilan et points ouverts.md` points to `Spécification/Spécification fonctionnelle.md`, `Spécification/Spécification technique.md`, `Spécification/MCD.md`. The real paths are `Spécification fonctionnelle/docs/Spécification fonctionnelle v1.md`, `Spécification technique/Spécification technique v1.md` and `Spécification fonctionnelle/docs/MCD.md`.
+**C18. Broken document references.** `Bilan et points ouverts.md` points to `Spécification/Spécification fonctionnelle.md`, `Spécification/Spécification technique.md`, `Spécification/MCD.md`. The real paths are `Spécification fonctionnelle/docs/_hist/Spécification fonctionnelle v1.md`, `Spécification technique/Spécification technique v1.md` and `Spécification fonctionnelle/docs/_hist/MCD.md`.
 
 **C19. §2.2 "Full time-based: with a TJM, off site is billed"** is unclear — presumably "off-site work is billed too, unlike `temps sur site`". Reword.
 

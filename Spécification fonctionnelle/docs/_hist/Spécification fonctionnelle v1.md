@@ -183,4 +183,4 @@ Import the history from the existing Excel workbooks into the single multi-year 
 ---
 
 ## 11. Open Questions
-The V1 modeling round of open points is resolved (see "../work/Bilan et points ouverts.md" and "MCD.md" section 5). Remaining, deliberately deferred: the assistant permission matrix, the training subcontracted/direct classification and the full "Déclaration d'Activité de Formation" tooling (V1 only has the `is_training` flag), and the scope/timing of the Excel history migration.
+The V1 modeling round of open points is resolved (see "../../work/Bilan et points ouverts.md" and "MCD.md" section 5). Remaining, deliberately deferred: the assistant permission matrix, the training subcontracted/direct classification and the full "Déclaration d'Activité de Formation" tooling (V1 only has the `is_training` flag), and the scope/timing of the Excel history migration.

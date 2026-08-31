@@ -7,9 +7,9 @@ Documents de reference :
 - Besoin : `Besoin/Description besoin.txt`
 - Decisions de cadrage : `Besoin/Questions-Réponses.md`
 - Resume metier : `Besoin/Résumé de Claude.txt`
-- Spec fonctionnelle : `Spécification fonctionnelle/docs/Spécification fonctionnelle v1.md` (V1)
+- Spec fonctionnelle : `Spécification fonctionnelle/docs/_hist/Spécification fonctionnelle v1.md` (V1)
 - Spec technique : `Spécification technique/Spécification technique v1.md` (V1)
-- Modele de donnees : `Spécification fonctionnelle/docs/MCD.md`
+- Modele de donnees : `Spécification fonctionnelle/docs/_hist/MCD.md`
 
 ## Spec fonctionnelle v1
 

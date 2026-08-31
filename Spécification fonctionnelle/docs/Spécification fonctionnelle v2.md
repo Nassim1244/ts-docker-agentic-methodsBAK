@@ -2,7 +2,7 @@
 
 > Billing and dashboard software for a freelance consultant operating under two regimes: French micro-entreprise and salary portage (portage salarial). This document covers the **functional** scope. The data model is in `MCD v2.md`; technical choices are in `Spécification technique/Spécification technique v1.md`.
 >
-> V2 supersedes `Spécification fonctionnelle v1.md`. It applies the 40 decisions recorded in `../work/Décisions v2.md`, which resolved the 33 findings of `../work/Revue spec fonctionnelle v1.md`. Decision references appear as *(D-nn)*.
+> V2 supersedes `_hist/Spécification fonctionnelle v1.md`. It applies the 40 decisions recorded in `../work/Décisions v2.md`, which resolved the 33 findings of `../work/Revue spec fonctionnelle v1.md`. Decision references appear as *(D-nn)*.
 >
 > Domain terms with no clean English equivalent are kept as-is: TJM (daily rate), URSSAF, portage, CFP, versement libératoire, HT.
 
