@@ -1,0 +1,70 @@
+- # Workflow
+  - Read this before starting or resuming any feature, and before dispatching any subagent.
+  - Canonical home for: the agent sequence, the gates, retry policy, handoff rules, entry points.
+  - Rationale for the gate design: see D-015.
+- # Agent roster
+  - `@product-owner` - challenges the request and writes the functional spec. See `agents/agent_product_owner.md`.
+  - `@designer` - owns `design/<index>/`. See `agents/agent_designer.md`.
+  - `@architect` - fills the technical spec, records D-XXX, owns `prisma/schema.prisma` and migrations. See `agents/agent_architect.md`.
+  - `@orchestrator` - drives the implementation chain. See `agents/agent_orchestrator.md`.
+  - `@coder` - production code only. Loads `policy_architecture.md`, `policy_coding_guidelines.md`, `policy_security.md`.
+  - `@tester` - sole author of `tests/` and `e2e/`. Loads `policy_testing.md`.
+  - `@reviewer` - compliance and security review. See `agents/agent_reviewer.md`.
+  - `@committer` - stages and commits, and cuts releases. Loads `policy_commits.md`.
+  - `@debugger` - bug entry point. See `agents/agent_debugger.md`.
+  - `@auditor` - whole-tree health check, on request. See `agents/agent_auditor.md`.
+  - `@dependency` - vulnerability triage, on request. See `agents/agent_dependency.md`.
+- # Sequence for a new feature
+  - ## Phase A - Definition (driven by the user)
+    - 1. `@product-owner` interviews the user, challenges scope, writes the FUNCTIONAL SPEC section of `specs/NNN-<name>.md`.
+      - **G1 - halts. The user approves the functional spec before anything else runs.**
+    - 2. `@designer` runs only if the feature has a user interface. Produces `design/NNN/`.
+      - **G2 - halts. The user approves the design.**
+      - Skip for a pure back-end feature, and record the skip in the spec's Design field as "N/A".
+    - 3. `@architect` fills the TECHNICAL SPEC section, records any new D-XXX, and proposes any Prisma schema change and migration.
+      - **G3 - halts by construction. The architect presents options and waits for the user's answers, including approval of any migration.**
+  - ## Phase B - Implementation (driven by the orchestrator)
+    - 4. `@orchestrator` reads the completed spec and emits an ordered plan, then dispatches:
+    - 5. `@coder` writes production code only.
+    - 6. `@tester` writes tests for that feature.
+      - **G5 - machine gate. `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` must pass. Proceeds automatically when green.**
+    - 7. `@reviewer` checks policy compliance, security and acceptance criteria.
+      - **G6 - judgment gate. Proceeds automatically on READY. On CHANGES NEEDED, see Retry policy.**
+    - 8. `@committer` runs the pre-commit checks and commits.
+      - **G8 - machine gate, inside the committer. See `policy_commits.md` -> Before committing.**
+- # Sequence for a bug
+  - 1. `@debugger` reproduces the bug and writes one failing test that captures it.
+  - 2. `@orchestrator` takes over from step 5 above: `@coder`, `@tester`, `@reviewer`, `@committer`.
+  - No spec, no design and no architect step, unless the fix requires a schema change or contradicts an existing D-XXX. In that case stop and run `@architect` first.
+- # Gates
+  - G1 - the functional spec is correct and complete. Human. Halts.
+  - G2 - the design is approved. Human. Halts.
+  - G3 - the architecture and migration answers are given. Human. Halts by construction.
+  - G5 - format, lint, types and tests are all green. Machine. Proceeds when green.
+  - G6 - the reviewer's verdict. Judgment. Proceeds on READY.
+  - G8 - the pre-commit checks. Machine. Proceeds when green.
+  - There is no G4 or G7. They were the migration approval and the security clearance; the first folded into G3 when `@architect` took ownership of the schema, the second into G6 when `@reviewer` took ownership of the security review.
+  - A human gate means the orchestrator stops and reports, and does not resume until the user answers.
+  - A machine gate is a command's exit code. It is objective and reproducible, so the orchestrator may retry it without asking.
+  - A judgment gate is an agent's verdict. It is only as reliable as the policies backing it, which is why the reviewer must cite the specific rule behind every finding.
+- # Retry policy
+  - On a failed G5 or a CHANGES NEEDED at G6, the orchestrator dispatches `@coder` again with the full failure report attached.
+  - Maximum two retries. On the third failure the orchestrator halts, reports what was attempted and what still fails, and asks the user how to proceed.
+  - A retry never skips `@tester`. If the failure was a broken test, `@tester` fixes the test; if it was broken behaviour, `@coder` fixes the code. The orchestrator decides which, and says why.
+  - The orchestrator never edits code itself to make a gate pass.
+- # Handoff rules
+  - Pass file paths between agents, never inlined file content. The receiving agent reads what it needs.
+  - Every dispatch names: the spec path, the design folder path if any, the gate the agent is working toward, and the retry number if this is a retry.
+  - An agent that cannot complete its task stops and reports. It does not take over another agent's role.
+  - `@coder` never writes tests. `@tester` never writes production code. `@reviewer` and `@auditor` never write anything.
+  - Only `@architect` edits `prisma/schema.prisma` and `prisma/seed.ts`. Only `@committer` runs `git commit`.
+- # Spec numbering
+  - Specs are numbered sequentially from `001`. The number is allocated by `@product-owner` as the next unused index in `specs/`.
+  - The design folder shares the index: `specs/007-payments.md` pairs with `design/007/`.
+- # When to stop and ask
+  - The request contradicts an existing D-XXX.
+  - The spec's acceptance criteria cannot be tested as written.
+  - A migration would drop or retype a column holding data.
+  - A new dependency is needed that is not in `policy_techstack.md`.
+  - A Route Handler is needed outside the closed list in D-003.
+  - Two retries have not cleared a gate.

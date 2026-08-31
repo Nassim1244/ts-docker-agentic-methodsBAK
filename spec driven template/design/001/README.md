@@ -1,0 +1,62 @@
+- # Design 001 - Greetings
+  - Supplied with the template. Treated as approved at G2.
+  - Serves as the worked example of what `agents/agent_designer.md` expects a design folder to contain.
+- # Screens
+  - ## Greetings
+    - Route: `/greetings`.
+    - Purpose: let a signed-in user record a short message and see the ones they have already recorded.
+- # Layout
+  - Single column, centred, maximum width comfortable for reading (roughly 640 px).
+  - Top to bottom:
+    - Page heading, level 1: "Greetings".
+    - One line of supporting text stating the page records short messages visible only to their author.
+    - The compose form.
+    - The list.
+- # Content
+  - Compose form: one text input labelled "Message", one submit button labelled "Add greeting".
+  - List item: the message text, and the creation date rendered as a short absolute date in the user's locale. For an administrator, a delete control aligned to the trailing edge.
+- # Components
+  - `Card` wrapping the whole page body.
+  - `Input` and `Label` for the message field.
+  - `Button` for submit, variant default.
+  - `Button` variant ghost with a trash icon for delete, visible to administrators only.
+  - `AlertDialog` for the delete confirmation.
+  - `Skeleton` for the loading state.
+  - No new primitive is required.
+- # States
+  - ## Loading
+    - Three `Skeleton` rows matching the height and spacing of a list item. The compose form renders immediately and is usable; it does not wait on the list.
+  - ## Empty
+    - Replaces the list. Heading: "No greetings yet". One line: "Add your first one above." The message field takes focus on load.
+  - ## Populated
+    - The list, most recent first. Each item separated by a hairline divider.
+  - ## Partial
+    - Not applicable. There is no derived or reconciled data on this screen.
+  - ## Error
+    - The list fails to load: an inline alert reading "Could not load your greetings." with a retry control. The compose form stays usable.
+    - The submission fails for a reason other than validation: an inline alert above the form reading "Could not save your greeting. Try again." The typed message is preserved in the field.
+    - No technical detail, no error code, no stack trace is ever shown.
+  - ## Forbidden
+    - A non-administrator does not see the delete control at all. Hidden, not disabled: a disabled control would advertise a capability the user will never have.
+  - ## Saving
+    - The submit button shows a pending state and is disabled. The message field stays enabled so the user can still correct it.
+  - ## Saved
+    - The field clears, focus returns to it, and the new item appears at the top of the list.
+- # Interaction detail
+  - Validation fires on submit, not on every keystroke. The message is trimmed before validation, so whitespace alone is rejected.
+  - The validation message appears directly below the field, is associated with it programmatically, and is announced to assistive technology.
+  - Submitting with the Enter key from the message field is equivalent to pressing the button.
+  - Delete opens the confirmation dialog. Confirming deletes; cancelling returns focus to the delete control that opened it. The action is not undoable, and the dialog says so.
+  - After any action the user stays on `/greetings`. There is no navigation.
+- # Keyboard
+  - Tab order: message field, submit button, then each list item's delete control in list order.
+  - The message field takes focus on page load, so a user can type immediately without reaching for the mouse.
+  - The confirmation dialog traps focus and closes on Escape.
+- # Responsive
+  - Below the tablet breakpoint the card loses its horizontal padding and spans the full width. The list stays a single column at every size, so nothing collapses.
+- # Accessibility
+  - Heading hierarchy: `h1` "Greetings", `h2` on the empty state only. No level is skipped.
+  - The message field has a visible `Label`, not a placeholder standing in for one.
+  - The delete control has an accessible name including the greeting it deletes, not merely "Delete".
+  - The validation error is linked to the field with `aria-describedby` and `aria-invalid`.
+  - Nothing relies on colour alone: the error state pairs its colour with text and an icon.

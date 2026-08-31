@@ -1,0 +1,164 @@
+Contexte :
+Création d'une spécification pour un logiciel de gestion de la facturation avec tableau de bord.
+
+"Exemple 2026-Comptabilité v2.xlsx"
+C'est le fichier que j'utilise actuellement.
+Il marche bien mais :
+ - Il n'est pas propre : certains essais d'évolutions n'ont pas été nettoyé
+ - Les stats et graphiques ne sont pas là.
+ - Il n'y a qu'une seule année alors qu'il faut ABSOLUMENT intégrer toutes les années dans la même BDD.
+
+# Différent types de facturation
+J'ai de la facturation en micro entreprise et de la facturation via société de portage salariale.
+Il faut m'aider pour ces deux types.
+
+# Besoin général
+## Grosso modo, c'est du CRUD d'infos financières
+Pouvoir saisir les informations facilement et rapidement
+Pouvoir visualiser la donnée : temporellement (un mois, une année), par client, par type, etc.
+Pouvoir générer des statistiques : moyenne annuel, etc.
+Pouvoir générer des graphiques : pour suivre l'évolution
+
+## Une autre partie c'est le suivi entre la facturation et les paiements.
+Pouvoir suivre ce qui est payé et lié à la facture / déclaration portage.
+Pouvoir générer des statistiques : délai de paiement moyen, etc.
+
+## Brut vs net
+L'outils doit permettre de gérer des estimatifs de différents types de passage du brut au net.
+Exemple : microentreprise ~25%, portage ~50%
+Puis quand le paiement est là on enlève l'estimation
+
+Il faudra pouvoir suivre l'évolution du brut et du net : stats + graphiques.
+
+# Pour les clients (feuille clients)
+## Partenaires vs clients finaux
+Je travaille pour des partenaires qui me mettent en relation avec des clients finaux.
+Il faut donc pouvoir faire la distinction
+
+=> A la création d'un client, je pense qu'il faut pouvoir déclarer si c'est via partenaire ou non, et sélectionner le partenaire le cas échéant.
+
+Pour un client final et/ou partenaire, il faut pouvoir avoir plusieurs TJM selon la presta.
+Exemple : Yanet
+
+# Pour les missions
+## Plusieurs types
+ - Factu au temps passé avec TJM
+ - Facturation d'intervention devant client.
+	* Exemple : Espace Repro : paiement pour le temps devant les clients
+	=> Besoin de tracker le temps passé non facturé pour calculer un Taux de facturation réel (vs TJM facturé).
+ - Factution au forfait :
+	* Cout global
+	=> Besoin de connaitre le TJM réel
+
+# Pour la formation
+## Sous traitance ou non
+Déclarer si c'est en sous traitance ou en direct.
+Si c'est en direct, on ajoutera plus tard une fonctionnalité de classification pour la Déclaration d'Activité de Formation en France.
+## Suivi du temps ("Exemple time Tracker - 2026.xlsx")
+Je déclare mois par mois comme dans le fichier xlsx.
+Il faut donc que je puisse facilement déclarer mes heures dans le SW.
+A terme, il y aura une lecture de mon Google Agenda pour faire le pré-remplissage.
+
+# Reprise d'historique
+Je veux reprendre l'historique de mes fichiers Excel.
+=> A discuter plus tard
+
+# Consolidation
+Je dois pouvoir facturer facilement mes partenaires.
+Ca veut dire avoir une vu du type :
+Partenaire	DigitalEase		
+Taux horaire	 100,00 € 	TJM	 700 € 
+"Mois de facturation /
+          Semaine de travail"	Tps Heures	Tps Jours	 Montant HT 
+2026.04	18,25 h	2,61 j	 1 825,00 € 
+ELA SW	9,50 h	1,36 j	 950,00 € 
+26.03	3,50 h	0,50 j	 350,00 € 
+26.04	6,00 h	0,86 j	 600,00 € 
+Léguméo	8,75 h	1,25 j	 875,00 € 
+26.12	4,25 h	0,61 j	 425,00 € 
+26.13	3,50 h	0,50 j	 350,00 € 
+26.14	1,00 h	0,14 j	 100,00 € 
+Grand Total	18,25 h	2,61 j	 1 825,00 € 
+
+Et générer le texte de facturation :
+"
+ Détail du mois : Avril 2026 
+ Client : ELA SW : 9,5h - soit 1,36 j 
+   - Semaine 03 : 3,5h - soit 0,5 j 
+   - Semaine 04 : 6h - soit 0,86 j 
+ Client : Léguméo : 8,75h - soit 1,25 j 
+   - Semaine 12 : 4,25h - soit 0,61 j 
+   - Semaine 13 : 3,5h - soit 0,5 j 
+   - Semaine 14 : 1h - soit 0,14 j 
+"
+
+## Gestion URSSAF pour la micro entreprise
+Il faudra un CRUD pour le paiement URSSAF :
+Avec 3 saisies : 
+ - Cotisations + CFP = Impots société
+ - Versement libératoire = Impot revenu personnel
+
+# Affichages
+## Vue déclaration portage
+Il y aura des vues comme la feuille : "Déclaration portage"
+Elle permet de savoir ce que je ventile comme facturation pour chaque client.
+
+## Vue facturation microentreprise
+Il y aura des vues comme la feuille : "Factu micro"
+Mais en plus simplifié.
+Car j'ai essayé de regroupé microentreprise et portage et c'était une erreur.
+
+## Vue paiements
+Il faudra une vue pour déclarer les paiements et les liés :
+ - A une facture de micro
+ - A une paye de portage
+
+# Gestion des utilisateurs
+Une gestion des utilisateurs sera implémentée plus tard.
+Il faut donc la prévoir dès le début :
+ - Les administrateurs peuvent tout voir.
+ - Un assistant administratif et financier externalisé pourra être utilisateur :
+Il pourra gérer de la saisie de temps passé, URSAFF, etc.
+Il n'aura pas accès à toutes les fonctionnalités d'historique, par exemple.
+Ce sera à préciser plus tard car j'en ai pas la vision précise.
+
+# Misc
+## Missions inactives
+Pour simplifier la saisie, les missions peuvent être déclarées inactives.
+Ainsi, elles ne sont pas proposées dans les listes lors de la saisie.
+
+## Le logiciel doit m'aider à gérer les paiements plusieurs fois.
+Certains clients de micro ou en portage me demandent des étalements de paiement, je dois pouvoir gérer ça.
+Il doit y avoir un encours à facturer et la facturation réelle.
+
+## Intégration IA
+Dans le futur, il devra être possible d'analyser les données avec l'IA.
+Soit par API vers un fournisseur (Mistral).
+soit par API vers Ollama.
+
+## Import de données
+Il sera nécessaire de pouvoir importer des données au format CSV.
+1. Le comportement sera le suivant. On lit un fichier CSV avec ses colonnes.
+2. On map les colonnes aux éléments de la base de données.
+3. On fait un dry run, juste pour montrer à l'utilisateur ce qui va se passer.
+4. L'utilisateur valide à la fin.
+On fera ça dans un temps ultérieur, mais il faut le prévoir tout de suite.
+
+## Export de données
+Il faudra pouvoir exporter les données pour faire des backups.
+Soit format CSV soit JSON.
+
+## Rapport PDF des graphiques et statistiques
+J'aimerais bien qu'on aille jusqu'à un outil d'export de PDF.
+Ce serait quelque chose où on choisit un titre, dessous on choisit un graphique ou un tableau.
+Dans un premier temps, je pense qu'on laisserait l'utilisateur mettre les sauts de page manuellement pour éviter des calculs compliqués.
+CA serait en WYSIWIG.
+Lors de l'export, la pagination doit être respectée.
+
+## Historique
+J'aimerais bien que une historisation des données.
+Tout simplement en exportant en interne du JSON par exemple.
+L'utilisateur peut rappeler une version précédente avec le diff entre les deux.
+
+
+

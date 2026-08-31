@@ -1,0 +1,112 @@
+- # Bootstrap
+  - Run this once, on an empty repository holding only the template files.
+  - Goal: a running, containerised Next.js application with the full toolchain wired, ending with `specs/001-hello-world.md` implemented and committed.
+  - Read `CLAUDE.md`, `rules/policy_techstack.md`, `rules/policy_architecture.md` and `rules/decisions.md` before starting.
+  - Work through the steps in order. Stop and ask at every point marked **ASK**. Commit where marked, following `rules/policy_commits.md`.
+- # 0 - Fill the vision
+  - **ASK** the user for the content of `context/vision.md`: purpose, why it exists, non-goals, target user, deployment context.
+  - Do not proceed with placeholders. Every later decision refers back to this file.
+- # 1 - Project identity and license
+  - **ASK** the user for the package name, the human-readable application name and the license.
+    - License options to present, with the trade-off in one line each:
+      - MIT or Apache-2.0 - permissive, anyone may build a closed product on it.
+      - AGPL-3.0 - copyleft that reaches network use, so a hosted derivative must publish its source. The usual choice when a self-hosted product may later be sold under a commercial exception.
+      - Proprietary - no open-source grant. The usual choice when the software will be licensed per customer.
+  - Record the answer as a new D-XXX in `rules/decisions.md`, with "Rule lives in: project root `LICENSE`".
+  - Write `LICENSE`.
+- # 2 - Scaffold
+  - Create the Next.js application in the repository root:
+    - `pnpm create next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*" --use-pnpm`
+  - Set `"strict": true` and `"noUncheckedIndexedAccess": true` in `tsconfig.json`.
+  - Pin the Node version in `package.json` `engines`, and add an `.nvmrc` with the same version.
+  - Replace every caret range in `package.json` with an exact version (see D-002). Run `pnpm install` and commit `pnpm-lock.yaml`.
+  - Create the empty folder skeleton from `rules/policy_architecture.md` -> Structure: `src/features/`, `src/lib/`, `src/components/ui/`, `tests/`, `e2e/`, `design/`.
+  - Commit: `chore: scaffold next.js application`.
+- # 3 - Toolchain
+  - Prettier with `prettier-plugin-tailwindcss`. Add `format` and `format:check` scripts.
+  - ESLint with the plugin set from D-011: `typescript-eslint` in type-aware mode, `eslint-plugin-react-hooks`, `@next/eslint-plugin-next`, `eslint-plugin-jsx-a11y`. Add a `lint` script.
+  - Add a `typecheck` script running `tsc --noEmit`.
+  - Vitest with `@vitejs/plugin-react`, `jsdom`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`. Add a `test` script. Point the config at `tests/`.
+  - Playwright. Add a `test:e2e` script. Point the config at `e2e/`. Chromium only at bootstrap.
+  - Verify: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` all pass on the empty project.
+  - Commit: `chore: add lint, format, type and test toolchain`.
+- # 4 - Configuration module
+  - Create `src/lib/config.ts`: a Zod schema over `process.env`, parsed once at module load, exporting a typed frozen object (see D-014).
+  - At bootstrap it declares at least `NODE_ENV`, `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `LOG_LEVEL`.
+  - A missing or malformed variable must fail startup with a message naming the variable. Write a test for that.
+  - Create `.env.example` listing every variable with a placeholder, and a comment on how to generate `BETTER_AUTH_SECRET`. Never a real value.
+  - Create `.env` locally. Confirm it is git-ignored.
+  - Commit: `feat(config): add validated environment configuration`.
+- # 5 - Logging
+  - Create `src/lib/logger.ts`: the pino root logger, level from `config.LOG_LEVEL`, JSON to stdout, pretty transport in development only (see D-012).
+  - Add a redaction list covering `password`, `token`, `secret`, `authorization`, `cookie`.
+  - Commit: `feat(lib): add structured logging`.
+- # 6 - Value objects
+  - Create `src/lib/money/` with `Money`, `Duration` and `Rate` (see D-007).
+    - `Money` - constructed from and serialised to integer cents. Addition, subtraction, multiplication by a `Rate`, division into equal parts with the remainder distributed deterministically, comparison, locale-aware formatting.
+    - `Duration` - constructed from and serialised to integer minutes. Addition, rounding up to a configurable step, conversion to a decimal number of days given a day length, formatting.
+    - `Rate` - constructed from and serialised to integer basis points. Application to a `Money`, formatting as a percentage.
+  - Every rounding rule lives inside these classes. Nothing outside `src/lib/money/` performs arithmetic on cents, minutes or basis points.
+  - **ASK** the user for the rounding convention on money (half up, half even, or always down) and the day length in minutes. Record the answers as a D-XXX.
+  - Tests are mandatory here and are written by `@tester`: boundaries, negatives, the half-way case, and the remainder distribution.
+  - Commit: `feat(lib): add money, duration and rate value objects`.
+- # 7 - Database
+  - Add Prisma. Datasource `sqlite`, `DATABASE_URL` from the environment (see D-013).
+  - Create `src/lib/db.ts`: the Prisma client singleton, guarded against hot-reload duplication in development.
+  - Create the initial migration with `prisma migrate dev`. Never `prisma db push`.
+  - Add `db:migrate` and `db:studio` scripts.
+  - Confirm the database file path resolves inside the volume mount point, not inside the source tree.
+  - Commit: `feat(db): add prisma with sqlite datasource`.
+- # 8 - Authentication
+  - Add Better Auth. Configure email and password, sessions, roles and invitations, backed by the local database (see D-009).
+  - Generate its schema into `prisma/schema.prisma`, then create the migration.
+  - Create `src/app/api/auth/[...all]/route.ts` - the first of the four permitted Route Handlers (see D-003).
+  - Create `src/lib/auth.ts` exporting the server instance plus `getSession()` and `requireRole(role)`. `requireRole` throws or returns a failure; it never returns an ignorable boolean.
+  - Create `src/middleware.ts` redirecting unauthenticated requests away from protected routes. Document in a comment that this is user experience, not the security boundary.
+  - **ASK** the user for the initial role list, and how the first administrator account is created.
+  - Commit: `feat(auth): add better auth with roles and sessions`.
+- # 8b - Seed
+  - Create `prisma/seed.ts` with the two modes defined in `rules/policy_testing.md` -> Seed data.
+  - The `test` mode creates one administrator and one restricted-role user, with fixed identifiers and credentials, and nothing else.
+  - The `dev` mode adds the `test` set plus sample data. At bootstrap it has nothing to add beyond the users; it grows with each feature.
+  - The script refuses to run against a database that already holds rows.
+  - Add `db:seed` and `db:seed:test` scripts.
+  - This is where the answer to "how is the first administrator created" lands. If the answer was an interactive command rather than a seed, build that instead and say so here.
+  - Commit: `feat(db): add seed script with dev and test modes`.
+- # 9 - Health check
+  - Create `src/app/api/health/route.ts` - the second permitted Route Handler. Returns 200 with the application version, and verifies the database is reachable.
+  - The version is read from `package.json` at build time and baked into the image. Never hard-code it and never declare it a second time (see `rules/policy_commits.md` -> Versioning).
+  - Commit: `feat(app): add health check endpoint`.
+- # 10 - Containerisation
+  - Write a multi-stage `Dockerfile`: dependencies, build, runtime. The runtime stage runs as a non-root user, contains no dev dependencies, and uses Next's standalone output.
+  - Write `docker-compose.yml` with a single `app` service, a named volume for the SQLite file, and attachment to the external network shared with the existing Caddy instance. No database service, no proxy service.
+  - The container entrypoint runs `prisma migrate deploy` before starting the server.
+  - Add a Docker `healthcheck` pointing at `/api/health`.
+  - Tag the image with the version and with `latest` (see `rules/policy_commits.md` -> Versioning).
+  - Write `.dockerignore`.
+  - Verify: `docker compose up` from a clean checkout produces a reachable application.
+  - Commit: `build: add multi-stage dockerfile and compose service`.
+- # 11 - Security headers
+  - Set `Strict-Transport-Security`, `X-Content-Type-Options`, `Referrer-Policy` and a frame-ancestors policy once, in `next.config` or middleware (see `rules/policy_security.md`).
+  - Commit: `feat(app): add security headers`.
+- # 12 - shadcn/ui
+  - Initialise shadcn/ui with components copied into `src/components/ui/`.
+  - Install only the primitives `specs/001-hello-world.md` needs. Add the rest per feature, never speculatively.
+  - **ASK** the user for the base colour and the light or dark default.
+  - Commit: `feat(ui): add shadcn primitives`.
+- # 13 - Dependency audit
+  - Run `agents/agent_dependency.md` once. Report using its format: advisory id, package, severity, direct or transitive, reachable or not, decision.
+  - Stop after the first report. Do not auto-upgrade.
+- # 14 - Hello world
+  - Implement `specs/001-hello-world.md` through the normal workflow, to prove every layer and every gate works end to end.
+  - Do not shortcut it because the feature is trivial. The point is the chain, not the feature.
+  - Run: `@architect` (G3) -> `@orchestrator` -> `@coder` -> `@tester` -> G5 -> `@reviewer` (G6) -> `@committer` (G8).
+  - `@product-owner` and `@designer` are skipped here only because the spec and its design are supplied with the template. Every subsequent feature starts at G1.
+- # 15 - Close out
+  - Update `context/progress.md` with the bootstrap date, the decisions recorded and the migrations applied.
+  - Confirm `git status` is clean and no ignored artefact was committed.
+  - Report to the user: the decisions recorded during bootstrap, the environment variables they must set, and the command to start the application.
+- # Notes
+  - `.claude/agents/` must be present at the repository root for subagent dispatch to work. If the template was copied without it, recreate it before step 14.
+  - Pin every dependency to the latest stable version at bootstrap time, exactly, with no range (see D-002). Verify each pinned version exists before writing it.
+  - If any step forces a choice not covered by an existing D-XXX, stop and record a decision rather than deciding silently.

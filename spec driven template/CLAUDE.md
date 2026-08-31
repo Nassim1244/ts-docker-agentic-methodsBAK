@@ -1,0 +1,58 @@
+- # Project
+  - Self-hosted web application built with Next.js and TypeScript.
+  - Distributed as a Docker image, started with `docker compose up`.
+  - Data sovereignty: all business data stays on the operator's machine. No user or financial data leaves the host.
+  - This file is read first by Claude at session start. It is the entry point.
+- # Folder layout
+  - To learn the actual current module structure, run a `glob` / directory listing of `src/` at session start - do not read files to discover it, and do not rely on a hand-written map (it drifts). `rules/policy_architecture.md` holds the intended structure (the why and where); the live listing holds what exists now.
+  - src/ - application code (see `rules/policy_architecture.md`).
+  - prisma/ - `schema.prisma` and the `migrations/` folder. Owned by the architect (see `agents/agent_architect.md`).
+  - tests/ - unit and integration suite, mirrors `src/`.
+  - e2e/ - Playwright end-to-end journeys.
+  - specs/ - one .md per feature, follows `specs/TEMPLATE.md`.
+  - design/ - design artefacts per feature, one subfolder per spec index (e.g. `design/001/`, `design/002/`). Owned by the designer (see `agents/agent_designer.md`).
+  - rules/ - policies and decisions (operational rules and their rationale).
+  - agents/ - agent workflows (product owner, designer, architect, orchestrator, reviewer, auditor, debugger, dependency).
+  - context/ - project state (vision, progress).
+- # Root files
+  - package.json - pinned dependencies, Node version, and the application `version`, which is the single source of truth for it (see `rules/policy_commits.md` -> Versioning).
+  - pnpm-lock.yaml - committed. Never edited by hand (see D-002).
+  - docker-compose.yml - one `app` service. Attached to the external network shared with the existing Caddy instance.
+  - Dockerfile - multi-stage build producing the runtime image.
+  - .env.example - every environment variable the app reads, with safe placeholder values. Never contains a real secret.
+  - LICENSE - chosen at project bootstrap and recorded as a new D-XXX (see `specs/init.md`).
+- # Tech stack
+  - See `rules/policy_techstack.md`.
+- # Context
+  - Read `context/vision.md` to understand the app's purpose and roadmap. Stable file, rarely changes.
+  - Read `context/progress.md` at session start to know the current state.
+  - `context/progress.md` is maintained by the committer (see `rules/policy_commits.md` -> Progress tracking).
+- # Document model
+  - Policies hold the operational rules (what to do).
+  - `rules/decisions.md` holds rationale only (why). Each decision points to the policy that owns the corresponding rule.
+- # Workflow
+  - The full agent sequence and its gates live in `rules/policy_workflow.md`. Read it before starting or resuming any feature.
+  - Short form:
+    - New feature -> `@product-owner` writes the functional spec -> **G1, stops for the user**.
+    - UI feature -> `@designer` fills `design/<index>/` -> **G2, stops for the user**.
+    - Then `@architect` fills the technical spec, records D-XXX, owns any Prisma schema change -> **G3, stops for the user**.
+    - Then `@orchestrator` drives `@coder` -> `@tester` -> `@reviewer` -> `@committer`.
+    - Bug report -> `@debugger` reproduces and writes the failing test, then rejoins at `@coder`.
+  - When designing structure -> load `rules/policy_architecture.md`.
+  - When writing code -> dispatch to `@coder` -> loads `rules/policy_coding_guidelines.md`. The coder writes production code only.
+  - When writing tests -> dispatch to `@tester` -> loads `rules/policy_testing.md`. The coder must never write tests.
+  - When committing -> load `rules/policy_commits.md`.
+  - When reviewing -> run `agents/agent_reviewer.md` (loads all policies + decisions). The reviewer also owns the security review.
+  - When writing a technical spec, designing structure, writing code, writing a spec, or reviewing -> also load `rules/policy_security.md`.
+  - When auditing dependencies -> run `agents/agent_dependency.md`.
+  - Load `rules/decisions.md` only to (a) review, (b) propose a new decision, or (c) check the rationale behind a rule.
+- # Subagents (Claude Code)
+  - When running under Claude Code, you must dispatch each task to the matching subagent in `.claude/agents/`: `product-owner`, `designer`, `architect`, `orchestrator`, `coder`, `tester`, `reviewer`, `committer`, `auditor`, `debugger`, `dependency`.
+  - Do not handle these tasks in the main session - that defeats the context isolation.
+  - Never skip `@tester`. The coder must not author tests; the tester is the sole author of the `tests/` and `e2e/` trees.
+  - If a subagent cannot be invoked, fails, or returns an error, stop and ask the user how to proceed. Never silently fall back to the main session.
+  - When writing a subagent prompt, pass file paths - never read the files yourself and inline their content into the prompt. The subagent must read all referenced files itself. Extracting and transmitting file content defeats context isolation and risks silent omission or interpretation.
+- # Adding a new policy file
+  - Add only when an existing doc holds 30+ lines of rules referenced by 2+ other docs.
+- # Definition of done
+  - See `agents/agent_reviewer.md`.

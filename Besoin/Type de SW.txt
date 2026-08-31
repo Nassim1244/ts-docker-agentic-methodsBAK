@@ -1,0 +1,9 @@
+Pour le type de software, j'imagine :
+
+Un logiciel accessible en web.
+Il sera exécuté dans un environnement Docker sur Windows ou docker sur VPS.
+
+Pour la spec technique on verra ça dans un deuxième temps, on se concentre sur la spec fonctionnel pour l'instant.
+Mes premières idées sont :
+- React + Typescript
+- shadcn/ui

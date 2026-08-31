@@ -1,0 +1,55 @@
+- # Greetings
+- # ── FUNCTIONAL SPEC ──────────────────────────────────────────
+  - Supplied with the template. Treated as approved at G1.
+- # Goal
+  - A minimal signed-in feature that records short greeting messages and lists them back. It exists to prove the whole stack and the whole agent chain work end to end: route, Server Component read, repository scoping, Zod validation, Server Action, role check, migration, and all three test levels.
+- # User flow
+  - An unauthenticated visitor requests `/greetings` and is redirected to the sign-in page.
+  - A signed-in user opens `/greetings` and sees their own greetings, most recent first, each with its message and the date it was created.
+  - A user with no greetings yet sees an empty state explaining what the page is for, with the message field focused.
+  - The user types a message and submits. The greeting appears at the top of the list without a full page reload.
+  - The user submits an empty message, or one longer than 80 characters. The form refuses it and shows why, next to the field. Nothing is saved.
+  - A user with the administrator role sees a delete control on each greeting. A user with any other role does not see it, and cannot delete by any other means.
+  - An administrator deletes a greeting. It disappears from the list. The action is not undoable and is confirmed first.
+- # Acceptance criteria
+  - An unauthenticated request to `/greetings` is redirected and never renders greeting data.
+  - A signed-in user sees only their own greetings, never another user's, regardless of any identifier they supply.
+  - Submitting a valid message of 1 to 80 characters creates a greeting owned by the current user and shows it at the top of the list.
+  - Submitting an empty message, a whitespace-only message, or one of 81 characters or more creates nothing and shows a field-level error.
+  - The list is ordered most recent first.
+  - A user without the administrator role cannot delete a greeting, including by invoking the delete action directly.
+  - An administrator can delete any greeting, after a confirmation step.
+  - A user with no greetings sees the empty state, not an empty list.
+- # Design
+  - `design/001/`
+- # Out of scope (functional)
+  - Editing an existing greeting.
+  - Pagination, search, sorting or filtering.
+  - Sharing a greeting with another user, or any visibility beyond the owner and an administrator.
+  - Rich text, links, emoji handling or internationalisation of the messages.
+  - Undo, soft delete or an audit trail of deletions.
+  - Any real product behaviour. This feature is a template smoke test and is expected to be deleted once the first real feature ships.
+- # Open questions
+  - None.
+- # ── TECHNICAL SPEC ───────────────────────────────────────────
+  - <Filled by @architect at bootstrap step 14. Do not edit by hand.>
+- # Architecture decisions
+  - <->
+- # Feature slice
+  - <->
+- # Data model
+  - <->
+- # Numeric and temporal representation
+  - <->
+- # Server boundary
+  - <->
+- # Data access
+  - <->
+- # Authorisation
+  - <->
+- # Validation
+  - <->
+- # Dependencies
+  - <->
+- # Out of scope (technical)
+  - <->

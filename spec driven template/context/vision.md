@@ -1,0 +1,22 @@
+- # Vision
+  - Purpose, target user, and direction of the app. Read at session start to anchor decisions.
+  - Stable file. Update only when purpose, target user, non-goals, or roadmap change.
+- # Purpose
+  - [One sentence: what the app does for the end user.]
+- # Why it exists
+  - [The problem solved or need served. What is missing today that this app provides.]
+- # Non-goals
+  - [What the app deliberately does not try to do. Prevents scope creep.]
+- # Target user
+  - [Who uses this app. Roles, skill level, context, constraints.]
+- # Deployment context
+  - [Who operates the instance, and whether that is the same person as the user. Affects error messages, logging and upgrade expectations.]
+  - [Single instance, or one instance per customer. Affects whether the data model needs a tenant boundary from the start.]
+- # Roadmap
+  - Ordered by priority. Update when priorities shift. Completed items move to `context/progress.md`.
+  - ## Now
+    - 001 - Hello world (template bootstrap, see `specs/001-hello-world.md`).
+  - ## Next
+    - [Add next planned specs here.]
+  - ## Later
+    - [Add ideas not yet scheduled here.]
