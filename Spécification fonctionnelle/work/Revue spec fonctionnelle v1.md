@@ -117,7 +117,7 @@ The URSSAF sheet uses **two** rates: 0.25 (cotisations + CFP) and 0.022 (verseme
 ### B12. An undocumented workbook column affects computed durations
 A column of the "Temps passé" sheet, historized in the Data sheet, feeds the computed durations without appearing anywhere in the spec or the MCD.
 
-→ Resolved — see `Décisions v2.md`, Appendix A.
+→ Resolved — see `../docs/Décisions v2.md`, Appendix A.
 
 ### B13. Google Calendar pre-fill has no functional description
 Phase 3, but zero functional content: what is imported, how events map to missions/clients, how duplicates are avoided, whether the import is a proposal or a direct write. One paragraph now avoids a redesign later.
@@ -184,7 +184,7 @@ Phase 3, but zero functional content: what is imported, how events map to missio
 
 ## Decisions needed from you (blocking the technical spec)
 
-> All eight were resolved on 2026-08-31 — see `Décisions v2.md`.
+> All eight were resolved on 2026-08-31 — see `../docs/Décisions v2.md`.
 
 1. **Hours per day** — confirm 7 h = 1 day, and whether it can vary per client. (A6)
 2. **The undocumented duration column** — what is it, and is it still needed? (B12)

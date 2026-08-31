@@ -1,6 +1,8 @@
 # SynFactu — Decisions (round 2, 2026-08-31)
 
-> Resolves every open point raised in `Revue spec fonctionnelle v1.md`. These decisions supersede the v1 functional spec and MCD where they conflict. Next step: rewrite `Spécification fonctionnelle v2.md` + `MCD v2.md` from this record, then the technical spec.
+> The decision record behind `Spécification fonctionnelle v2.md` and `MCD v2.md`. Those two documents state **what** SynFactu does; this one states **why**, and which alternatives were rejected. They cite it as *(D-nn)*.
+>
+> It resolves the 33 findings of the v1 review round. Read it when a rule in the other two documents looks arbitrary, or before reopening a settled question.
 
 ---
 
