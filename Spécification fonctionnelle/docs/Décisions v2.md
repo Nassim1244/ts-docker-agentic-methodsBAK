@@ -117,7 +117,7 @@
 - Widen the Glossary definition of **Partner** — RG-01 allows a partner to be billed directly, and your workbook shows micro invoices addressed to a partner. *(C20)*
 - Reword §2.2 "Full time-based: with a TJM, off site is billed". *(C19)*
 - Soften §11 — the modelling round was not closed. *(C17)*
-- Fix the broken paths in `Bilan et points ouverts.md`, and mark it plus `Besoin/Résumé de Claude.txt` as **historical records** (they still describe superseded rules: real net at full payment, formation as a mission type). *(C3, C18)*
+- Treat the pre-v2 working notes and business summaries as **historical records**, not as current rules: they still describe the real net arriving at full payment, and formation as a billing type. Repair their stale cross-references at the same time. *(C3, C18)*
 
 ---
 
