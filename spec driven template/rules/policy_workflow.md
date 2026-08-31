@@ -47,6 +47,7 @@
   - A human gate means the orchestrator stops and reports, and does not resume until the user answers.
   - A machine gate is a command's exit code. It is objective and reproducible, so the orchestrator may retry it without asking.
   - A judgment gate is an agent's verdict. It is only as reliable as the policies backing it, which is why the reviewer must cite the specific rule behind every finding.
+  - Known limitation: the machine gates are enforced only by the agents that run them. There is no continuous integration yet, so a commit made outside `@committer` bypasses G5 and G8 entirely. Until CI exists, the gates are a convention, not an enforcement. See `context/vision.md` -> Roadmap -> Later.
 - # Retry policy
   - On a failed G5 or a CHANGES NEEDED at G6, the orchestrator dispatches `@coder` again with the full failure report attached.
   - Maximum two retries. On the third failure the orchestrator halts, reports what was attempted and what still fails, and asks the user how to proceed.

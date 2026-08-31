@@ -110,3 +110,4 @@
   - `.claude/agents/` must be present at the repository root for subagent dispatch to work. If the template was copied without it, recreate it before step 14.
   - Pin every dependency to the latest stable version at bootstrap time, exactly, with no range (see D-002). Verify each pinned version exists before writing it.
   - If any step forces a choice not covered by an existing D-XXX, stop and record a decision rather than deciding silently.
+  - Continuous integration is deliberately not set up at bootstrap. It is carried in `context/vision.md` -> Roadmap -> Later, and until it exists the machine gates depend on the agents running them.

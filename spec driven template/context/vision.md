@@ -19,4 +19,5 @@
   - ## Next
     - [Add next planned specs here.]
   - ## Later
+    - CI pipeline (GitHub Actions) running `format:check`, `lint`, `typecheck`, `test` and `build` on every push, so gates G5 and G8 are enforced rather than conventional. See `rules/policy_workflow.md` -> Gates.
     - [Add ideas not yet scheduled here.]
