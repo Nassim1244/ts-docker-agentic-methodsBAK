@@ -112,12 +112,12 @@
 
 ## 9. Editorial fixes to apply during the v2 rewrite
 
-- Complete MCD §3 with the two missing cardinalities (`MICRO_INVOICE`/`PORTAGE_DECLARATION` — bills — `TIME_ENTRY`). *(A9)*
-- Harmonize amount naming: `amount_ht` on both the invoice and the declaration; drop the asymmetric `expected_payment`. *(C15)*
-- Widen the Glossary definition of **Partner** — RG-01 allows a partner to be billed directly, and your workbook shows micro invoices addressed to a partner. *(C20)*
-- Reword §2.2 "Full time-based: with a TJM, off site is billed". *(C19)*
-- Soften §11 — the modelling round was not closed. *(C17)*
-- Treat the pre-v2 working notes and business summaries as **historical records**, not as current rules: they still describe the real net arriving at full payment, and formation as a billing type. Repair their stale cross-references at the same time. *(C3, C18)*
+- Complete MCD §3 with the two missing cardinalities (`MICRO_INVOICE`/`PORTAGE_DECLARATION` — bills — `TIME_ENTRY`).
+- Harmonize amount naming: `amount_ht` on both the invoice and the declaration; drop the asymmetric `expected_payment`.
+- Widen the Glossary definition of **Partner** — RG-01 allows a partner to be billed directly, and your workbook shows micro invoices addressed to a partner.
+- Reword §2.2 "Full time-based: with a TJM, off site is billed".
+- Soften §11 — the modelling round was not closed.
+- Treat the pre-v2 working notes and business summaries as **historical records**, not as current rules: they still describe the real net arriving at full payment, and formation as a billing type. Repair their stale cross-references at the same time.
 
 ---
 
