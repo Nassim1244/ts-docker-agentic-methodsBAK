@@ -3,17 +3,28 @@
   - Canonical home for: the agent sequence, the gates, retry policy, handoff rules, entry points.
   - Rationale for the gate design: see D-015.
 - # Agent roster
+  - Name, role in one line, and the document that governs it. Nothing else. See Agent documents below.
   - `@product-owner` - challenges the request and writes the functional spec. See `agents/agent_product_owner.md`.
   - `@designer` - owns `design/<index>/`. See `agents/agent_designer.md`.
   - `@architect` - fills the technical spec, records D-XXX, owns `prisma/schema.prisma` and migrations. See `agents/agent_architect.md`.
   - `@orchestrator` - drives the implementation chain. See `agents/agent_orchestrator.md`.
-  - `@coder` - production code only. Loads `policy_architecture.md`, `policy_coding_guidelines.md`, `policy_security.md`.
-  - `@tester` - sole author of `tests/` and `e2e/`. Loads `policy_testing.md`.
+  - `@coder` - production code only. See `agents/agent_coder.md`.
+  - `@tester` - sole author of `tests/` and `e2e/`. See `agents/agent_tester.md`.
   - `@reviewer` - compliance and security review. See `agents/agent_reviewer.md`.
-  - `@committer` - stages and commits, and cuts releases. Loads `policy_commits.md`.
+  - `@committer` - stages and commits, and cuts releases. See `agents/agent_committer.md`.
   - `@debugger` - bug entry point. See `agents/agent_debugger.md`.
   - `@auditor` - whole-tree health check, on request. See `agents/agent_auditor.md`.
   - `@dependency` - vulnerability triage, on request. See `agents/agent_dependency.md`.
+  - `@ai-method` - owns the method's own documents, on request. See `agents/agent_ai_method.md`.
+- # Agent documents
+  - Each agent has two files. `agents/agent_<name>.md` is canonical and holds everything. `.claude/agents/<name>.md` is the Claude Code wrapper, and Claude Code injects it as the subagent's system prompt.
+  - A wrapper contains exactly two things:
+    - The pointer: read `CLAUDE.md`, then the canonical document, and follow it exactly. Name the topics the document is canonical on, so the agent knows what it is deferring.
+    - The prohibitions whose violation cannot be undone: writing tests when you are the coder, touching the schema when you are not the architect, committing, editing a file when you are read-only, passing a gate that failed.
+  - A wrapper never contains a procedure, an output format, a load list, or an enumeration copied from the canonical document. Those change, the copy does not, and the copy is the one that gets read.
+  - The prohibitions are duplicated deliberately, and that is the only duplication permitted here. The wrapper is the one text whose reading is guaranteed; the canonical document is read only if the agent complies with the pointer. Repeating five short interdictions is cheap insurance. Repeating a format is a second source of truth.
+  - What an agent loads is stated in its own `Load` section and nowhere else. A stale load list is worse than none.
+  - Adding or changing an agent touches four files: the canonical document, the wrapper, the roster above, and the dispatch list in `CLAUDE.md`. Fewer than four means it drifts.
 - # Sequence for a new feature
   - ## Phase A - Definition (driven by the user)
     - 1. `@product-owner` interviews the user, challenges scope, writes the FUNCTIONAL SPEC section of `specs/NNN-<name>.md`.

@@ -49,16 +49,10 @@
     - "Rule lives in" points to the spec file for a feature-scoped decision, or to the owning policy for a project-wide one. When it points to a policy, update that policy in the same pass.
   - ## 5 - Populate the technical spec
     - Fill every section under `# ── TECHNICAL SPEC ───`. Do not touch the functional half.
-    - Architecture decisions: every applicable D-XXX, existing and new, each with one line on what it governs here.
-    - Feature slice: the folder, and each file to create or modify with its responsibility in one sentence.
-    - Data model: the schema diff, the migration name, the backfill if any, and "N/A" if nothing changes.
-    - Numeric and temporal representation: every money, duration, rate, instant and period field, with its storage unit.
-    - Server boundary: each Server Action with its required role, its Zod schema, and the paths it revalidates. Any Route Handler, with the closed-list entry that justifies it.
-    - Data access: each repository function, its signature intent, and the scoping it enforces.
-    - Authorisation: the role required at each entry point.
-    - Validation: what each schema rejects beyond type checks.
-    - Dependencies: any new package with its one-line justification, or "None".
-    - Out of scope (technical): implementation choices explicitly deferred.
+    - What each section holds is written in `specs/TEMPLATE.md`, in the placeholder under its own heading. That file is canonical for the shape of a spec, and a second description of it here would drift from it.
+    - Two things the template cannot state, because they are judgment rather than shape:
+      - A section that genuinely does not apply reads "N/A" followed by the reason, on the same line. An unfilled section and an inapplicable one are indistinguishable a month later, and the reader assumes the worse of the two.
+      - Every claim in the technical spec traces to a D-XXX, to a policy, or to an answer the user gave at G3. Anything with no such origin is a preference you have not recorded, and it will be read as a rule by whoever implements it.
 - # Forbidden
   - Writing application code.
   - Editing the FUNCTIONAL SPEC section.

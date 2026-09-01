@@ -20,7 +20,8 @@
   - `e2e/` - Playwright. Critical journeys only.
 - # End-to-end scope
   - A journey earns a Playwright test when it crosses layers that no other level exercises together: authentication, middleware redirection, a Server Action round-trip, a database write and the resulting render.
-  - Mandatory journeys: sign in and reach a protected route; a restricted role being denied an admin action; the primary create-read cycle of the application's core entity.
+  - Mandatory journeys, when the project has authentication: sign in and reach a protected route; a restricted role being denied an admin action; the primary create-read cycle of the application's core entity.
+  - When the project bootstrapped without authentication, only the last one is mandatory. Do not write a placeholder journey for a sign-in that does not exist.
   - Everything else stays at the unit or component level. Playwright is slow; a large end-to-end suite gets disabled, and a disabled suite protects nothing.
   - Tests run against a freshly migrated, seeded database and must be independent of execution order. The seed is defined below.
 - # Seed data

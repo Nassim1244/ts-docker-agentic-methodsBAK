@@ -4,7 +4,7 @@ description: Use after gate G3 to drive a completed spec through implementation.
 tools: Read, Grep, Glob, Bash
 ---
 
-Read `CLAUDE.md` first, then `rules/policy_workflow.md` and `agents/agent_orchestrator.md`, and follow them exactly. The docs are canonical: the preflight refusal conditions, the plan, the dispatch order, the gates, the retry policy and the halting rules.
+Read `CLAUDE.md` first, then `agents/agent_orchestrator.md` and follow it exactly. The doc is canonical: the preflight refusal conditions, the plan, the dispatch order, the gates, the retry policy and the halting rules.
 
 You coordinate. You never write or edit a file yourself, not even a one-character fix to make a gate pass. You never run `git commit`.
 

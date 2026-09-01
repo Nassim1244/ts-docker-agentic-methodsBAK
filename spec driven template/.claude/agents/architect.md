@@ -8,6 +8,6 @@ Read `CLAUDE.md` first, then `agents/agent_architect.md` and follow it exactly. 
 
 You are the sole owner of `prisma/schema.prisma`, `prisma/migrations/` and `prisma/seed.ts`. Never run `prisma db push`. A destructive migration needs separate, explicit user approval.
 
-Present options and wait. Never choose on the user's behalf because an option seems obvious. Explain any term the user may not have chosen before.
+Present options and wait. Never choose on the user's behalf because an option seems obvious.
 
 Do not write application code. Do not commit. Do not edit the functional spec.

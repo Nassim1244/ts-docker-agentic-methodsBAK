@@ -1,34 +1,36 @@
-- # Greetings
+- # Hello world
 - # ── FUNCTIONAL SPEC ──────────────────────────────────────────
   - Supplied with the template. Treated as approved at G1.
+  - Deliberately trivial. Its purpose is to prove the project is ready to be coded in, not to deliver product value.
 - # Goal
-  - A minimal signed-in feature that records short greeting messages and lists them back. It exists to prove the whole stack and the whole agent chain work end to end: route, Server Component read, repository scoping, Zod validation, Server Action, role check, migration, and all three test levels.
+  - A single page showing the text "Hello world" and a button that changes the text's colour. It exists to prove the toolchain, the container and the agent chain all work end to end before any real feature is specified.
 - # User flow
-  - An unauthenticated visitor requests `/greetings` and is redirected to the sign-in page.
-  - A signed-in user opens `/greetings` and sees their own greetings, most recent first, each with its message and the date it was created.
-  - A user with no greetings yet sees an empty state explaining what the page is for, with the message field focused.
-  - The user types a message and submits. The greeting appears at the top of the list without a full page reload.
-  - The user submits an empty message, or one longer than 80 characters. The form refuses it and shows why, next to the field. Nothing is saved.
-  - A user with the administrator role sees a delete control on each greeting. A user with any other role does not see it, and cannot delete by any other means.
-  - An administrator deletes a greeting. It disappears from the list. The action is not undoable and is confirmed first.
+  - A visitor opens `/hello-world` and sees "Hello world" as the page heading, rendered in the first colour of a fixed sequence, with a button below it.
+  - The visitor presses the button. The heading changes to the next colour in the sequence and the button's label updates to name the colour it will apply next.
+  - The visitor presses the button from the last colour of the sequence. The heading returns to the first colour.
+  - The visitor reloads the page. The heading is back to the first colour; nothing was remembered.
+  - The visitor operates the page with the keyboard alone, reaching the button by tabbing and pressing it with Enter or Space.
 - # Acceptance criteria
-  - An unauthenticated request to `/greetings` is redirected and never renders greeting data.
-  - A signed-in user sees only their own greetings, never another user's, regardless of any identifier they supply.
-  - Submitting a valid message of 1 to 80 characters creates a greeting owned by the current user and shows it at the top of the list.
-  - Submitting an empty message, a whitespace-only message, or one of 81 characters or more creates nothing and shows a field-level error.
-  - The list is ordered most recent first.
-  - A user without the administrator role cannot delete a greeting, including by invoking the delete action directly.
-  - An administrator can delete any greeting, after a confirmation step.
-  - A user with no greetings sees the empty state, not an empty list.
+  - `/hello-world` renders the text "Hello world" as the page's only level-1 heading.
+  - On first render the heading uses the first colour of the sequence defined in the technical spec.
+  - Pressing the button once advances the heading to the next colour in that sequence.
+  - Pressing the button while the heading is on the last colour returns it to the first.
+  - Reloading the page returns the heading to the first colour; no colour is persisted anywhere.
+  - The button's accessible name states the colour it will apply next, so the page is usable and verifiable without seeing the colours.
+  - The button is reachable by keyboard and activates with both Enter and Space.
+  - The page renders without reading from the database and without calling a Server Action.
 - # Design
   - `design/001/`
 - # Out of scope (functional)
-  - Editing an existing greeting.
-  - Pagination, search, sorting or filtering.
-  - Sharing a greeting with another user, or any visibility beyond the owner and an administrator.
-  - Rich text, links, emoji handling or internationalisation of the messages.
-  - Undo, soft delete or an audit trail of deletions.
-  - Any real product behaviour. This feature is a template smoke test and is expected to be deleted once the first real feature ships.
+  - Persisting the chosen colour, in any form.
+  - Authentication, roles or per-user state. This page is public.
+  - Choosing an arbitrary colour. The sequence is fixed and short.
+  - Any real product behaviour. This feature is a smoke test and is expected to be deleted once the first real feature ships.
+- # What this deliberately does not prove
+  - Stated plainly so nobody mistakes a green bootstrap for a validated stack.
+  - It does not exercise the database, a repository, a Zod schema, a Server Action, a migration or the authorisation layers.
+  - Those are proven by the first real feature, which is the first to run the full chain of `rules/policy_workflow.md`.
+  - What it does prove: the application builds, starts in its container and answers; a route renders; the Server and Client Component boundary works; Tailwind and the shadcn primitives are wired; all three test levels run; and every gate from G3 to G8 can be passed by the agent chain.
 - # Open questions
   - None.
 - # ── TECHNICAL SPEC ───────────────────────────────────────────

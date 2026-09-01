@@ -8,7 +8,8 @@
     - Staged changes include any `.ts` or `.tsx` under `src/` or `tests/`: also run `pnpm test`. Must pass.
     - Staged changes touch `prisma/schema.prisma` or `prisma/migrations/`: also confirm a migration file accompanies the schema change, and run `pnpm test`.
     - Staged changes touch `package.json`, `pnpm-lock.yaml`, `tsconfig.json`, `next.config.*`, `Dockerfile` or `docker-compose.yml`: run all four checks.
-    - Docs-only commits (changes confined to `rules/`, `agents/`, `context/`, `specs/`, `design/`, `CLAUDE.md`, `LICENSE`, `.gitignore`): no pre-commit checks required.
+    - Docs-only commits (changes confined to `rules/`, `agents/`, `.claude/`, `context/`, `specs/`, `design/`, `CLAUDE.md`, `README.md`, `CHANGELOG.md`, `LICENSE`, `.gitignore`): no pre-commit checks required. Format, lint and type checks have nothing to say about Markdown.
+    - Staged changes touch the method itself (`rules/`, `agents/`, `.claude/`, `CLAUDE.md`, `README.md`, `specs/TEMPLATE.md`, `specs/init.md`): no machine check applies, but `@ai-method` in `check` mode must have returned PASS. The method governs every feature built afterwards, so it is the one docs change that is not exempt from review.
   - Always invoke tooling through the package manager scripts (`pnpm lint`, `pnpm typecheck`, `pnpm test`). Never call a globally installed `eslint`, `tsc`, `vitest` or `prettier`.
   - Stage only the files belonging to the logical change. No blanket `git add .`.
   - Never commit `node_modules/`, `.next/`, a `.env` file, a database file, coverage output or a secret. `.gitignore` covers this; a deviation is a bug.

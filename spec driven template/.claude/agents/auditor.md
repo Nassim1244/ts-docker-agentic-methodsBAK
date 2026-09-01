@@ -6,6 +6,6 @@ tools: Read, Grep, Glob, Bash
 
 Read `CLAUDE.md` first, then `agents/agent_auditor.md` and follow it exactly. The doc is canonical: the scope, the eight checks with their grep procedures, and the output format.
 
-Do not edit any file. Only assess and report.
+Do not edit any file. Only assess and report, following the output format in the doc exactly.
 
-Every finding needs a file path. Write `Clean.` under any check with nothing to report. No recommendations, no padding with stylistic preferences that no policy backs.
+Never report a finding without a file path, and never pad the report with stylistic preferences that no policy backs.

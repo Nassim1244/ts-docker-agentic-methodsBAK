@@ -6,7 +6,7 @@
 - # 0 - Fill the vision
   - **ASK** the user for the content of `context/vision.md`: purpose, why it exists, non-goals, target user, deployment context.
   - Do not proceed with placeholders. Every later decision refers back to this file.
-- # 1 - Project identity and license
+- # 1 - Project identity, license and bootstrap options
   - **ASK** the user for the package name, the human-readable application name and the license.
     - License options to present, with the trade-off in one line each:
       - MIT or Apache-2.0 - permissive, anyone may build a closed product on it.
@@ -14,6 +14,10 @@
       - Proprietary - no open-source grant. The usual choice when the software will be licensed per customer.
   - Record the answer as a new D-XXX in `rules/decisions.md`, with "Rule lives in: project root `LICENSE`".
   - Write `LICENSE`.
+  - **ASK** the user whether the bootstrap includes authentication. This governs steps 4, 8 and 8b, and it has to be answered here because step 4 declares the environment variables.
+    - Include it - Better Auth, roles, sessions and the middleware are wired at bootstrap. The application is protected from its first commit, and the two layers of D-009 are in place before any feature exists.
+    - Skip it - no login, no roles, no session. Faster to a running application, and defensible for a single-operator tool on a private network. The cost is real: D-009 has to be retro-fitted across every feature already written, and the instance must not be exposed on a public URL until it is.
+  - Record the answer as a new D-XXX either way. Skipping authentication is a decision, not the absence of one, and the D-XXX is what keeps the debt visible.
 - # 2 - Scaffold
   - Create the Next.js application in the repository root:
     - `pnpm create next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*" --use-pnpm`
@@ -32,9 +36,10 @@
   - Commit: `chore: add lint, format, type and test toolchain`.
 - # 4 - Configuration module
   - Create `src/lib/config.ts`: a Zod schema over `process.env`, parsed once at module load, exporting a typed frozen object (see D-014).
-  - At bootstrap it declares at least `NODE_ENV`, `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `LOG_LEVEL`.
+  - At bootstrap it declares at least `NODE_ENV`, `DATABASE_URL` and `LOG_LEVEL`.
+  - When step 1 chose to include authentication, it also declares `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`. When authentication was skipped, do not declare them. A required variable nobody can give a meaning to is how a config module starts rotting.
   - A missing or malformed variable must fail startup with a message naming the variable. Write a test for that.
-  - Create `.env.example` listing every variable with a placeholder, and a comment on how to generate `BETTER_AUTH_SECRET`. Never a real value.
+  - Create `.env.example` listing every variable with a placeholder, and, when authentication is included, a comment on how to generate `BETTER_AUTH_SECRET`. Never a real value.
   - Create `.env` locally. Confirm it is git-ignored.
   - Commit: `feat(config): add validated environment configuration`.
 - # 5 - Logging
@@ -43,7 +48,7 @@
   - Commit: `feat(lib): add structured logging`.
 - # 6 - Value objects
   - Create `src/lib/money/` with `Money`, `Duration` and `Rate` (see D-007).
-    - `Money` - constructed from and serialised to integer cents. Addition, subtraction, multiplication by a `Rate`, division into equal parts with the remainder distributed deterministically, comparison, locale-aware formatting.
+    - `Money` - constructed from and serialised to integer cents. Addition, subtraction, multiplication by a `Rate`, division into equal parts with the remainder distributed deterministically, comparison, and formatting against the single locale constant of `rules/policy_coding_guidelines.md` -> Value objects.
     - `Duration` - constructed from and serialised to integer minutes. Addition, rounding up to a configurable step, conversion to a decimal number of days given a day length, formatting.
     - `Rate` - constructed from and serialised to integer basis points. Application to a `Money`, formatting as a percentage.
   - Every rounding rule lives inside these classes. Nothing outside `src/lib/money/` performs arithmetic on cents, minutes or basis points.
@@ -58,6 +63,7 @@
   - Confirm the database file path resolves inside the volume mount point, not inside the source tree.
   - Commit: `feat(db): add prisma with sqlite datasource`.
 - # 8 - Authentication
+  - **Conditional.** Run this step only if step 1 chose to include authentication. If it did not, go straight to step 8b and carry the skip into the close-out report.
   - Add Better Auth. Configure email and password, sessions, roles and invitations, backed by the local database (see D-009).
   - Generate its schema into `prisma/schema.prisma`, then create the migration.
   - Create `src/app/api/auth/[...all]/route.ts` - the first of the four permitted Route Handlers (see D-003).
@@ -66,12 +72,16 @@
   - **ASK** the user for the initial role list, and how the first administrator account is created.
   - Commit: `feat(auth): add better auth with roles and sessions`.
 - # 8b - Seed
-  - Create `prisma/seed.ts` with the two modes defined in `rules/policy_testing.md` -> Seed data.
-  - The `test` mode creates one administrator and one restricted-role user, with fixed identifiers and credentials, and nothing else.
-  - The `dev` mode adds the `test` set plus sample data. At bootstrap it has nothing to add beyond the users; it grows with each feature.
-  - The script refuses to run against a database that already holds rows.
+  - Create `prisma/seed.ts` with the two modes defined in `rules/policy_testing.md` -> Seed data, selected by an argument and never by `NODE_ENV`.
+  - The script refuses to run against a database that already holds rows, in both modes.
   - Add `db:seed` and `db:seed:test` scripts.
-  - This is where the answer to "how is the first administrator created" lands. If the answer was an interactive command rather than a seed, build that instead and say so here.
+  - When authentication was included:
+    - The `test` mode creates one administrator and one restricted-role user, with fixed identifiers and credentials, and nothing else.
+    - The `dev` mode adds the `test` set plus sample data. At bootstrap it has nothing to add beyond the users; it grows with each feature.
+    - This is where the answer to "how is the first administrator created" lands. If the answer was an interactive command rather than a seed, build that instead and say so here.
+  - When authentication was skipped:
+    - Create the file with both modes present, the refusal guard in place, and no records in either. The shape is what matters; the first feature that needs data fills it.
+    - Do not invent placeholder rows to make the file look finished. An unused seed record becomes a dependency the moment someone writes a test against it.
   - Commit: `feat(db): add seed script with dev and test modes`.
 - # 9 - Health check
   - Create `src/app/api/health/route.ts` - the second permitted Route Handler. Returns 200 with the application version, and verifies the database is reachable.
@@ -91,21 +101,25 @@
   - Commit: `feat(app): add security headers`.
 - # 12 - shadcn/ui
   - Initialise shadcn/ui with components copied into `src/components/ui/`.
-  - Install only the primitives `specs/001-hello-world.md` needs. Add the rest per feature, never speculatively.
+  - Install only the primitives `specs/001-hello-world.md` needs, which is `Button` and nothing else. Add the rest per feature, never speculatively.
   - **ASK** the user for the base colour and the light or dark default.
   - Commit: `feat(ui): add shadcn primitives`.
 - # 13 - Dependency audit
   - Run `agents/agent_dependency.md` once. Report using its format: advisory id, package, severity, direct or transitive, reachable or not, decision.
   - Stop after the first report. Do not auto-upgrade.
 - # 14 - Hello world
-  - Implement `specs/001-hello-world.md` through the normal workflow, to prove every layer and every gate works end to end.
+  - Implement `specs/001-hello-world.md` through the normal workflow, to prove every gate and every agent handoff works.
   - Do not shortcut it because the feature is trivial. The point is the chain, not the feature.
   - Run: `@architect` (G3) -> `@orchestrator` -> `@coder` -> `@tester` -> G5 -> `@reviewer` (G6) -> `@committer` (G8).
   - `@product-owner` and `@designer` are skipped here only because the spec and its design are supplied with the template. Every subsequent feature starts at G1.
+  - Expect `@architect` to record almost nothing. The feature has no data model, no server boundary, no authorisation and no validation, so those sections of the technical spec read "N/A". That is the correct answer, not a gap to fill.
+  - Expect `@tester` to produce a component test and one Playwright journey, and no repository or schema test. There is nothing at those levels to cover.
+  - Read `specs/001-hello-world.md` -> What this deliberately does not prove before calling the stack validated. A green bootstrap proves the chain runs; it does not prove the database, the server boundary or the authorisation layers. The first real feature exercises those for the first time.
 - # 15 - Close out
   - Update `context/progress.md` with the bootstrap date, the decisions recorded and the migrations applied.
   - Confirm `git status` is clean and no ignored artefact was committed.
-  - Report to the user: the decisions recorded during bootstrap, the environment variables they must set, and the command to start the application.
+  - Report to the user: the decisions recorded during bootstrap, whether authentication was included or skipped, the environment variables they must set, and the command to start the application.
+  - When authentication was skipped, restate the consequence in the report rather than leaving it buried in the D-XXX: the instance must not be exposed on a public URL, and D-009 is outstanding debt.
 - # Notes
   - `.claude/agents/` must be present at the repository root for subagent dispatch to work. If the template was copied without it, recreate it before step 14.
   - Pin every dependency to the latest stable version at bootstrap time, exactly, with no range (see D-002). Verify each pinned version exists before writing it.

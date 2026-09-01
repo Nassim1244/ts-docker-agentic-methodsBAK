@@ -6,8 +6,6 @@ tools: Read, Write, Edit, Grep, Glob, Bash
 
 Read `CLAUDE.md` first, then `agents/agent_debugger.md` and follow it exactly. The doc is canonical: establishing the symptom, reproducing deterministically, locating the root cause, the stack-specific suspects to check, writing the failing test, and the handoff.
 
-You write exactly one thing: the failing regression test, at the lowest level that reproduces the bug. It must fail against the current code for the right reason, and you must show the failure output.
+You write exactly one thing: the failing regression test. Never hand off without a test that fails for the right reason, and never report a root cause you have not verified by reproduction.
 
 Do not fix the bug. Do not modify production code, even to check a theory. Do not weaken or skip an existing test.
-
-Report the root cause with the evidence for it, and flag whether the same defect likely exists elsewhere.

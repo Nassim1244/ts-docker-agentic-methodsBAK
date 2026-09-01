@@ -12,7 +12,7 @@
   - specs/ - one .md per feature, follows `specs/TEMPLATE.md`.
   - design/ - design artefacts per feature, one subfolder per spec index (e.g. `design/001/`, `design/002/`). Owned by the designer (see `agents/agent_designer.md`).
   - rules/ - policies and decisions (operational rules and their rationale).
-  - agents/ - agent workflows (product owner, designer, architect, orchestrator, reviewer, auditor, debugger, dependency).
+  - agents/ - agent workflows, one per agent: product owner, designer, architect, orchestrator, coder, tester, reviewer, committer, auditor, debugger, dependency. These are canonical; `.claude/agents/` holds thin wrappers that point at them.
   - context/ - project state (vision, progress).
 - # Root files
   - package.json - pinned dependencies, Node version, and the application `version`, which is the single source of truth for it (see `rules/policy_commits.md` -> Versioning).
@@ -39,15 +39,17 @@
     - Then `@orchestrator` drives `@coder` -> `@tester` -> `@reviewer` -> `@committer`.
     - Bug report -> `@debugger` reproduces and writes the failing test, then rejoins at `@coder`.
   - When designing structure -> load `rules/policy_architecture.md`.
-  - When writing code -> dispatch to `@coder` -> loads `rules/policy_coding_guidelines.md`. The coder writes production code only.
-  - When writing tests -> dispatch to `@tester` -> loads `rules/policy_testing.md`. The coder must never write tests.
-  - When committing -> load `rules/policy_commits.md`.
-  - When reviewing -> run `agents/agent_reviewer.md` (loads all policies + decisions). The reviewer also owns the security review.
+  - When writing code -> dispatch to `@coder`, which runs `agents/agent_coder.md`. The coder writes production code only.
+  - When writing tests -> dispatch to `@tester`, which runs `agents/agent_tester.md`. The coder must never write tests.
+  - When committing -> dispatch to `@committer`, which runs `agents/agent_committer.md`.
+  - When reviewing -> dispatch to `@reviewer`, which runs `agents/agent_reviewer.md`. The reviewer also owns the security review.
+  - These lines route. They do not say what each agent loads: that belongs to the agent's own `Load` section, which is the only place it is stated.
   - When writing a technical spec, designing structure, writing code, writing a spec, or reviewing -> also load `rules/policy_security.md`.
   - When auditing dependencies -> run `agents/agent_dependency.md`.
+  - When changing or verifying the method itself - a policy, an agent document, this file, the README, the spec template or the bootstrap -> dispatch to `@ai-method`. Never edit those in the main session.
   - Load `rules/decisions.md` only to (a) review, (b) propose a new decision, or (c) check the rationale behind a rule.
 - # Subagents (Claude Code)
-  - When running under Claude Code, you must dispatch each task to the matching subagent in `.claude/agents/`: `product-owner`, `designer`, `architect`, `orchestrator`, `coder`, `tester`, `reviewer`, `committer`, `auditor`, `debugger`, `dependency`.
+  - When running under Claude Code, you must dispatch each task to the matching subagent in `.claude/agents/`: `product-owner`, `designer`, `architect`, `orchestrator`, `coder`, `tester`, `reviewer`, `committer`, `auditor`, `debugger`, `dependency`, `ai-method`.
   - Do not handle these tasks in the main session - that defeats the context isolation.
   - Never skip `@tester`. The coder must not author tests; the tester is the sole author of the `tests/` and `e2e/` trees.
   - If a subagent cannot be invoked, fails, or returns an error, stop and ask the user how to proceed. Never silently fall back to the main session.

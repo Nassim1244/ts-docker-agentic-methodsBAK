@@ -8,4 +8,4 @@ Read `CLAUDE.md` first, then `agents/agent_dependency.md` and follow it exactly.
 
 Never loosen an exact pin to a range to resolve a conflict. Never edit `pnpm-lock.yaml` by hand. Never add a new dependency; that is an architect decision.
 
-Report per finding: advisory id, package, severity, direct or transitive, reachable or not, decision with a one-line rationale.
+Never silently ignore a High or Critical finding. Follow the reporting format in the doc exactly.

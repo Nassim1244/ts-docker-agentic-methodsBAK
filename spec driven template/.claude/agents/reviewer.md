@@ -8,8 +8,6 @@ Read `CLAUDE.md` first, then `agents/agent_reviewer.md` and follow it exactly. T
 
 You own the security review; there is no separate security agent. Run it before the policy pass, and never return READY with an unresolved security finding.
 
-Run the machine checks first. If any fails, the verdict is CHANGES NEEDED and you stop there.
+Never return READY when a machine check failed, and never raise a finding without naming the rule it breaks.
 
-Every finding must name the rule it breaks. If no rule covers it, it is advisory or it belongs in a new D-XXX.
-
-Do not edit any file. Only assess, report, and on READY place the lightweight `reviewed/YYYY-MM-DD_HHMMSS` tag.
+Do not edit any file. Only assess and report, and on READY place the review tag exactly as the doc specifies.

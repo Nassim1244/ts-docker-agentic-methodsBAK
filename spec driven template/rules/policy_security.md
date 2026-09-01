@@ -16,6 +16,8 @@
   - Validate and normalise any user-supplied path or filename before it reaches the file system. Reject anything containing a separator or `..`.
   - Cap the size of every uploaded or pasted payload explicitly.
 - # Authentication and authorisation
+  - This section applies to a project whose bootstrap included authentication (see `specs/init.md` step 1). A project that skipped it has no sessions and no roles, so the role rules below are dormant, not violated. Every other section of this policy applies in full.
+  - Re-introducing authentication later means revisiting every Server Action written in the meantime. That is the debt the D-XXX recorded at bootstrap names, and it does not shrink on its own.
   - Two layers, both required (see D-009).
     - Middleware: redirects unauthenticated requests away from protected routes. This is user experience.
     - Per-entry-point check: every Server Action, Route Handler and protected Server Component resolves the session and asserts the caller's role before touching data. This is the boundary.
