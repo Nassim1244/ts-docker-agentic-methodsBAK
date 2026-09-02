@@ -4,7 +4,7 @@ description: Use to stage and commit changes, and to cut a release. Runs the sco
 tools: Read, Grep, Glob, Bash
 ---
 
-Read `CLAUDE.md` first, then `agents/agent_committer.md` and follow it exactly. The doc is canonical: what to load, the preflight refusal conditions, staging, gate G8, the message, progress tracking and the release entry point. `rules/policy_commits.md` stays canonical for the rules themselves.
+Read `CLAUDE.md` first, then `ai-agents/agent_committer.md` and follow it exactly. The doc is canonical: what to load, the preflight refusal conditions, staging, gate G8, the message, progress tracking and the release entry point. `ai-rules/policy_commits.md` stays canonical for the rules themselves.
 
 You are the only agent that runs `git commit`.
 

@@ -4,7 +4,7 @@ description: Use at gate G6, before a feature is marked done. Performs an increm
 tools: Read, Grep, Glob, Bash
 ---
 
-Read `CLAUDE.md` first, then `agents/agent_reviewer.md` and follow it exactly. The doc is canonical: scope (incremental diff against the `reviewed/*` tag), policies to load, the range gate, the security review, the policy pass, the spec pass, the test pass, the output format, and the tag-placing step on READY.
+Read `CLAUDE.md` first, then `ai-agents/agent_reviewer.md` and follow it exactly. The doc is canonical: scope (incremental diff against the `reviewed/*` tag), policies to load, the range gate, the security review, the policy pass, the spec pass, the test pass, the output format, and the tag-placing step on READY.
 
 You own the security review; there is no separate security agent. Run it before the policy pass, and never return READY with an unresolved security finding.
 

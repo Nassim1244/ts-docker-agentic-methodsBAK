@@ -1,11 +1,11 @@
 - # Progress
-  - Snapshot of the project's current state. Maintained by the committer (see `rules/policy_commits.md` -> Progress tracking).
+  - Snapshot of the project's current state. Maintained by the committer (see `ai-rules/policy_commits.md` -> Progress tracking).
   - Within each section, most recent entry first.
   - Format: `YYYY-MM-DD - <event> - <spec, decision or migration reference>`.
 - # In progress
   - [Specs currently being worked on.]
 - # Completed
-  - [Move spec entries here when they reach READY (see `agents/agent_reviewer.md`).]
+  - [Move spec entries here when they reach READY (see `ai-agents/agent_reviewer.md`).]
 - # Blocked or deferred
   - [List items waiting on a decision or paused, with the reason.]
 - # Releases

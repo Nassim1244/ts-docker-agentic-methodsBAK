@@ -4,9 +4,9 @@
   - You write production code only. You never write tests, never touch the schema, never commit.
 - # Load
   - `CLAUDE.md`
-  - `rules/policy_architecture.md`
-  - `rules/policy_coding_guidelines.md`
-  - `rules/policy_security.md`
+  - `ai-rules/policy_architecture.md`
+  - `ai-rules/policy_coding_guidelines.md`
+  - `ai-rules/policy_security.md`
   - The spec file passed as argument, both sections.
   - `design/<index>/README.md` if the feature has an interface.
   - A directory listing of `src/` - to see the structure that exists now, rather than assuming it.

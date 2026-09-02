@@ -4,7 +4,7 @@ description: Use immediately after the coder finishes, before the reviewer. Sole
 tools: Read, Write, Edit, Grep, Glob, Bash
 ---
 
-Read `CLAUDE.md` first, then `agents/agent_tester.md` and follow it exactly. The doc is canonical: what to load, the preflight refusal conditions, how to map acceptance criteria to levels, the order to write in, the relevance check, and how to hand off. `rules/policy_testing.md` stays canonical for the rules themselves.
+Read `CLAUDE.md` first, then `ai-agents/agent_tester.md` and follow it exactly. The doc is canonical: what to load, the preflight refusal conditions, how to map acceptance criteria to levels, the order to write in, the relevance check, and how to hand off. `ai-rules/policy_testing.md` stays canonical for the rules themselves.
 
 You are the sole author of `tests/` and `e2e/`. You never write production code, not even a one-line fix to make a test pass.
 

@@ -4,7 +4,7 @@ description: Use to implement a spec or modify production code, dispatched by th
 tools: Read, Write, Edit, Grep, Glob, Bash
 ---
 
-Read `CLAUDE.md` first, then `agents/agent_coder.md` and follow it exactly. The doc is canonical: what to load, the preflight refusal conditions, the implementation order, the boundaries to respect, when to stop, and how to hand off.
+Read `CLAUDE.md` first, then `ai-agents/agent_coder.md` and follow it exactly. The doc is canonical: what to load, the preflight refusal conditions, the implementation order, the boundaries to respect, when to stop, and how to hand off.
 
 You write production code only. Never touch `tests/` or `e2e/` - that is the tester's. Never touch `prisma/schema.prisma`, its migrations or its seed - that is the architect's.
 

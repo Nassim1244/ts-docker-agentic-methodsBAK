@@ -1,8 +1,8 @@
 - # Bootstrap
   - Run this once, on an empty repository holding only the template files.
   - Goal: a running, containerised Next.js application with the full toolchain wired, ending with `specs/001-hello-world.md` implemented and committed.
-  - Read `CLAUDE.md`, `rules/policy_techstack.md`, `rules/policy_architecture.md` and `rules/decisions.md` before starting.
-  - Work through the steps in order. Stop and ask at every point marked **ASK**. Commit where marked, following `rules/policy_commits.md`.
+  - Read `CLAUDE.md`, `ai-rules/policy_techstack.md`, `ai-rules/policy_architecture.md` and `ai-rules/decisions.md` before starting.
+  - Work through the steps in order. Stop and ask at every point marked **ASK**. Commit where marked, following `ai-rules/policy_commits.md`.
 - # 0 - Fill the vision
   - **ASK** the user for the content of `context/vision.md`: purpose, why it exists, non-goals, target user, deployment context.
   - Do not proceed with placeholders. Every later decision refers back to this file.
@@ -12,7 +12,7 @@
       - MIT or Apache-2.0 - permissive, anyone may build a closed product on it.
       - AGPL-3.0 - copyleft that reaches network use, so a hosted derivative must publish its source. The usual choice when a self-hosted product may later be sold under a commercial exception.
       - Proprietary - no open-source grant. The usual choice when the software will be licensed per customer.
-  - Record the answer as a new D-XXX in `rules/decisions.md`, with "Rule lives in: project root `LICENSE`".
+  - Record the answer as a new D-XXX in `ai-rules/decisions.md`, with "Rule lives in: project root `LICENSE`".
   - Write `LICENSE`.
   - **ASK** the user whether the bootstrap includes authentication. This governs steps 4, 8 and 8b, and it has to be answered here because step 4 declares the environment variables.
     - Include it - Better Auth, roles, sessions and the middleware are wired at bootstrap. The application is protected from its first commit, and the two layers of D-009 are in place before any feature exists.
@@ -24,7 +24,7 @@
   - Set `"strict": true` and `"noUncheckedIndexedAccess": true` in `tsconfig.json`.
   - Pin the Node version in `package.json` `engines`, and add an `.nvmrc` with the same version.
   - Replace every caret range in `package.json` with an exact version (see D-002). Run `pnpm install` and commit `pnpm-lock.yaml`.
-  - Create the empty folder skeleton from `rules/policy_architecture.md` -> Structure: `src/features/`, `src/lib/`, `src/components/ui/`, `tests/`, `e2e/`, `design/`.
+  - Create the empty folder skeleton from `ai-rules/policy_architecture.md` -> Structure: `src/features/`, `src/lib/`, `src/components/ui/`, `tests/`, `e2e/`, `design/`.
   - Commit: `chore: scaffold next.js application`.
 - # 3 - Toolchain
   - Prettier with `prettier-plugin-tailwindcss`. Add `format` and `format:check` scripts.
@@ -48,7 +48,7 @@
   - Commit: `feat(lib): add structured logging`.
 - # 6 - Value objects
   - Create `src/lib/money/` with `Money`, `Duration` and `Rate` (see D-007).
-    - `Money` - constructed from and serialised to integer cents. Addition, subtraction, multiplication by a `Rate`, division into equal parts with the remainder distributed deterministically, comparison, and formatting against the single locale constant of `rules/policy_coding_guidelines.md` -> Value objects.
+    - `Money` - constructed from and serialised to integer cents. Addition, subtraction, multiplication by a `Rate`, division into equal parts with the remainder distributed deterministically, comparison, and formatting against the single locale constant of `ai-rules/policy_coding_guidelines.md` -> Value objects.
     - `Duration` - constructed from and serialised to integer minutes. Addition, rounding up to a configurable step, conversion to a decimal number of days given a day length, formatting.
     - `Rate` - constructed from and serialised to integer basis points. Application to a `Money`, formatting as a percentage.
   - Every rounding rule lives inside these classes. Nothing outside `src/lib/money/` performs arithmetic on cents, minutes or basis points.
@@ -72,7 +72,7 @@
   - **ASK** the user for the initial role list, and how the first administrator account is created.
   - Commit: `feat(auth): add better auth with roles and sessions`.
 - # 8b - Seed
-  - Create `prisma/seed.ts` with the two modes defined in `rules/policy_testing.md` -> Seed data, selected by an argument and never by `NODE_ENV`.
+  - Create `prisma/seed.ts` with the two modes defined in `ai-rules/policy_testing.md` -> Seed data, selected by an argument and never by `NODE_ENV`.
   - The script refuses to run against a database that already holds rows, in both modes.
   - Add `db:seed` and `db:seed:test` scripts.
   - When authentication was included:
@@ -85,19 +85,31 @@
   - Commit: `feat(db): add seed script with dev and test modes`.
 - # 9 - Health check
   - Create `src/app/api/health/route.ts` - the second permitted Route Handler. Returns 200 with the application version, and verifies the database is reachable.
-  - The version is read from `package.json` at build time and baked into the image. Never hard-code it and never declare it a second time (see `rules/policy_commits.md` -> Versioning).
+  - The version is read from `package.json` at build time and baked into the image. Never hard-code it and never declare it a second time (see `ai-rules/policy_commits.md` -> Versioning).
   - Commit: `feat(app): add health check endpoint`.
 - # 10 - Containerisation
-  - Write a multi-stage `Dockerfile`: dependencies, build, runtime. The runtime stage runs as a non-root user, contains no dev dependencies, and uses Next's standalone output.
-  - Write `docker-compose.yml` with a single `app` service, a named volume for the SQLite file, and attachment to the external network shared with the existing Caddy instance. No database service, no proxy service.
+  - Everything Docker reads or runs lives in `docker/`, except the two files Docker resolves against the repository root.
+  - Write `docker/Dockerfile`: multi-stage - dependencies, build, runtime. The runtime stage runs as a non-root user, contains no dev dependencies, and uses Next's standalone output.
+  - Write `docker/docker-compose.yml` with a single `app` service, `build.context` set to the repository root, a named volume for the SQLite file, and attachment to the external network shared with the existing Caddy instance. No database service, no proxy service.
   - The container entrypoint runs `prisma migrate deploy` before starting the server.
   - Add a Docker `healthcheck` pointing at `/api/health`.
-  - Tag the image with the version and with `latest` (see `rules/policy_commits.md` -> Versioning).
-  - Write `.dockerignore`.
-  - Verify: `docker compose up` from a clean checkout produces a reachable application.
+  - Tag the image with the version and with `latest` (see `ai-rules/policy_commits.md` -> Versioning).
+  - Write `.dockerignore` at the repository root, not in `docker/`. Docker resolves it against the build context, and the build context is the root.
+  - Keep `.env.example` at the repository root too. Next.js loads `.env` from the project root, so an example living anywhere else invites someone to copy it next to itself, where nothing will read it.
+  - Verify: `cd docker && docker compose up` from a clean checkout produces a reachable application.
   - Commit: `build: add multi-stage dockerfile and compose service`.
+- # 10b - Operating scripts
+  - Write two POSIX shell scripts in `docker/`, executable, each usable from any directory by resolving its own location first. They are the two things an operator does after the first deployment, and an operator who is not the developer will not assemble them from a README.
+  - `docker/restart.sh` - restart the running container without rebuilding. No image build, no migration, no data touched. This is the one to reach for when the application is wedged.
+  - `docker/update.sh` - bring a deployed instance onto a new version:
+    - **Back up the database file first, into a timestamped copy outside the volume, and abort the whole script if that copy fails.** The entrypoint runs `prisma migrate deploy` on a file holding years of financial data, and a migration is the one operation with no undo. Everything else in this script is recoverable; this is the step that makes it so.
+    - Then build the image, recreate the container, and wait on the `/api/health` endpoint before declaring success.
+    - Report the version before and after, and where the backup was written.
+  - Neither script may run a destructive Docker command - no `down -v`, no volume removal, no image pruning. Removing the volume deletes the database, and a script an operator runs monthly must not be one keystroke away from that.
+  - **ASK** the user where backups should be written and how many to keep. Record the answer as a D-XXX; the template has no operations policy to default to.
+  - Commit: `build: add restart and update scripts`.
 - # 11 - Security headers
-  - Set `Strict-Transport-Security`, `X-Content-Type-Options`, `Referrer-Policy` and a frame-ancestors policy once, in `next.config` or middleware (see `rules/policy_security.md`).
+  - Set `Strict-Transport-Security`, `X-Content-Type-Options`, `Referrer-Policy` and a frame-ancestors policy once, in `next.config` or middleware (see `ai-rules/policy_security.md`).
   - Commit: `feat(app): add security headers`.
 - # 12 - shadcn/ui
   - Initialise shadcn/ui with components copied into `src/components/ui/`.
@@ -105,7 +117,7 @@
   - **ASK** the user for the base colour and the light or dark default.
   - Commit: `feat(ui): add shadcn primitives`.
 - # 13 - Dependency audit
-  - Run `agents/agent_dependency.md` once. Report using its format: advisory id, package, severity, direct or transitive, reachable or not, decision.
+  - Run `ai-agents/agent_dependency.md` once. Report using its format: advisory id, package, severity, direct or transitive, reachable or not, decision.
   - Stop after the first report. Do not auto-upgrade.
 - # 14 - Hello world
   - Implement `specs/001-hello-world.md` through the normal workflow, to prove every gate and every agent handoff works.

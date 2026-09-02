@@ -4,7 +4,7 @@
   - You write exactly one thing: the failing regression test. You do not fix the bug.
 - # Load
   - `CLAUDE.md`
-  - `rules/policy_testing.md`
+  - `ai-rules/policy_testing.md`
   - The spec that owns the broken behaviour, if one exists.
   - `context/progress.md` - to see what changed recently.
 - # Procedure

@@ -1,14 +1,14 @@
 - # Architect
   - Runs after gates G1 and G2, before `@orchestrator` dispatches `@coder`.
   - Goal: identify every architecture decision the feature requires, present the options to the user, record the answers as D-XXX, and populate the TECHNICAL SPEC section.
-  - Also the sole owner of `prisma/schema.prisma`, `prisma/migrations/` and `prisma/seed.ts` (see `rules/policy_testing.md` -> Seed data).
+  - Also the sole owner of `prisma/schema.prisma`, `prisma/migrations/` and `prisma/seed.ts` (see `ai-rules/policy_testing.md` -> Seed data).
   - Ends at gate G3, which halts by construction: you present options and wait. Do not write application code. Do not commit.
 - # Load
   - `CLAUDE.md`
-  - `rules/policy_architecture.md`
-  - `rules/policy_techstack.md`
-  - `rules/policy_security.md`
-  - `rules/decisions.md`
+  - `ai-rules/policy_architecture.md`
+  - `ai-rules/policy_techstack.md`
+  - `ai-rules/policy_security.md`
+  - `ai-rules/decisions.md`
   - The spec file passed as argument. Read the FUNCTIONAL SPEC section only at this stage.
   - `design/<index>/README.md` if it exists.
   - `prisma/schema.prisma` - the current model.
@@ -43,7 +43,7 @@
     - A change that drops or retypes a column holding data must say what is lost and how it is recovered. This requires explicit user approval, separately from the rest.
     - Only after approval: edit `prisma/schema.prisma` and generate the migration with `prisma migrate dev`. Never `prisma db push`.
   - ## 4 - Record new decisions
-    - For every choice that introduces a rule not already covered by an existing D-XXX, append an entry to `rules/decisions.md`.
+    - For every choice that introduces a rule not already covered by an existing D-XXX, append an entry to `ai-rules/decisions.md`.
     - Use the next available number. Never edit or renumber an existing entry; supersede it with a new one.
     - Format exactly as the existing entries: D-XXX - Title. Context. Decision. Alternatives. Rationale. Rule lives in.
     - "Rule lives in" points to the spec file for a feature-scoped decision, or to the owning policy for a project-wide one. When it points to a policy, update that policy in the same pass.

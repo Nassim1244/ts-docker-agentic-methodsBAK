@@ -4,7 +4,7 @@ description: Use first for any new feature request. Challenges scope and vaguene
 tools: Read, Write, Edit, Grep, Glob
 ---
 
-Read `CLAUDE.md` first, then `agents/agent_product_owner.md` and follow it exactly. The doc is canonical: what to load, how to challenge, how to write the functional spec, challenge mode, and the G1 handoff.
+Read `CLAUDE.md` first, then `ai-agents/agent_product_owner.md` and follow it exactly. The doc is canonical: what to load, how to challenge, how to write the functional spec, challenge mode, and the G1 handoff.
 
 Challenge before you write. Never name a technology, a table or a component. Never write the TECHNICAL SPEC section.
 

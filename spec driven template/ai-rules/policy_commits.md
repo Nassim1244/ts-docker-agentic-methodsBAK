@@ -3,13 +3,14 @@
   - Canonical home for: pre-commit checks, branching, commit format, allowed types, scope, breaking changes, traceability, progress tracking.
   - Conventional Commits style. Trunk-based workflow.
 - # Before committing (gate G8)
-  - Pre-commit checks are scoped to what is staged. The reviewer applies the same scoping on the aggregated diff range (see `agents/agent_reviewer.md` -> Check).
+  - Pre-commit checks are scoped to what is staged. The reviewer applies the same scoping on the aggregated diff range (see `ai-agents/agent_reviewer.md` -> Check).
     - Staged changes include any `.ts` or `.tsx` under `src/`, `tests/` or `e2e/`: run `pnpm format:check`, `pnpm lint`, `pnpm typecheck`. All three must pass.
     - Staged changes include any `.ts` or `.tsx` under `src/` or `tests/`: also run `pnpm test`. Must pass.
     - Staged changes touch `prisma/schema.prisma` or `prisma/migrations/`: also confirm a migration file accompanies the schema change, and run `pnpm test`.
-    - Staged changes touch `package.json`, `pnpm-lock.yaml`, `tsconfig.json`, `next.config.*`, `Dockerfile` or `docker-compose.yml`: run all four checks.
-    - Docs-only commits (changes confined to `rules/`, `agents/`, `.claude/`, `context/`, `specs/`, `design/`, `CLAUDE.md`, `README.md`, `CHANGELOG.md`, `LICENSE`, `.gitignore`): no pre-commit checks required. Format, lint and type checks have nothing to say about Markdown.
-    - Staged changes touch the method itself (`rules/`, `agents/`, `.claude/`, `CLAUDE.md`, `README.md`, `specs/TEMPLATE.md`, `specs/init.md`): no machine check applies, but `@ai-method` in `check` mode must have returned PASS. The method governs every feature built afterwards, so it is the one docs change that is not exempt from review.
+    - Staged changes touch `package.json`, `pnpm-lock.yaml`, `tsconfig.json`, `next.config.*` or anything under `docker/`: run all four checks.
+    - Staged changes include a shell script: run `shellcheck` on it if available, and state plainly that it was not run if it is not. `docker/` holds the only executables in the tree, and they are the ones an operator runs on a live instance.
+    - Docs-only commits (changes confined to `ai-rules/`, `ai-agents/`, `.claude/`, `context/`, `specs/`, `design/`, `CLAUDE.md`, `README.md`, `CHANGELOG.md`, `LICENSE`, `.gitignore`): no pre-commit checks required. Format, lint and type checks have nothing to say about Markdown.
+    - Staged changes touch the method itself (`ai-rules/`, `ai-agents/`, `.claude/`, `CLAUDE.md`, `README.md`, `specs/TEMPLATE.md`, `specs/init.md`): no machine check applies, but `@ai-method` in `check` mode must have returned PASS. The method governs every feature built afterwards, so it is the one docs change that is not exempt from review.
   - Always invoke tooling through the package manager scripts (`pnpm lint`, `pnpm typecheck`, `pnpm test`). Never call a globally installed `eslint`, `tsc`, `vitest` or `prettier`.
   - Stage only the files belonging to the logical change. No blanket `git add .`.
   - Never commit `node_modules/`, `.next/`, a `.env` file, a database file, coverage output or a secret. `.gitignore` covers this; a deviation is a bug.
@@ -52,8 +53,8 @@
   - A release is a tagged commit on `main` whose image has been built and verified. Nothing else is a release.
   - Only run this on `main`, with a clean working tree and every gate passed.
   - Procedure:
-    - 1. Run `agents/agent_reviewer.md` in full-tree mode, not incremental. A release is the one time the review is not scoped to a diff.
-    - 2. Run `agents/agent_dependency.md`. No unresolved High or Critical finding may ship.
+    - 1. Run `ai-agents/agent_reviewer.md` in full-tree mode, not incremental. A release is the one time the review is not scoped to a diff.
+    - 2. Run `ai-agents/agent_dependency.md`. No unresolved High or Critical finding may ship.
     - 3. Compute the new version with the bump rule above, from the commits since the previous `v*` tag. State the version and the reason for the bump before applying it.
     - 4. Bump `version` in `package.json`. Commit as `chore(release): v<version>`.
     - 5. Build the image and tag it `<name>:v<version>` and `<name>:latest`.

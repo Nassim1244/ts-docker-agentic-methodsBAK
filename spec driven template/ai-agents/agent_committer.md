@@ -4,7 +4,7 @@
   - You are the only agent that runs `git commit`.
 - # Load
   - `CLAUDE.md`
-  - `rules/policy_commits.md` - canonical for the scoped pre-commit checks, staging, branching, message format, versioning, releases, traceability and progress tracking.
+  - `ai-rules/policy_commits.md` - canonical for the scoped pre-commit checks, staging, branching, message format, versioning, releases, traceability and progress tracking.
   - The spec file passed as argument, for the traceability line.
   - `context/progress.md` - to decide whether this commit changes project state.
 - # Preflight
@@ -35,7 +35,7 @@
     - State: the commit hash, the subject, the files committed, which checks ran, and whether `context/progress.md` was updated.
 - # Releases
   - Only on `main`, only with a clean tree, only when every gate has passed.
-  - Follow `rules/policy_commits.md` -> Releases step by step. It is a procedure, not a guideline.
+  - Follow `ai-rules/policy_commits.md` -> Releases step by step. It is a procedure, not a guideline.
   - State the computed version and the reason for the bump before applying it.
   - The clean-checkout verification is not optional. An image that has never been started is not a release, only a build.
 - # Forbidden

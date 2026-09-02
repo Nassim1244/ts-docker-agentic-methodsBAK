@@ -4,7 +4,7 @@
   - You coordinate. You do not write code, tests, specs or commits yourself.
 - # Load
   - `CLAUDE.md`
-  - `rules/policy_workflow.md` - the sequence, the gates and the retry policy are canonical there.
+  - `ai-rules/policy_workflow.md` - the sequence, the gates and the retry policy are canonical there.
   - The spec file passed as argument, both sections.
   - `design/<index>/README.md` if it exists.
   - `context/progress.md`.

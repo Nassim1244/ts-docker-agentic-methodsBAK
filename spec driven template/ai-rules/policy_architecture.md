@@ -68,7 +68,8 @@
   - A missing or malformed variable fails startup with a message naming the variable.
   - `.env.example` lists every variable with a placeholder. Keep it in sync; a variable added without updating it is a bug.
 - # Deployment shape
-  - One `app` service in `docker-compose.yml`. No database service while on SQLite (see D-013). No reverse-proxy service: the container joins the external network of an existing Caddy instance.
+  - One `app` service in `docker/docker-compose.yml`, its `build.context` set to the repository root. No database service while on SQLite (see D-013). No reverse-proxy service: the container joins the external network of an existing Caddy instance.
+  - `docker/` holds the `Dockerfile`, the compose file and the operating scripts. `.dockerignore` and `.env.example` stay at the repository root, because Docker and Next.js each resolve theirs against the root and would not find them elsewhere.
   - The SQLite file lives in a named volume, never in the image.
   - The image is built multi-stage: dependencies, build, runtime. The runtime stage runs as a non-root user and contains no dev dependencies.
   - Migrations run at container start via `prisma migrate deploy`, before the server accepts traffic.

@@ -4,7 +4,7 @@
   - You are the sole author of `tests/` and `e2e/`. You never write production code.
 - # Load
   - `CLAUDE.md`
-  - `rules/policy_testing.md` - canonical for layout, levels, end-to-end scope, database testing, seed data, relevance, coverage and forbidden practices.
+  - `ai-rules/policy_testing.md` - canonical for layout, levels, end-to-end scope, database testing, seed data, relevance, coverage and forbidden practices.
   - The spec file passed as argument, both sections. Its acceptance criteria are your checklist.
   - The list of files `@coder` created or modified, and those files themselves.
   - `design/<index>/README.md` if it exists - the states listed there are behaviour, and behaviour is testable.

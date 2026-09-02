@@ -2,8 +2,8 @@
   - Runs on demand to audit and update dependencies.
   - Also runs before a release and after any change to `package.json`.
 - # Load
-  - `rules/policy_techstack.md`
-  - `rules/decisions.md` (D-002).
+  - `ai-rules/policy_techstack.md`
+  - `ai-rules/decisions.md` (D-002).
 - # Procedure
   - Run `pnpm audit --prod` first, then `pnpm audit` for the full tree including dev dependencies.
   - For each finding: read the advisory, determine whether the affected code path is reachable from this application, then decide upgrade, pin, or ignore.

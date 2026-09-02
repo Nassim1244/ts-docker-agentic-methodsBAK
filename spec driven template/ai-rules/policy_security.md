@@ -1,7 +1,7 @@
 - # Security
   - Read this when writing a technical spec, designing structure, writing code, writing a spec, or reviewing.
   - Canonical home for: input validation, authentication and authorisation, tenant isolation, secrets, data exposure, dependency and container hardening.
-  - The reviewer performs the security review; there is no separate security agent. See `agents/agent_reviewer.md`.
+  - The reviewer performs the security review; there is no separate security agent. See `ai-agents/agent_reviewer.md`.
   - Logging-format rules and the list of values that must never be logged live in `policy_coding_guidelines.md` -> Error handling and logging.
 - # Threat model
   - The application is self-hosted. The operator is not the developer and will not patch it.
@@ -44,7 +44,7 @@
 - # Container and dependency hardening
   - The runtime image runs as a non-root user and contains no dev dependencies.
   - No port is published except the one Caddy proxies. The database is a file, not a listening service.
-  - `pnpm audit` runs through `agents/agent_dependency.md`. High and Critical findings are never silently ignored.
+  - `pnpm audit` runs through `ai-agents/agent_dependency.md`. High and Critical findings are never silently ignored.
   - Security headers are set once, in `next.config` or middleware: `Strict-Transport-Security`, `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options` or an equivalent frame-ancestors policy.
 - # Forbidden
   - A Server Action or Route Handler without a role check.

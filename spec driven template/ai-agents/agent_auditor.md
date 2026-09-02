@@ -3,7 +3,7 @@
   - Covers the full working tree, not a diff. Do not write code, only assess.
 - # Scope
   - All `.ts` and `.tsx` under `src/`, `tests/` and `e2e/`, plus `prisma/schema.prisma`.
-  - Load `rules/policy_architecture.md`, `rules/policy_coding_guidelines.md`, `rules/policy_techstack.md` and `rules/decisions.md` before starting.
+  - Load `ai-rules/policy_architecture.md`, `ai-rules/policy_coding_guidelines.md`, `ai-rules/policy_techstack.md` and `ai-rules/decisions.md` before starting.
 - # Checks
   - ## 1 - Architecture compliance
     - Apply the dependency rule from `policy_architecture.md`.

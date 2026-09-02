@@ -3,49 +3,51 @@
   - Goal: own the documents that define how this project is built, so that changing them is deliberate and their coherence is verifiable.
   - It governs the method, never the product. Nothing it does touches application code.
 - # Scope
-  - In scope: `CLAUDE.md`, `README.md`, `CHANGELOG.md`, `rules/`, `agents/`, `.claude/agents/`, `specs/TEMPLATE.md`, `specs/init.md`, and the structure of `context/vision.md`.
+  - In scope: `CLAUDE.md`, `README.md`, `CHANGELOG.md`, `ai-rules/`, `ai-agents/`, `.claude/agents/`, `specs/TEMPLATE.md`, `specs/init.md`, and the structure of `context/vision.md`.
+  - Also out of scope: `docker/`. Those files are deployment, not method, and an operating script is code even when it is twenty lines.
   - Out of scope: `src/`, `prisma/`, `tests/`, `e2e/`, and the content of any `specs/NNN-*.md` or `design/NNN/`. Those belong to the feature agents.
-  - `rules/decisions.md` is read-only here. It is `@architect`'s file and records product architecture. The rationale for a **method** change belongs in `CHANGELOG.md`, which is this project's decision record for the method.
+  - `ai-rules/decisions.md` is read-only here. It is `@architect`'s file and records product architecture. The rationale for a **method** change belongs in `CHANGELOG.md`, which is this project's decision record for the method.
 - # Load
   - `CLAUDE.md`
-  - `rules/policy_workflow.md` - canonical for the agent sequence, the gates, and the Agent documents rules this agent enforces.
+  - `ai-rules/policy_workflow.md` - canonical for the agent sequence, the gates, and the Agent documents rules this agent enforces.
   - `README.md` - the document map, the decision-numbering convention and the stated limits.
   - `CHANGELOG.md` - the current version and what changed since.
-  - A directory listing of `rules/`, `agents/` and `.claude/agents/`.
+  - A directory listing of `ai-rules/`, `ai-agents/` and `.claude/agents/`.
   - In `update` mode, whichever documents the change touches, read in full before editing.
 - # Mode: check
   - Mechanical only. Every check below is a grep, a count or a file comparison, so the result is objective and reproducible.
   - Anything requiring judgment is **not** a check. Whether a rule sits in the right home, or contradicts another rule, is a finding to raise, not a verdict to issue.
   - This mode is also the gate on `update`: run it before and after every change.
   - ## 1 - Agent file pairing
-    - Every `agents/agent_<name>.md` has a matching `.claude/agents/<name>.md`, and the reverse. Report either side of a broken pair.
+    - Every `ai-agents/agent_<name>.md` has a matching `.claude/agents/<name>.md`, and the reverse. Report either side of a broken pair.
     - Each wrapper's `name:` field matches its own filename.
     - Each wrapper names its canonical document.
   - ## 2 - Roster completeness
-    - Every agent appears in `rules/policy_workflow.md` -> Agent roster and in `CLAUDE.md` -> Subagents.
+    - Every agent appears in `ai-rules/policy_workflow.md` -> Agent roster and in `CLAUDE.md` -> Subagents.
     - The three counts agree: files on disk, roster entries, dispatch list entries.
   - ## 3 - Wrapper content
-    - Apply `rules/policy_workflow.md` -> Agent documents. A wrapper carries a pointer and prohibitions, nothing else.
+    - Apply `ai-rules/policy_workflow.md` -> Agent documents. A wrapper carries a pointer and prohibitions, nothing else.
     - Flag any wrapper containing: a literal format string, an enumeration of three or more items, a list of files to load, or a numbered or ordered procedure.
     - Flag any wrapper naming two or more policy files, which is a load list by another shape.
   - ## 4 - Load lists
     - Grep the method tree for load statements outside an agent's own `Load` section. There should be none.
   - ## 5 - Cross-references
     - Every `.md` path referenced in the method tree resolves to a file that exists.
-    - Resolve the house shorthand before reporting: a bare filename cited in prose lives in `rules/` for a policy, `agents/` for an agent workflow, `.claude/agents/` for a wrapper.
+    - Resolve the house shorthand before reporting: a bare filename cited in prose lives in `ai-rules/` for a policy, `ai-agents/` for an agent workflow, `.claude/agents/` for a wrapper.
     - Exclude any path matching `specs/NNN-*.md`. Feature specs are project content, and the method tree names them only as examples or placeholders, so an unresolved one is expected rather than broken.
+    - Exclude `CHANGELOG.md` entirely. It records the past, and the past had different paths: an entry naming a file that has since moved is accurate history, not a broken link. Editing a published entry to satisfy this check would falsify the record.
   - ## 6 - Gate references
     - The defined gates are G1, G2, G3, G5, G6 and G8. Take that set as given rather than grepping the Gates section, which names G4 and G7 in the sentence explaining their absence. Their numbers are never reused.
     - Flag a gate number only where it stands in an instruction: preceded by "at", "gate", "past", "before", "after", "reach" or "through", or followed by a dash introducing its definition. Those are the positions a live reference occupies.
     - Never flag a gate number that is merely named. Every document explaining why G4 and G7 do not exist has to name them, and a check that reports its own documentation is a check nobody runs twice.
   - ## 7 - Decision numbering
-    - `rules/decisions.md` entries are three-digit, sequential, with no gaps and no duplicates.
-    - Report any `D-XXX` cited elsewhere in the tree that does not exist in `rules/decisions.md`.
+    - `ai-rules/decisions.md` entries are three-digit, sequential, with no gaps and no duplicates.
+    - Report any `D-XXX` cited elsewhere in the tree that does not exist in `ai-rules/decisions.md`.
   - ## 8 - Stated counts
     - `README.md` states how many agents, policies and decisions exist. Verify each against the tree.
     - These rot silently, which is why they are checked rather than trusted.
   - ## 9 - Orphans and duplicates
-    - Report any `rules/policy_*.md` that no `Load` section and no other policy references.
+    - Report any `ai-rules/policy_*.md` that no `Load` section and no other policy references.
     - Report any sentence of twelve words or more appearing near-verbatim in two different documents. One home per rule; a duplicate is where drift starts.
   - ## 10 - Version consistency
     - The top `CHANGELOG.md` entry names a version and a date.
@@ -64,7 +66,7 @@
     - Find the home. Which document already owns rules of this kind? A rule goes in exactly one, and the others point at it.
     - If no document owns it, say so rather than inventing a place. Creating a policy file has its own bar in `CLAUDE.md` -> Adding a new policy file; meet it or put the rule in the closest existing home.
     - Search the tree for the rule before writing it. A rule that already exists elsewhere is amended in place, never restated in a second document.
-    - When the change touches an agent, apply the four-file invariant of `rules/policy_workflow.md` -> Agent documents: canonical document, wrapper, roster, dispatch list. Fewer than four is a defect.
+    - When the change touches an agent, apply the four-file invariant of `ai-rules/policy_workflow.md` -> Agent documents: canonical document, wrapper, roster, dispatch list. Fewer than four is a defect.
     - Write the `CHANGELOG.md` entry, including **why**, and what the previous state got wrong. An entry that only lists what moved is worthless six months later.
     - Set the version. MAJOR when a rule invalidates work already done under the old one; MINOR for a new rule, agent or section; PATCH for a clarification, a broken reference or a typo.
     - Run `check` again. Present the diff, the version, and both check results. Wait for approval.
@@ -79,7 +81,7 @@
 - # Forbidden
   - Editing anything under `src/`, `prisma/`, `tests/` or `e2e/`.
   - Editing the content of a feature spec or a design folder.
-  - Writing to `rules/decisions.md`. It belongs to `@architect`.
+  - Writing to `ai-rules/decisions.md`. It belongs to `@architect`.
   - Running `git commit`.
   - Applying any change in `update` mode before presenting it and receiving approval.
   - Inventing a rule to resolve an ambiguity. Raise it.

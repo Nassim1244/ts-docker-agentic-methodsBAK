@@ -4,7 +4,7 @@
   - Version and history: `CHANGELOG.md`.
 - # What this template is
   - Opinionated and stack-specific. Next.js with the App Router, TypeScript, Prisma, SQLite, Better Auth, Tailwind, shadcn/ui, Vitest, Playwright, Docker Compose behind an existing Caddy instance.
-  - It is **not** stack-agnostic, and pretending otherwise would be the fastest way to ruin it. `rules/policy_architecture.md` is built around Server Actions and the App Router; `rules/decisions.md` D-001 to D-015 assume Prisma and SQLite; `specs/init.md` scaffolds a Next.js project. On a Python service or a CLI, the workflow and the gates transfer, and almost nothing else does.
+  - It is **not** stack-agnostic, and pretending otherwise would be the fastest way to ruin it. `ai-rules/policy_architecture.md` is built around Server Actions and the App Router; `ai-rules/decisions.md` D-001 to D-015 assume Prisma and SQLite; `specs/init.md` scaffolds a Next.js project. On a Python service or a CLI, the workflow and the gates transfer, and almost nothing else does.
   - What makes it worth copying is not the stack. It is that every rule is specific enough for `@reviewer` to cite it and refuse a change, which is what separates a policy from a wish.
 - # What it guarantees, and what it does not
   - It guarantees that a feature cannot reach a commit without: an approved functional spec, an approved design when it has an interface, a technical spec with its decisions recorded, tests written by someone other than the author, and a review that names the rule behind every finding.
@@ -12,7 +12,8 @@
 - # Instantiating a new project
   - ## 1 - Copy
     - Copy the whole folder into the new repository, including the hidden `.claude/` directory. Without `.claude/agents/`, subagent dispatch does not work and every task silently collapses into the main session, which defeats the context isolation the workflow depends on.
-    - Confirm the copy: `agents/` and `.claude/agents/` must both hold twelve files.
+    - Confirm the copy: `ai-agents/` and `.claude/agents/` must both hold twelve files.
+    - The `ai-` prefix marks what drives the method rather than the product. It matters once the template lands in a real application: `rules/` at the root of a billing system reads as the business rules, and `agents/` collides the day the product grows an AI feature of its own.
   - ## 2 - Fill the vision
     - `context/vision.md` ships full of bracketed placeholders. Fill every one before anything else. `specs/init.md` step 0 refuses to proceed otherwise, and it is right to: every later decision refers back to that file.
     - Leave the Roadmap's "Later" entry about continuous integration in place. It is the record of a debt, not filler.
@@ -33,20 +34,21 @@
 - # Document map
   - Every rule has exactly one home. When two documents seem to cover the same ground, the one named here wins and the other should be pointing at it.
   - `CLAUDE.md` - the entry point, read first at every session. Holds the folder layout and the short form of the workflow. Not a rule book.
-  - `rules/policy_workflow.md` - the agent sequence, the gates, the retry policy, the handoff rules. Read before starting or resuming any feature.
-  - `rules/policy_architecture.md` - structure, dependency rule, server boundary, data access, data-model conventions, migrations, configuration, deployment shape.
-  - `rules/policy_techstack.md` - language and library choices, dependency policy, the required `package.json` scripts.
-  - `rules/policy_coding_guidelines.md` - style, TypeScript rules, React and Next idioms, forms, value objects, error handling and logging.
-  - `rules/policy_testing.md` - test layout, what to test at which level, database testing, seed data, relevance, coverage stance.
-  - `rules/policy_security.md` - threat model, input validation, authorisation, tenant isolation, secrets, data exposure, container hardening.
-  - `rules/policy_commits.md` - pre-commit checks, branching, message format, versioning, the release procedure, progress tracking.
-  - `rules/decisions.md` - rationale for **product architecture** only, written by `@architect`. Each entry names the policy that owns the corresponding rule. Load it to review, to propose a decision, or to check why a rule exists - not to look up what the rule is.
-  - `CHANGELOG.md` - the version history and the rationale for **method** changes, written by `@ai-method`. It is to the method what `rules/decisions.md` is to the architecture, which is why its entries carry a why and not only a what.
-  - `agents/agent_*.md` - one workflow per agent, canonical.
+  - `ai-rules/policy_workflow.md` - the agent sequence, the gates, the retry policy, the handoff rules. Read before starting or resuming any feature.
+  - `ai-rules/policy_architecture.md` - structure, dependency rule, server boundary, data access, data-model conventions, migrations, configuration, deployment shape.
+  - `ai-rules/policy_techstack.md` - language and library choices, dependency policy, the required `package.json` scripts.
+  - `ai-rules/policy_coding_guidelines.md` - style, TypeScript rules, React and Next idioms, forms, value objects, error handling and logging.
+  - `ai-rules/policy_testing.md` - test layout, what to test at which level, database testing, seed data, relevance, coverage stance.
+  - `ai-rules/policy_security.md` - threat model, input validation, authorisation, tenant isolation, secrets, data exposure, container hardening.
+  - `ai-rules/policy_commits.md` - pre-commit checks, branching, message format, versioning, the release procedure, progress tracking.
+  - `ai-rules/decisions.md` - rationale for **product architecture** only, written by `@architect`. Each entry names the policy that owns the corresponding rule. Load it to review, to propose a decision, or to check why a rule exists - not to look up what the rule is.
+  - `CHANGELOG.md` - the version history and the rationale for **method** changes, written by `@ai-method`. It is to the method what `ai-rules/decisions.md` is to the architecture, which is why its entries carry a why and not only a what.
+  - `ai-agents/agent_*.md` - one workflow per agent, canonical.
   - `.claude/agents/*.md` - thin Claude Code wrappers. Frontmatter, then a pointer to the canonical doc. They exist so Claude Code can dispatch; they are not a second place to put rules.
   - `specs/TEMPLATE.md` - the shape of a spec. `specs/init.md` - the bootstrap. `specs/NNN-*.md` - one per feature.
+  - `docker/` - the `Dockerfile`, the compose file and the two operating scripts, created at bootstrap step 10. `.dockerignore` and `.env.example` stay at the repository root, because Docker and Next.js each resolve theirs against the root.
 - # Decision numbering
-  - `rules/decisions.md` uses `D-001`, `D-002`, ... - three digits, zero-padded, allocated by `@architect`, append-only.
+  - `ai-rules/decisions.md` uses `D-001`, `D-002`, ... - three digits, zero-padded, allocated by `@architect`, append-only.
   - Keep the three-digit form even when a project's own upstream documents use a `D-nn` series of their own. Two series sharing one prefix is a real source of confusion, and the digit count is the cheapest way to tell them apart at a glance.
   - When a project arrives with an existing functional decision record, state the convention in `CLAUDE.md` on day one: which series lives where, and which one a bare `D-` reference means.
 - # The gates
@@ -55,19 +57,19 @@
   - G6 review: judgment, and proceeds on READY.
   - There is no G4 and no G7, deliberately. G4 was migration approval, which folded into G3 when `@architect` took ownership of the schema. G7 was security clearance, which folded into G6 when `@reviewer` took ownership of the security review. The numbering is left with holes rather than renumbered, so that a reference to G6 in an old commit or an old spec still means what it meant. Do not close the gaps.
 - # Agents
-  - Twelve agents, each with a canonical workflow in `agents/` and a Claude Code wrapper in `.claude/agents/`.
+  - Twelve agents, each with a canonical workflow in `ai-agents/` and a Claude Code wrapper in `.claude/agents/`.
   - Definition, driven by the user: `@product-owner`, `@designer`, `@architect`.
   - Implementation, driven by the orchestrator: `@orchestrator`, `@coder`, `@tester`, `@reviewer`, `@committer`.
   - On demand: `@debugger` for a bug report, `@auditor` for a whole-tree health check, `@dependency` for vulnerability triage, `@ai-method` for the method's own documents.
-  - `@ai-method` is the one agent that governs the method rather than the product. Everything in this file, in `rules/` and in `agents/` is its territory, in two modes: `check` for mechanical coherence, `update` for editing the method or bringing a project's copy up to a newer version. Do not edit those documents in the main session.
+  - `@ai-method` is the one agent that governs the method rather than the product. Everything in this file, in `ai-rules/` and in `ai-agents/` is its territory, in two modes: `check` for mechanical coherence, `update` for editing the method or bringing a project's copy up to a newer version. Do not edit those documents in the main session.
   - The separations that matter: `@coder` never writes tests, `@tester` never writes production code, only `@architect` touches the schema, only `@committer` runs `git commit`. Each exists because the alternative is an agent marking its own homework.
-  - Each agent has a canonical document in `agents/` and a Claude Code wrapper in `.claude/agents/`. What may appear in a wrapper, and what may not, is ruled by `rules/policy_workflow.md` -> Agent documents. Read it before editing one; the short version is that a wrapper carries a pointer and hard prohibitions, never a procedure or a format.
-  - To add an agent: write `agents/agent_<name>.md` in the shape of the existing ones - Runs / Goal / Load / Preflight / Procedure / Forbidden - then the wrapper, then add it to the roster in `rules/policy_workflow.md` and to the dispatch list in `CLAUDE.md`. Four files, or it drifts.
+  - Each agent has a canonical document in `ai-agents/` and a Claude Code wrapper in `.claude/agents/`. What may appear in a wrapper, and what may not, is ruled by `ai-rules/policy_workflow.md` -> Agent documents. Read it before editing one; the short version is that a wrapper carries a pointer and hard prohibitions, never a procedure or a format.
+  - To add an agent: write `ai-agents/agent_<name>.md` in the shape of the existing ones - Runs / Goal / Load / Preflight / Procedure / Forbidden - then the wrapper, then add it to the roster in `ai-rules/policy_workflow.md` and to the dispatch list in `CLAUDE.md`. Four files, or it drifts.
 - # Known limits
   - **No continuous integration.** G5 and G8 are conventions until a pipeline runs them. This is the largest gap in the template and the first thing to close on a project that will have more than one contributor.
   - **No operations policy.** Backup of the database file, tested restore, retention, and the upgrade procedure for a self-hosted instance are not covered anywhere. On a project holding financial data, write one before going live rather than after.
-  - **No internationalisation.** The template assumes one interface language and one locale, declared as a single constant (see `rules/policy_coding_guidelines.md` -> Value objects). A genuinely multilingual product needs a decision and a library, and both are out of scope here.
-  - **One runner.** The workflow assumes Claude Code and its subagent dispatch. The canonical docs in `agents/` are plain Markdown and would port, but nothing has been tried elsewhere.
+  - **No internationalisation.** The template assumes one interface language and one locale, declared as a single constant (see `ai-rules/policy_coding_guidelines.md` -> Value objects). A genuinely multilingual product needs a decision and a library, and both are out of scope here.
+  - **One runner.** The workflow assumes Claude Code and its subagent dispatch. The canonical docs in `ai-agents/` are plain Markdown and would port, but nothing has been tried elsewhere.
 - # Roadmap
   - A CI workflow running `format:check`, `lint`, `typecheck`, `test` and `build`, so the machine gates are enforced rather than observed.
   - An operations and backup policy.

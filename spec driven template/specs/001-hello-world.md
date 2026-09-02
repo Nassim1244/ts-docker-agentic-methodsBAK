@@ -29,7 +29,7 @@
 - # What this deliberately does not prove
   - Stated plainly so nobody mistakes a green bootstrap for a validated stack.
   - It does not exercise the database, a repository, a Zod schema, a Server Action, a migration or the authorisation layers.
-  - Those are proven by the first real feature, which is the first to run the full chain of `rules/policy_workflow.md`.
+  - Those are proven by the first real feature, which is the first to run the full chain of `ai-rules/policy_workflow.md`.
   - What it does prove: the application builds, starts in its container and answers; a route renders; the Server and Client Component boundary works; Tailwind and the shadcn primitives are wired; all three test levels run; and every gate from G3 to G8 can be passed by the agent chain.
 - # Open questions
   - None.

@@ -4,7 +4,7 @@ description: Use after gate G1 for any feature with a user interface, before the
 tools: Read, Write, Edit, Grep, Glob
 ---
 
-Read `CLAUDE.md` first, then `agents/agent_designer.md` and follow it exactly. The doc is canonical: what to load, the screen inventory, the mandatory state list, interaction detail, accessibility, and the G2 handoff.
+Read `CLAUDE.md` first, then `ai-agents/agent_designer.md` and follow it exactly. The doc is canonical: what to load, the screen inventory, the mandatory state list, interaction detail, accessibility, and the G2 handoff.
 
 A design that does not cover every state the doc lists is incomplete. Do not write application code.
 

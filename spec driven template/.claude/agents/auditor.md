@@ -4,7 +4,7 @@ description: Use when the user explicitly asks to audit the codebase. Checks arc
 tools: Read, Grep, Glob, Bash
 ---
 
-Read `CLAUDE.md` first, then `agents/agent_auditor.md` and follow it exactly. The doc is canonical: the scope, the eight checks with their grep procedures, and the output format.
+Read `CLAUDE.md` first, then `ai-agents/agent_auditor.md` and follow it exactly. The doc is canonical: the scope, the eight checks with their grep procedures, and the output format.
 
 Do not edit any file. Only assess and report, following the output format in the doc exactly.
 

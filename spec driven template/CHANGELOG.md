@@ -2,6 +2,23 @@
   - Versions of the spec-driven template itself, independent of any project built from it. SemVer.
   - How a project catches up on a newer version, and why there is no link back to this repository: `README.md` -> Versioning and back-porting.
   - Most recent version first.
+- # 2.0.0 - 2026-09-02
+  - MAJOR because it moves folders every project references. Nothing breaks at runtime - the tree is documentation - but a project taking this update has to move its own directories, and any path it wrote in its own notes stops resolving. That is a change no upgrade may apply silently, which is exactly what MAJOR exists to signal: it is the one classification that overrides "local divergence wins" in the upgrade path.
+  - ## Changed
+    - `rules/` renamed to `ai-rules/`, `agents/` renamed to `ai-agents/`. About 160 references rewritten across 33 files.
+    - The reason is collision, not tidiness. Once the template lands in a real application these folders sit at the root beside `src/`, `prisma/` and `tests/`, and `rules/` at the root of a billing system reads as the business rules - the first project built on this template has thirty-six of them, numbered RG-01 to RG-36. `agents/` collides the day the product grows an AI feature of its own. The prefix also groups what drives the method, so a listing separates method from product at a glance.
+    - `.claude/agents/` keeps its name. It is Claude Code's convention and cannot move; it is already namespaced by `.claude/`, so the asymmetry costs nothing.
+    - `context/` keeps its name. It holds project state a human reads, not rules that drive the method, so the prefix would claim something untrue about it.
+    - **The 1.1.0 entry below was not rewritten.** Its paths are the paths that existed when it was published. Check 5 of `@ai-method` now excludes `CHANGELOG.md` for that reason: an entry naming a file that has since moved is accurate history, and editing it to satisfy a check would falsify the record.
+  - ## Added
+    - `docker/` holds the `Dockerfile` and the compose file, written at bootstrap step 10 with `build.context` pointing at the repository root. `.dockerignore` and `.env.example` deliberately stay at the root: Docker resolves the first against the build context and Next.js loads `.env` from the project root, so an example living beside the compose file would be copied to where nothing reads it.
+    - Bootstrap step 10b: two operating scripts in `docker/`. `restart.sh` restarts the container without rebuilding or migrating. `update.sh` backs up the database, builds, recreates, and waits on `/api/health`.
+    - `update.sh` **aborts if the backup fails**, before anything else runs. The entrypoint applies `prisma migrate deploy` to a file holding years of financial data, and a migration is the only step in that script with no undo. Step 10b also asks where backups go and how many to keep, and records the answer, because the template still has no operations policy to default to.
+    - Neither script may run a destructive Docker command. An operator running `update.sh` monthly must not be one flag away from `down -v`, which deletes the database.
+  - ## Decided
+    - `ai-rules/policy_techstack.md` no longer promises `docker compose up` from the root, since the compose file moved. It promises one command, and names the two scripts.
+    - `ai-rules/policy_commits.md`: anything under `docker/` now triggers all four pre-commit checks, and a staged shell script asks for `shellcheck`. These are the first executables in the tree and the only files an operator runs against a live instance, so the docs-only exemption must not reach them.
+    - `docker/` is out of `@ai-method`'s scope. Those files are deployment, not method, and an operating script is code even at twenty lines.
 - # 1.1.0 - 2026-09-01
   - The release that made the template reusable rather than merely present. Every gap here was found by reading it as a stranger would, from a project about to be bootstrapped from it.
   - ## Added

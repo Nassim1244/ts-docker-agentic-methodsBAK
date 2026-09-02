@@ -5,7 +5,7 @@
 - # Principles
   - Data sovereignty: business data stays on the operator's machine. No external service stores user or financial data.
   - One language end to end: TypeScript everywhere.
-  - Operational simplicity: `docker compose up` starts everything.
+  - Operational simplicity: one command starts everything, and two scripts in `docker/` cover restarting and updating a deployed instance.
   - Progressive database: SQLite now, PostgreSQL when the need is real (see D-013).
 - # Required
   - Node.js - version pinned in `package.json` `engines` and matched by the Dockerfile base image.
@@ -34,7 +34,7 @@
   - Playwright - end-to-end journeys.
   - ESLint with `typescript-eslint`, `eslint-plugin-react-hooks`, `@next/eslint-plugin-next`, `eslint-plugin-jsx-a11y` (see D-011).
   - Prettier with `prettier-plugin-tailwindcss`.
-  - `pnpm audit` - dependency vulnerability scanning, invoked via `agents/agent_dependency.md`.
+  - `pnpm audit` - dependency vulnerability scanning, invoked via `ai-agents/agent_dependency.md`.
   - Docker and Docker Compose - the only supported deployment target.
 - # Dependencies
   - Pin every direct dependency exactly. No `^`, no `~`, no `*`.
