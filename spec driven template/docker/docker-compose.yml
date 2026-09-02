@@ -1,0 +1,63 @@
+# Skeleton shipped with the spec-driven template. Adapt every CHANGEME.
+# Run from this directory: cd docker && docker compose up -d
+#
+# Placeholders: the compose project name, the image name, and the name of
+# the external network your Caddy instance already runs on.
+
+name: CHANGEME-project
+
+services:
+  app:
+    build:
+      # The build context is the repository root, not this folder.
+      # .dockerignore is resolved against the context, so it lives there too.
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        NODE_VERSION: ${NODE_VERSION:-22}
+    image: CHANGEME-project:latest
+    restart: unless-stopped
+
+    env_file:
+      # Next.js loads .env from the project root, so the example and the real
+      # file both live there. This line is what brings them into the container.
+      - ../.env
+
+    environment:
+      # The path inside the container. The host side is set by the volume below.
+      DATABASE_URL: "file:/data/app.db"
+
+    volumes:
+      # A host directory, not a named volume. update.sh has to be able to copy
+      # the database, and the operator has to be able to put it in their own
+      # backup rotation - neither is practical with Docker-managed storage.
+      #
+      # On Docker Desktop for Windows or macOS, read the caveat in README.md
+      # before keeping this line: SQLite file locking is not reliable across
+      # the bind-mount translation layer, and the alternative is there.
+      - ${DATA_DIR:-./data}:/data
+
+    expose:
+      # Not "ports". Nothing is published to the host: Caddy reaches the
+      # container over the shared network and terminates TLS.
+      - "3000"
+
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    # Created and owned by the existing Caddy stack, not by this file.
+    external: true
+    name: CHANGEME-caddy-network

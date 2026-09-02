@@ -1,7 +1,7 @@
 - # Project
   - Self-hosted web application built with Next.js and TypeScript.
   - Distributed as a Docker image, started with one command from `docker/`.
-  - Data sovereignty: all business data stays on the operator's machine. No user or financial data leaves the host.
+  - Data sovereignty: all business data stays on the operator's machine. No user or data leaves the host.
   - This file is read first by Claude at session start. It is the entry point.
 - # Folder layout
   - To learn the actual current module structure, run a `glob` / directory listing of `src/` at session start - do not read files to discover it, and do not rely on a hand-written map (it drifts). `ai-rules/policy_architecture.md` holds the intended structure (the why and where); the live listing holds what exists now.
@@ -10,11 +10,11 @@
   - tests/ - unit and integration suite, mirrors `src/`.
   - e2e/ - Playwright end-to-end journeys.
   - specs/ - one .md per feature, follows `specs/TEMPLATE.md`.
-  - design/ - design artefacts per feature, one subfolder per spec index (e.g. `design/001/`, `design/002/`). Owned by the designer (see `ai-agents/agent_designer.md`).
+  - design/ - design artefacts per feature, one subfolder per spec index (e.g. `design/001/`, `design/002/`). Owned by the designer (see `ai-agents/agent_designer.md`). This is OPTIONAL.
   - ai-rules/ - policies and decisions (operational rules and their rationale).
   - ai-agents/ - agent workflows, one per agent: product owner, designer, architect, orchestrator, coder, tester, reviewer, committer, auditor, debugger, dependency, ai-method. These are canonical; `.claude/agents/` holds thin wrappers that point at them.
   - context/ - project state (vision, progress).
-  - docker/ - `Dockerfile`, `docker-compose.yml` and the operating scripts. Everything Docker reads, except the two files it resolves against the repository root (see Root files).
+  - docker/ - `Dockerfile`, `docker-compose.yml`, the entrypoint and the operating scripts, with their own `README.md`. Ships as a skeleton to adapt, and is the only code in the tree. Everything Docker reads, except the two files it resolves against the repository root (see Root files).
 - # Root files
   - package.json - pinned dependencies, Node version, and the application `version`, which is the single source of truth for it (see `ai-rules/policy_commits.md` -> Versioning).
   - pnpm-lock.yaml - committed. Never edited by hand (see D-002).

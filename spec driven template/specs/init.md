@@ -88,26 +88,25 @@
   - The version is read from `package.json` at build time and baked into the image. Never hard-code it and never declare it a second time (see `ai-rules/policy_commits.md` -> Versioning).
   - Commit: `feat(app): add health check endpoint`.
 - # 10 - Containerisation
-  - Everything Docker reads or runs lives in `docker/`, except the two files Docker resolves against the repository root.
-  - Write `docker/Dockerfile`: multi-stage - dependencies, build, runtime. The runtime stage runs as a non-root user, contains no dev dependencies, and uses Next's standalone output.
-  - Write `docker/docker-compose.yml` with a single `app` service, `build.context` set to the repository root, a named volume for the SQLite file, and attachment to the external network shared with the existing Caddy instance. No database service, no proxy service.
-  - The container entrypoint runs `prisma migrate deploy` before starting the server.
-  - Add a Docker `healthcheck` pointing at `/api/health`.
+  - `docker/` ships with the template, already holding a skeleton: `Dockerfile`, `docker-compose.yml`, `entrypoint.sh`, `restart.sh`, `update.sh` and its own `README.md`. Adapt it; do not write it again from nothing. It is the only code the template ships, because it is the only part that is nearly identical between projects.
+  - Read `docker/README.md` first, then replace every `CHANGEME`: the compose project name, the image name, and the name of the external network the existing Caddy instance runs on.
+  - Verify rather than trust: the pinned `NODE_VERSION` against `package.json` `engines`, the Prisma CLI path in `entrypoint.sh` against the version you pinned, and `output: "standalone"` in `next.config`, without which the runtime stage has nothing to copy.
+  - **ASK** the user where the database directory lives on the host, and confirm the bind mount is safe there. On Docker Desktop for Windows or macOS it is not: see `ai-rules/policy_architecture.md` -> Deployment shape for the two alternatives. Record the answer as a D-XXX.
+  - Create the data directory and hand it to the runtime uid before the first start, or the application cannot write.
+  - The healthcheck and the migration-on-entrypoint are already in the skeleton. Confirm both fire rather than assuming they do.
   - Tag the image with the version and with `latest` (see `ai-rules/policy_commits.md` -> Versioning).
   - Write `.dockerignore` at the repository root, not in `docker/`. Docker resolves it against the build context, and the build context is the root.
   - Keep `.env.example` at the repository root too. Next.js loads `.env` from the project root, so an example living anywhere else invites someone to copy it next to itself, where nothing will read it.
   - Verify: `cd docker && docker compose up` from a clean checkout produces a reachable application.
   - Commit: `build: add multi-stage dockerfile and compose service`.
 - # 10b - Operating scripts
-  - Write two POSIX shell scripts in `docker/`, executable, each usable from any directory by resolving its own location first. They are the two things an operator does after the first deployment, and an operator who is not the developer will not assemble them from a README.
-  - `docker/restart.sh` - restart the running container without rebuilding. No image build, no migration, no data touched. This is the one to reach for when the application is wedged.
-  - `docker/update.sh` - bring a deployed instance onto a new version:
-    - **Back up the database file first, into a timestamped copy outside the volume, and abort the whole script if that copy fails.** The entrypoint runs `prisma migrate deploy` on a file holding years of financial data, and a migration is the one operation with no undo. Everything else in this script is recoverable; this is the step that makes it so.
-    - Then build the image, recreate the container, and wait on the `/api/health` endpoint before declaring success.
-    - Report the version before and after, and where the backup was written.
-  - Neither script may run a destructive Docker command - no `down -v`, no volume removal, no image pruning. Removing the volume deletes the database, and a script an operator runs monthly must not be one keystroke away from that.
-  - **ASK** the user where backups should be written and how many to keep. Record the answer as a D-XXX; the template has no operations policy to default to.
-  - Commit: `build: add restart and update scripts`.
+  - `restart.sh` and `update.sh` ship with the skeleton. Read both before running either, and keep their two guarantees intact when you adapt them:
+    - `update.sh` **backs up the database first and aborts if that fails**, before anything is built or migrated. The entrypoint applies `prisma migrate deploy` to a file holding years of financial data, and a migration is the one operation with no undo. Everything else in the script is recoverable because of that step.
+    - Neither script runs a destructive Docker command - no `down -v`, no volume removal, no image pruning. An operator running `update.sh` monthly must not be one flag away from deleting the database.
+  - `update.sh` prefers `sqlite3 .backup` over `cp`, because only the former is consistent against a live database. If `sqlite3` is absent on the host it stops the container first. Do not simplify that away.
+  - **ASK** the user where backups are written and how many to keep, and set `BACKUP_DIR` and `BACKUP_KEEP` accordingly. Record the answer as a D-XXX; the template has no operations policy to default to.
+  - Verify both scripts once, on the freshly deployed instance, before the first real feature ships. A backup script that has never been run is not a backup script.
+  - Commit: `build: adapt docker skeleton and operating scripts`.
 - # 11 - Security headers
   - Set `Strict-Transport-Security`, `X-Content-Type-Options`, `Referrer-Policy` and a frame-ancestors policy once, in `next.config` or middleware (see `ai-rules/policy_security.md`).
   - Commit: `feat(app): add security headers`.

@@ -2,6 +2,16 @@
   - Versions of the spec-driven template itself, independent of any project built from it. SemVer.
   - How a project catches up on a newer version, and why there is no link back to this repository: `README.md` -> Versioning and back-porting.
   - Most recent version first.
+- # 2.1.0 - 2026-09-02
+  - ## Fixed
+    - `ai-rules/policy_architecture.md` -> Deployment shape said the SQLite file lives in a **named volume**. That was wrong for this stack. A named volume sits under Docker's own storage, or inside Docker Desktop's virtual machine, where `update.sh` cannot copy it and the operator cannot fold it into their own backup rotation. The rule is now a bind-mounted host directory.
+    - The rule carries its exception rather than pretending there is none: on Docker Desktop for Windows and macOS a bind mount cannot hold a SQLite database safely, because the filesystem translation layer does not carry file locking reliably, and an unreliable lock corrupts rather than errors. Those hosts keep the data directory on the Linux filesystem under WSL2, or use a named volume and extract backups with `docker compose cp`. Bootstrap step 10 now asks which, and records it.
+    - Added the consequence nobody remembers until the container will not start: the runtime user is non-root, and a bind mount's host ownership wins over any `chown` in the image.
+  - ## Added
+    - `docker/` now ships a skeleton - `Dockerfile`, `docker-compose.yml`, `entrypoint.sh`, `restart.sh`, `update.sh` and its own `README.md` - instead of being described in prose for each bootstrap to re-derive.
+    - This is the first code the template ships, and the exception is deliberate. Container configuration is the part that barely varies between projects, and the part where a mistake is silent and expensive: a wrong volume line loses a database, and `update.sh`'s backup-or-abort is safety-critical logic nobody should improvise twice. Everything else stays instructions, because everything else is genuinely project-specific.
+    - `update.sh` prefers `sqlite3 .backup` over `cp`, the former being the only consistent snapshot of a live database, and stops the container first when `sqlite3` is absent. It prunes old backups by `BACKUP_KEEP`, newest first.
+    - Bootstrap steps 10 and 10b now adapt the skeleton and verify it, rather than describe it. Step 10b ends by requiring both scripts to be exercised once on the fresh instance, for the reason it states there.
 - # 2.0.0 - 2026-09-02
   - MAJOR because it moves folders every project references. Nothing breaks at runtime - the tree is documentation - but a project taking this update has to move its own directories, and any path it wrote in its own notes stops resolving. That is a change no upgrade may apply silently, which is exactly what MAJOR exists to signal: it is the one classification that overrides "local divergence wins" in the upgrade path.
   - ## Changed

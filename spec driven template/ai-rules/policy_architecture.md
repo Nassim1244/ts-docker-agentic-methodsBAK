@@ -70,7 +70,9 @@
 - # Deployment shape
   - One `app` service in `docker/docker-compose.yml`, its `build.context` set to the repository root. No database service while on SQLite (see D-013). No reverse-proxy service: the container joins the external network of an existing Caddy instance.
   - `docker/` holds the `Dockerfile`, the compose file and the operating scripts. `.dockerignore` and `.env.example` stay at the repository root, because Docker and Next.js each resolve theirs against the root and would not find them elsewhere.
-  - The SQLite file lives in a named volume, never in the image.
+  - The SQLite file lives on a host directory, bind-mounted, never in the image and never in a Docker-managed volume. The operating scripts have to be able to copy it and the operator has to be able to put it in their own backup rotation; neither is practical when the file sits under Docker's storage or inside Docker Desktop's virtual machine.
+  - The exception is a host where a bind mount cannot hold a SQLite database safely - Docker Desktop for Windows and macOS, whose filesystem translation layer does not carry file locking reliably, and an unreliable lock corrupts rather than errors. There, either keep the data directory on the Linux filesystem under WSL2, or use a named volume and have the backup step extract through `docker compose cp`. Whichever is chosen is recorded as a D-XXX at bootstrap.
+  - The runtime user is non-root, so the host directory must be owned by that uid. A bind mount's host ownership wins over any `chown` in the image.
   - The image is built multi-stage: dependencies, build, runtime. The runtime stage runs as a non-root user and contains no dev dependencies.
   - Migrations run at container start via `prisma migrate deploy`, before the server accepts traffic.
 - # Defaults
