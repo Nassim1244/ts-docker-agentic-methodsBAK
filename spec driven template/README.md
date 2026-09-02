@@ -3,7 +3,7 @@
   - Copy this folder into an empty repository, run `specs/init.md`, and you have a containerised application with the whole chain proven before the first real feature is specified.
   - Version and history: `CHANGELOG.md`.
 - # What this template is
-  - Instructions, not code, with one deliberate exception: `docker/` ships a skeleton, because container configuration is the one part that barely varies between projects and the one where a mistake is silent and expensive.
+  - Instructions, not code, with one deliberate exception: `docker/` and `.devcontainer/` ship skeletons, because container configuration is the one part that barely varies between projects and the one where a mistake is silent and expensive.
   - Opinionated and stack-specific. Next.js with the App Router, TypeScript, Prisma, SQLite, Better Auth, Tailwind, shadcn/ui, Vitest, Playwright, Docker Compose behind an existing Caddy instance.
   - It is **not** stack-agnostic, and pretending otherwise would be the fastest way to ruin it. `ai-rules/policy_architecture.md` is built around Server Actions and the App Router; `ai-rules/decisions.md` D-001 to D-015 assume Prisma and SQLite; `specs/init.md` scaffolds a Next.js project. On a Python service or a CLI, the workflow and the gates transfer, and almost nothing else does.
   - What makes it worth copying is not the stack. It is that every rule is specific enough for `@reviewer` to cite it and refuse a change, which is what separates a policy from a wish.
@@ -47,7 +47,8 @@
   - `ai-agents/agent_*.md` - one workflow per agent, canonical.
   - `.claude/agents/*.md` - thin Claude Code wrappers. Frontmatter, then a pointer to the canonical doc. They exist so Claude Code can dispatch; they are not a second place to put rules.
   - `specs/TEMPLATE.md` - the shape of a spec. `specs/init.md` - the bootstrap. `specs/NNN-*.md` - one per feature.
-  - `docker/` - the only code the template ships: a `Dockerfile`, a compose file, an entrypoint and two operating scripts, with their own `README.md`. A skeleton to adapt at bootstrap step 10, not a working configuration. `.dockerignore` and `.env.example` stay at the repository root, because Docker and Next.js each resolve theirs against the root.
+  - `docker/` - the production and development stacks, an entrypoint and two operating scripts, with their own `README.md`. A skeleton to adapt at bootstrap step 10, not a working configuration. `.dockerignore` and `.env.example` stay at the repository root, because Docker and Next.js each resolve theirs against the root.
+  - `.devcontainer/` - the VS Code development container, adapted at bootstrap step 1b. It and `docker/` are the only code the template ships.
 - # Decision numbering
   - `ai-rules/decisions.md` uses `D-001`, `D-002`, ... - three digits, zero-padded, allocated by `@architect`, append-only.
   - Keep the three-digit form even when a project's own upstream documents use a `D-nn` series of their own. Two series sharing one prefix is a real source of confusion, and the digit count is the cheapest way to tell them apart at a glance.

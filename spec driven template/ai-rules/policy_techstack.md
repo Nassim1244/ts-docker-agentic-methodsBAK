@@ -8,7 +8,7 @@
   - Operational simplicity: one command starts everything, and two scripts in `docker/` cover restarting and updating a deployed instance.
   - Progressive database: SQLite now, PostgreSQL when the need is real (see D-013).
 - # Required
-  - Node.js - version pinned in `package.json` `engines` and matched by the Dockerfile base image.
+  - Node.js - version pinned in `package.json` `engines`, matched by the Dockerfile base image and by the development container. Nothing is installed on the host: every command in this file runs inside the development container (see `policy_architecture.md` -> Development environment).
   - Next.js with the App Router, TypeScript, `strict: true`.
   - React.
   - Tailwind CSS.

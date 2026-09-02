@@ -28,14 +28,14 @@ services:
       DATABASE_URL: "file:/data/app.db"
 
     volumes:
-      # A host directory, not a named volume. update.sh has to be able to copy
-      # the database, and the operator has to be able to put it in their own
-      # backup rotation - neither is practical with Docker-managed storage.
+      # A named volume, not a host directory. Bind-mount source code you are
+      # editing; use a named volume for data that just has to survive. SQLite
+      # file locking is reliable in a named volume on every host, including
+      # Docker Desktop, and nothing on the host - a sync client, a backup
+      # agent, a stray script - can reach the live file.
       #
-      # On Docker Desktop for Windows or macOS, read the caveat in README.md
-      # before keeping this line: SQLite file locking is not reliable across
-      # the bind-mount translation layer, and the alternative is there.
-      - ${DATA_DIR:-./data}:/data
+      # Backups still land on the host: update.sh extracts them. See README.md.
+      - data:/data
 
     expose:
       # Not "ports". Nothing is published to the host: Caddy reaches the
@@ -55,6 +55,9 @@ services:
 
     networks:
       - proxy
+
+volumes:
+  data:
 
 networks:
   proxy:

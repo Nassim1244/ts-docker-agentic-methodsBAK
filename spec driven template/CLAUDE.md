@@ -1,6 +1,7 @@
 - # Project
   - Self-hosted web application built with Next.js and TypeScript.
   - Distributed as a Docker image, started with one command from `docker/`.
+  - Developed inside a container. Nothing is installed on the host; run this session from the development container's terminal, or `pnpm` does not exist for the agents.
   - Data sovereignty: all business data stays on the operator's machine. No user or data leaves the host.
   - This file is read first by Claude at session start. It is the entry point.
 - # Folder layout
@@ -14,7 +15,9 @@
   - ai-rules/ - policies and decisions (operational rules and their rationale).
   - ai-agents/ - agent workflows, one per agent: product owner, designer, architect, orchestrator, coder, tester, reviewer, committer, auditor, debugger, dependency, ai-method. These are canonical; `.claude/agents/` holds thin wrappers that point at them.
   - context/ - project state (vision, progress).
-  - docker/ - `Dockerfile`, `docker-compose.yml`, the entrypoint and the operating scripts, with their own `README.md`. Ships as a skeleton to adapt, and is the only code in the tree. Everything Docker reads, except the two files it resolves against the repository root (see Root files).
+  - docker/ - the production and development stacks, the entrypoint and the operating scripts, with their own `README.md`. Everything Docker reads, except the two files it resolves against the repository root (see Root files).
+  - .devcontainer/ - the VS Code development container. Nothing is installed on the host, so every command runs inside it - including Claude Code itself, or the agents cannot run `pnpm`.
+  - `docker/` and `.devcontainer/` ship as skeletons to adapt, and are the only code in the tree.
 - # Root files
   - package.json - pinned dependencies, Node version, and the application `version`, which is the single source of truth for it (see `ai-rules/policy_commits.md` -> Versioning).
   - pnpm-lock.yaml - committed. Never edited by hand (see D-002).

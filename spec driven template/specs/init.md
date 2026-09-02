@@ -18,6 +18,13 @@
     - Include it - Better Auth, roles, sessions and the middleware are wired at bootstrap. The application is protected from its first commit, and the two layers of D-009 are in place before any feature exists.
     - Skip it - no login, no roles, no session. Faster to a running application, and defensible for a single-operator tool on a private network. The cost is real: D-009 has to be retro-fitted across every feature already written, and the instance must not be exposed on a public URL until it is.
   - Record the answer as a new D-XXX either way. Skipping authentication is a decision, not the absence of one, and the D-XXX is what keeps the debt visible.
+- # 1b - Development container
+  - Nothing is installed on the host. Every command from here on - `pnpm`, `prisma`, the checks the agents run - executes inside the development container, so it has to exist before step 2 can scaffold anything.
+  - `.devcontainer/devcontainer.json` and `docker/docker-compose.dev.yml` ship with the template. Replace their `CHANGEME` names and set `NODE_VERSION`.
+  - **ASK** the user to confirm the repository is not inside a synced folder - OneDrive, Dropbox, iCloud. A sync client will copy `node_modules` and `.next` continuously, and one that touches a live SQLite file corrupts it. If it is, move the repository before going further; this gets harder to undo later, not easier.
+  - Open the repository in VS Code and choose **Reopen in Container**. Confirm `node --version` and `pnpm --version` answer inside it.
+  - **Run Claude Code from the container's terminal from this point on.** `@tester` runs `pnpm test` and `@committer` runs `pnpm lint`; dispatched from a shell outside the container, those commands do not exist and the machine gates cannot pass.
+  - Commit: `build: add development container`.
 - # 2 - Scaffold
   - Create the Next.js application in the repository root:
     - `pnpm create next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*" --use-pnpm`
@@ -88,11 +95,11 @@
   - The version is read from `package.json` at build time and baked into the image. Never hard-code it and never declare it a second time (see `ai-rules/policy_commits.md` -> Versioning).
   - Commit: `feat(app): add health check endpoint`.
 - # 10 - Containerisation
-  - `docker/` ships with the template, already holding a skeleton: `Dockerfile`, `docker-compose.yml`, `entrypoint.sh`, `restart.sh`, `update.sh` and its own `README.md`. Adapt it; do not write it again from nothing. It is the only code the template ships, because it is the only part that is nearly identical between projects.
+  - `docker/` ships with the template, already holding a skeleton: `Dockerfile`, `docker-compose.yml`, `docker-compose.dev.yml`, `entrypoint.sh`, `restart.sh`, `update.sh` and its own `README.md`. Adapt it; do not write it again from nothing. It and `.devcontainer/` are the only code the template ships, because they are the only parts that are nearly identical between projects.
+  - The development stack was already adapted at step 1b. This step covers production only, and the two stay separate stacks with different project names.
   - Read `docker/README.md` first, then replace every `CHANGEME`: the compose project name, the image name, and the name of the external network the existing Caddy instance runs on.
   - Verify rather than trust: the pinned `NODE_VERSION` against `package.json` `engines`, the Prisma CLI path in `entrypoint.sh` against the version you pinned, and `output: "standalone"` in `next.config`, without which the runtime stage has nothing to copy.
-  - **ASK** the user where the database directory lives on the host, and confirm the bind mount is safe there. On Docker Desktop for Windows or macOS it is not: see `ai-rules/policy_architecture.md` -> Deployment shape for the two alternatives. Record the answer as a D-XXX.
-  - Create the data directory and hand it to the runtime uid before the first start, or the application cannot write.
+  - The database is a named volume in both stacks, and needs nothing on the host: the volume inherits the image's ownership of `/data` on first creation. Backups reach the host through `update.sh`, not through the volume type.
   - The healthcheck and the migration-on-entrypoint are already in the skeleton. Confirm both fire rather than assuming they do.
   - Tag the image with the version and with `latest` (see `ai-rules/policy_commits.md` -> Versioning).
   - Write `.dockerignore` at the repository root, not in `docker/`. Docker resolves it against the build context, and the build context is the root.
@@ -103,7 +110,7 @@
   - `restart.sh` and `update.sh` ship with the skeleton. Read both before running either, and keep their two guarantees intact when you adapt them:
     - `update.sh` **backs up the database first and aborts if that fails**, before anything is built or migrated. The entrypoint applies `prisma migrate deploy` to a file holding years of financial data, and a migration is the one operation with no undo. Everything else in the script is recoverable because of that step.
     - Neither script runs a destructive Docker command - no `down -v`, no volume removal, no image pruning. An operator running `update.sh` monthly must not be one flag away from deleting the database.
-  - `update.sh` prefers `sqlite3 .backup` over `cp`, because only the former is consistent against a live database. If `sqlite3` is absent on the host it stops the container first. Do not simplify that away.
+  - `update.sh` snapshots with `sqlite3 ".backup"` inside the container, then extracts with `docker compose cp`. Only that sequence is consistent against a live database, and it is why `sqlite3` is installed in the runtime image. Do not simplify it into a `cp`.
   - **ASK** the user where backups are written and how many to keep, and set `BACKUP_DIR` and `BACKUP_KEEP` accordingly. Record the answer as a D-XXX; the template has no operations policy to default to.
   - Verify both scripts once, on the freshly deployed instance, before the first real feature ships. A backup script that has never been run is not a backup script.
   - Commit: `build: adapt docker skeleton and operating scripts`.

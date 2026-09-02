@@ -34,9 +34,12 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Prisma's query engine needs OpenSSL on the slim image.
+# openssl: Prisma's query engine needs it on the slim image.
+# sqlite3: update.sh runs ".backup" inside the container, the only way to
+# snapshot a live database consistently. About 1.5 MB, against the alternative
+# of stopping the service to copy a file.
 RUN apt-get update \
- && apt-get install -y --no-install-recommends openssl ca-certificates \
+ && apt-get install -y --no-install-recommends openssl ca-certificates sqlite3 \
  && rm -rf /var/lib/apt/lists/*
 
 # No dev dependencies reach this stage: only the standalone output and the
@@ -52,9 +55,10 @@ COPY --from=build /app/node_modules/prisma ./node_modules/prisma
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# /data is the mount point for the database. It is created and owned here so
-# the non-root user can write to it. With a bind mount the host directory's
-# owner wins, so it must be chown'd to the same uid on the host - see README.md.
+# /data is the mount point for the database. A named volume inherits the
+# ownership of its mount point on first creation, so this chown is what makes
+# the volume writable by the non-root user. Nothing is needed on the host,
+# which is one more reason the volume is named rather than bound.
 RUN mkdir -p /data && chown -R node:node /data
 
 USER node

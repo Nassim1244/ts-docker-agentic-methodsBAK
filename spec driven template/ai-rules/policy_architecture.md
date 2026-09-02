@@ -70,9 +70,17 @@
 - # Deployment shape
   - One `app` service in `docker/docker-compose.yml`, its `build.context` set to the repository root. No database service while on SQLite (see D-013). No reverse-proxy service: the container joins the external network of an existing Caddy instance.
   - `docker/` holds the `Dockerfile`, the compose file and the operating scripts. `.dockerignore` and `.env.example` stay at the repository root, because Docker and Next.js each resolve theirs against the root and would not find them elsewhere.
-  - The SQLite file lives on a host directory, bind-mounted, never in the image and never in a Docker-managed volume. The operating scripts have to be able to copy it and the operator has to be able to put it in their own backup rotation; neither is practical when the file sits under Docker's storage or inside Docker Desktop's virtual machine.
-  - The exception is a host where a bind mount cannot hold a SQLite database safely - Docker Desktop for Windows and macOS, whose filesystem translation layer does not carry file locking reliably, and an unreliable lock corrupts rather than errors. There, either keep the data directory on the Linux filesystem under WSL2, or use a named volume and have the backup step extract through `docker compose cp`. Whichever is chosen is recorded as a D-XXX at bootstrap.
-  - The runtime user is non-root, so the host directory must be owned by that uid. A bind mount's host ownership wins over any `chown` in the image.
+  - The SQLite file lives in a named volume, never in the image and never on a bind-mounted host directory. Bind-mount source code being edited; use a named volume for data that only has to survive.
+  - This is also the safe choice for SQLite specifically. File locking is reliable in a named volume on every host, including Docker Desktop, whose filesystem translation layer does not carry locking faithfully - and an unreliable lock corrupts a database rather than raising an error. Nothing on the host can reach the live file either: no sync client, no backup agent, no stray script.
+  - Backups reach the host through the operating script, not through the volume type. It runs `sqlite3 ".backup"` inside the container, the only consistent snapshot of a live database, then extracts it with `docker compose cp`.
+  - The runtime user is non-root. A named volume inherits the ownership of its mount point on first creation, so the image's `chown` is what makes it writable and nothing is required on the host.
+- # Development environment
+  - Development runs in a container, described by `.devcontainer/devcontainer.json` and `docker/docker-compose.dev.yml`. Nothing is installed on the host.
+  - The development image is a plain Node image, not the production `Dockerfile`. The production image is non-root, carries no dev dependencies and needs a built application, none of which exists before the project is scaffolded.
+  - Development and production are separate compose stacks with different project names, never a base and an overlay. Compose prefixes volume names with the project name, which is what keeps a development migration away from production data.
+  - The plain `docker-compose.yml` is production. An auto-loaded override file would mean that forgetting a flag runs development configuration on a server; this way, forgetting a flag runs production configuration locally, which is the harmless direction.
+  - `node_modules` lives in a named volume shadowing the source bind mount, so an install does not drag thousands of small files across the filesystem boundary.
+  - The repository must not sit inside a synced folder. A sync client will copy `node_modules` and `.next` continuously, and touching a live SQLite file corrupts it.
   - The image is built multi-stage: dependencies, build, runtime. The runtime stage runs as a non-root user and contains no dev dependencies.
   - Migrations run at container start via `prisma migrate deploy`, before the server accepts traffic.
 - # Defaults

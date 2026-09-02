@@ -2,6 +2,19 @@
   - Versions of the spec-driven template itself, independent of any project built from it. SemVer.
   - How a project catches up on a newer version, and why there is no link back to this repository: `README.md` -> Versioning and back-porting.
   - Most recent version first.
+- # 2.2.0 - 2026-09-02
+  - ## Fixed
+    - The database moves to a **named volume**, reverting the bind mount introduced one version ago. The ordinary rule settles it: bind-mount source code you are editing, and use a named volume for data that only has to survive. 2.1.0 argued the bind mount was needed so backups could reach the host; that was wrong. Backups reach the host because the script puts them there, not because of the volume type.
+    - It is also the safer choice for SQLite. File locking is reliable in a named volume on every host, including Docker Desktop, where a bind mount crosses a filesystem translation layer that does not carry locking faithfully - and an unreliable lock corrupts rather than errors. Nothing on the host can reach the live file either, which matters when the repository sits anywhere a sync client is watching.
+    - The permissions caveat disappears with it: a named volume inherits the ownership of its mount point on first creation, so the image's `chown` is enough and nothing is required on the host.
+    - `update.sh` rewritten to match: `sqlite3 ".backup"` inside the container, then `docker compose cp` to extract. `sqlite3` was added to the runtime image, about 1.5 MB, against the alternative of stopping the service to copy a file.
+  - ## Added
+    - `.devcontainer/devcontainer.json` and `docker/docker-compose.dev.yml`. Development now happens in a container with nothing installed on the host.
+    - **Claude Code must run from the container's terminal.** `@tester` runs `pnpm test` and `@committer` runs `pnpm lint`; dispatched from a host shell with no Node, those commands do not exist and the machine gates cannot pass. This is a requirement, not a preference, and bootstrap step 1b states it.
+    - The development container is built from a plain Node image, not from `docker/Dockerfile`. The production image is non-root, carries no dev dependencies and needs a built application - none of which exists before step 2 has scaffolded the project. Dev and prod images are different images, and the bootstrap would deadlock otherwise.
+    - Development and production are separate stacks with different project names, not a base and an overlay. Compose prefixes volume names with the project name, which is what stops a development migration reaching production data. The plain filename is production, so forgetting a flag runs production configuration locally rather than development configuration on a server.
+    - Installed packages are kept out of the source bind mount, for the reason the policy gives: crossing the filesystem boundary is where Docker Desktop gets slow.
+    - Bootstrap step 1b, before scaffolding, and it asks one thing outright: confirm the repository is not inside a synced folder. OneDrive, Dropbox and iCloud copy `node_modules` and `.next` continuously, and a sync client that touches a live SQLite file corrupts it. Moving the repository gets harder later, not easier.
 - # 2.1.0 - 2026-09-02
   - ## Fixed
     - `ai-rules/policy_architecture.md` -> Deployment shape said the SQLite file lives in a **named volume**. That was wrong for this stack. A named volume sits under Docker's own storage, or inside Docker Desktop's virtual machine, where `update.sh` cannot copy it and the operator cannot fold it into their own backup rotation. The rule is now a bind-mounted host directory.

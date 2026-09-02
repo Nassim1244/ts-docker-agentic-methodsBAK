@@ -6,34 +6,33 @@
 # financial data, and a migration is the only step here with no undo.
 # Everything after the backup is recoverable; the backup is what makes it so.
 #
+# The database lives in a named volume, so the snapshot is taken inside the
+# container with sqlite3 ".backup" - the only consistent way to copy a live
+# SQLite file - and then extracted to the host with "docker compose cp".
+#
 # Deliberately absent: "docker compose down -v", volume removal and image
 # pruning. An operator running this monthly must not be one flag away from
 # deleting the database.
 set -eu
 cd "$(dirname "$0")"
 
-DATA_DIR="${DATA_DIR:-./data}"
 BACKUP_DIR="${BACKUP_DIR:-./backups}"
 BACKUP_KEEP="${BACKUP_KEEP:-10}"
-DB="$DATA_DIR/app.db"
+DB_PATH="${DB_PATH:-/data/app.db}"
+SNAP="/data/_backup.tmp.db"
 
 # --- 1. back up, or stop here ------------------------------------------------
-if [ ! -f "$DB" ]; then
-  echo "no database at $DB - refusing to update an instance I cannot back up"
+if [ "$(docker compose ps -q app)" = "" ]; then
+  echo "the app container is not running - start it before updating"
   exit 1
 fi
 
 mkdir -p "$BACKUP_DIR"
 DEST="$BACKUP_DIR/app-$(date +%Y%m%d-%H%M%S).db"
 
-if command -v sqlite3 >/dev/null 2>&1; then
-  # .backup is consistent against a live database; cp is not.
-  sqlite3 "$DB" ".backup '$DEST'"
-else
-  echo "sqlite3 not found - stopping the container for a consistent copy"
-  docker compose stop app
-  cp "$DB" "$DEST"
-fi
+docker compose exec -T app sh -c "rm -f $SNAP && sqlite3 $DB_PATH \".backup '$SNAP'\""
+docker compose cp "app:$SNAP" "$DEST"
+docker compose exec -T app rm -f "$SNAP"
 
 if [ ! -s "$DEST" ]; then
   echo "backup failed or is empty - aborting before any migration runs"
@@ -58,7 +57,7 @@ while [ "$i" -lt 60 ]; do
       after=$(docker compose images app --format '{{.Tag}}' 2>/dev/null || echo "unknown")
       echo "healthy - $before -> $after"
       echo "backup: $DEST"
-      # --- 4. prune old backups, newest kept --------------------------------
+      # --- 4. prune old backups, newest kept ---------------------------------
       ls -1t "$BACKUP_DIR"/app-*.db 2>/dev/null \
         | tail -n +"$((BACKUP_KEEP + 1))" \
         | while read -r old; do rm -f "$old"; echo "pruned $old"; done
@@ -66,6 +65,7 @@ while [ "$i" -lt 60 ]; do
       ;;
     unhealthy)
       echo "unhealthy after update - the backup is at $DEST"
+      echo "restore: docker compose cp $DEST app:$DB_PATH  (container stopped)"
       echo "logs: docker compose logs app"
       exit 1
       ;;
