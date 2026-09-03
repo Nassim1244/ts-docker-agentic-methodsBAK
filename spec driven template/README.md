@@ -42,12 +42,12 @@
   - `ai-rules/policy_testing.md` - test layout, what to test at which level, database testing, seed data, relevance, coverage stance.
   - `ai-rules/policy_security.md` - threat model, input validation, authorisation, tenant isolation, secrets, data exposure, container hardening.
   - `ai-rules/policy_commits.md` - pre-commit checks, branching, message format, versioning, the release procedure, progress tracking.
-  - `ai-rules/decisions.md` - rationale for **product architecture** only, written by `@architect`. Each entry names the policy that owns the corresponding rule. Load it to review, to propose a decision, or to check why a rule exists - not to look up what the rule is.
+  - `ai-rules/decisions.md` - rationale for **product architecture** only, written by `@architect`. Each entry names the policy that owns the corresponding rule. When it may be read: `CLAUDE.md` -> Workflow.
   - `CHANGELOG.md` - the version history and the rationale for **method** changes, written by `@ai-method`. It is to the method what `ai-rules/decisions.md` is to the architecture, which is why its entries carry a why and not only a what.
   - `ai-agents/agent_*.md` - one workflow per agent, canonical.
   - `.claude/agents/*.md` - thin Claude Code wrappers. Frontmatter, then a pointer to the canonical doc. They exist so Claude Code can dispatch; they are not a second place to put rules.
   - `specs/TEMPLATE.md` - the shape of a spec. `specs/init.md` - the bootstrap. `specs/NNN-*.md` - one per feature.
-  - `docker/` - the production and development stacks, an entrypoint and two operating scripts, with their own `README.md`. A skeleton to adapt at bootstrap step 10, not a working configuration. `.dockerignore` and `.env.example` stay at the repository root, because Docker and Next.js each resolve theirs against the root.
+  - `docker/` - the production and development stacks, an entrypoint and two operating scripts, with their own `README.md`. A skeleton to adapt at bootstrap step 10, not a working configuration.
   - `.devcontainer/` - the VS Code development container, adapted at bootstrap step 1b. It and `docker/` are the only code the template ships.
 - # Decision numbering
   - `ai-rules/decisions.md` uses `D-001`, `D-002`, ... - three digits, zero-padded, allocated by `@architect`, append-only.
@@ -63,7 +63,7 @@
   - Definition, driven by the user: `@product-owner`, `@designer`, `@architect`.
   - Implementation, driven by the orchestrator: `@orchestrator`, `@coder`, `@tester`, `@reviewer`, `@committer`.
   - On demand: `@debugger` for a bug report, `@auditor` for a whole-tree health check, `@dependency` for vulnerability triage, `@ai-method` for the method's own documents.
-  - `@ai-method` is the one agent that governs the method rather than the product. Everything in this file, in `ai-rules/` and in `ai-agents/` is its territory, in two modes: `check` for mechanical coherence, `update` for editing the method or bringing a project's copy up to a newer version. Do not edit those documents in the main session.
+  - `@ai-method` is the one agent that governs the method rather than the product. What falls inside its territory is stated in `ai-agents/agent_ai_method.md` -> Scope, and only there. Two modes: `check` for mechanical coherence, `update` for editing the method or bringing a project's copy up to a newer version. Do not edit those documents in the main session.
   - The separations that matter: `@coder` never writes tests, `@tester` never writes production code, only `@architect` touches the schema, only `@committer` runs `git commit`. Each exists because the alternative is an agent marking its own homework.
   - Each agent has a canonical document in `ai-agents/` and a Claude Code wrapper in `.claude/agents/`. What may appear in a wrapper, and what may not, is ruled by `ai-rules/policy_workflow.md` -> Agent documents. Read it before editing one; the short version is that a wrapper carries a pointer and hard prohibitions, never a procedure or a format.
   - To add an agent: write `ai-agents/agent_<name>.md` in the shape of the existing ones - Runs / Goal / Load / Preflight / Procedure / Forbidden - then the wrapper, then add it to the roster in `ai-rules/policy_workflow.md` and to the dispatch list in `CLAUDE.md`. Four files, or it drifts.

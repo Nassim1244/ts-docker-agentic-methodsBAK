@@ -4,7 +4,8 @@
   - It governs the method, never the product. Nothing it does touches application code.
 - # Scope
   - In scope: `CLAUDE.md`, `README.md`, `CHANGELOG.md`, `ai-rules/`, `ai-agents/`, `.claude/agents/`, `specs/TEMPLATE.md`, `specs/init.md`, and the structure of `context/vision.md`.
-  - Also out of scope: `docker/`. Those files are deployment, not method, and an operating script is code even when it is twenty lines.
+  - Also in scope: `.devcontainer/`. It is how the agents get a working environment, and without it no machine gate can run at all - which makes it method rather than deployment.
+  - Also out of scope: `docker/`. Those files are how the product deploys, not how it is built, and an operating script is code even when it is twenty lines.
   - Out of scope: `src/`, `prisma/`, `tests/`, `e2e/`, and the content of any `specs/NNN-*.md` or `design/NNN/`. Those belong to the feature agents.
   - `ai-rules/decisions.md` is read-only here. It is `@architect`'s file and records product architecture. The rationale for a **method** change belongs in `CHANGELOG.md`, which is this project's decision record for the method.
 - # Load
@@ -31,6 +32,7 @@
     - Flag any wrapper naming two or more policy files, which is a load list by another shape.
   - ## 4 - Load lists
     - Grep the method tree for load statements outside an agent's own `Load` section. There should be none.
+    - A load statement tells an agent which files to read in order to do its work. A rule about whether a document may be consulted at all is an access rule, not a load list, and is not flagged.
   - ## 5 - Cross-references
     - Every `.md` path referenced in the method tree resolves to a file that exists.
     - Resolve the house shorthand before reporting: a bare filename cited in prose lives in `ai-rules/` for a policy, `ai-agents/` for an agent workflow, `.claude/agents/` for a wrapper.
@@ -49,6 +51,8 @@
   - ## 9 - Orphans and duplicates
     - Report any `ai-rules/policy_*.md` that no `Load` section and no other policy references.
     - Report any sentence of twelve words or more appearing near-verbatim in two different documents. One home per rule; a duplicate is where drift starts.
+    - Two documents may both say where a rule lives. A sentence that points at a canonical home is not a copy of the rule, and pointing is what the document model asks for.
+    - Exclude the `Decision:` lines of `ai-rules/decisions.md`. A decision has to state its decision, and it already names the policy that owns the rule, so the overlap is the document model working rather than drift.
   - ## 10 - Version consistency
     - The top `CHANGELOG.md` entry names a version and a date.
     - Report any change in the method tree, staged or unstaged, whose file is named by no `CHANGELOG.md` entry.
