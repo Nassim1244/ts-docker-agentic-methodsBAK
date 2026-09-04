@@ -2,6 +2,12 @@
   - Versions of the spec-driven template itself, independent of any project built from it. SemVer.
   - How a project catches up on a newer version, and why there is no link back to this repository: `README.md` -> Versioning and back-porting.
   - Most recent version first.
+- # 2.7.0 - 2026-09-04
+  - ## Changed
+    - Decisions carry their series as a prefix: functional `FD-001`, architecture `AD-001`, placeholders `FD-XXX` and `AD-XXX`. Bare `D-001` is gone; numbers unchanged.
+    - Prefix, not digit count, separates the two: `D-16` and `D-016` meant unrelated things.
+  - ## Upgrading
+    - MINOR. Rename `D-nnn` to `AD-nnn`, and any functional series to `FD-nnn`. Older entries keep the `D-` form, annotated after publication.
 - # 2.6.0 - 2026-09-04
   - ## Added
     - Each version is one release commit carrying one annotated `template/v<version>` tag, recorded in `ai-agents/agent_ai_method.md` -> update. Until now nothing tagged the template's history, so an entry's commits could only be found by reading subject lines, and two commits carried two versions each. A tag survives the squash-merge and rebase that `ai-rules/policy_commits.md` -> Branching requires, which is why it is the reference and a commit hash is not.
