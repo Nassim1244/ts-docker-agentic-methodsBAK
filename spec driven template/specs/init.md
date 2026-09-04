@@ -151,7 +151,7 @@
   - Confirm `git status` is clean and no ignored artefact was committed.
   - Report to the user: the decisions recorded during bootstrap, whether authentication was included or skipped, the environment variables they must set, and the command to start the application.
   - When authentication was skipped, restate the consequence in the report rather than leaving it buried in the AD-XXX: the instance must not be exposed on a public URL, and AD-009 is outstanding debt.
-  - **Remind the user to fill `specs/functional/`** - `functional-spec.md`, `data-model.md` and `functional-decisions.md` - before the first iteration is specified. The bootstrap does not write them: they describe the product, not the stack, and no agent can invent them. Until they hold something, `@product-owner` has nothing to derive a feature spec from and every spec written is a guess.
+  - **Remind the user to copy `specs/functional/templates/`** - `functional-spec.md`, `data-model.md` and `functional-decisions.md` - into `specs/functional/` and fill them before the first iteration is specified. The bootstrap does not write them: they describe the product, not the stack, and no agent can invent them. Until they hold something, `@product-owner` has nothing to derive a feature spec from and every spec written is a guess.
   - Say the same thing whenever they are stale rather than empty. A feature spec derived from an outdated functional source is wrong in a way no gate catches.
 - # Notes
   - `.claude/agents/` must be present at the repository root for subagent dispatch to work. If the template was copied without it, recreate it before step 14.

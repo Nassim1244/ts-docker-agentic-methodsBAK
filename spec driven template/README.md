@@ -23,7 +23,7 @@
     - Step 1 asks whether the bootstrap includes authentication. Answer it deliberately - it governs steps 4, 8 and 8b, and skipping it is a decision that gets recorded, not a step that gets forgotten.
     - The bootstrap ends by implementing `specs/001-hello-world.md` through the full agent chain. Do not shortcut it because the feature is trivial. The point is to prove the chain, and a chain proven on a trivial feature is far cheaper to debug than one first exercised on a real one.
   - ## 4 - Fill the functional source
-    - `specs/functional/` ships as three skeletons: `functional-spec.md`, `data-model.md`, `functional-decisions.md`. They describe the product, not the stack, so the bootstrap does not write them and no agent can invent them.
+    - `specs/functional/templates/` ships three skeletons: `functional-spec.md`, `data-model.md`, `functional-decisions.md`. Copy them into `specs/functional/` and fill them there. They describe the product, not the stack, so the bootstrap does not write them and no agent can invent them.
     - Fill them before specifying the first iteration. `@product-owner` derives every feature spec from them, and stops if they are silent on the request.
     - Keep them current afterwards. They outlive every iteration, and a feature spec derived from a stale functional source is wrong in a way no gate catches.
   - ## 5 - Delete the smoke test
@@ -50,7 +50,7 @@
   - `CHANGELOG.md` - the version history and the rationale for **method** changes, written by `@ai-method`. It is to the method what `ai-rules/decisions.md` is to the architecture, which is why an entry that changes a rule carries its why and not only a what.
   - `ai-agents/agent_*.md` - one workflow per agent, canonical.
   - `.claude/agents/*.md` - thin Claude Code wrappers. Frontmatter, then a pointer to the canonical doc. They exist so Claude Code can dispatch; they are not a second place to put rules.
-  - `specs/functional/` - the functional source: `functional-spec.md`, `data-model.md`, `functional-decisions.md`. Ships as three skeletons to fill.
+  - `specs/functional/` - the functional source: `functional-spec.md`, `data-model.md`, `functional-decisions.md`. `specs/functional/templates/` ships the three skeletons to copy in and fill.
   - `specs/iteration/README.md` - the iteration layout and the index convention. `specs/iteration/TEMPLATE.md` - the shape of a spec. `specs/iteration/v<NN>/` - one file per feature.
   - `specs/init.md` - the bootstrap. `specs/001-hello-world.md` - the smoke test. Both stay at the root of `specs/`; neither is an iteration feature.
   - `docker/` - what it holds: `CLAUDE.md` -> Folder layout. A skeleton to adapt at bootstrap step 10, not a working configuration.
