@@ -79,6 +79,7 @@
     - Shape it as one subtitle per topic - `Retry policy reworked:` - and under it one line per idea, each a single sentence carrying its own reason. A topic with one idea is that line alone, no subtitle.
     - A topic needing more than about four ideas is a version bundling changes that belong in separate ones.
     - Set the version. MAJOR when a rule invalidates work already done under the old one; MINOR for a new rule, agent or section; PATCH for a clarification, a broken reference or a typo.
+    - One version, one release commit, one annotated tag: `git tag -a template/v<version>`. The tag is the only stable reference to the commits an entry covers, since squash-merge and rebase rewrite hashes - which is why an entry names files, specs and decisions and never a hash. The `template/` prefix keeps it clear of the `v*` tags `ai-rules/policy_commits.md` -> Releases gives a product release.
     - Run `check` again. Present the diff, the version, and both check results. Wait for approval.
   - ## 2 - Updating a project's copy
     - The project's current version is the top entry of its own `CHANGELOG.md`, frozen at the moment it was copied.
