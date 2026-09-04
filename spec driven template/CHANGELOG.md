@@ -2,6 +2,13 @@
   - Versions of the spec-driven template itself, independent of any project built from it. SemVer.
   - How a project catches up on a newer version, and why there is no link back to this repository: `README.md` -> Versioning and back-porting.
   - Most recent version first.
+- # 2.9.0 - 2026-09-04
+  - ## Changed
+    - Functional source:
+      - The three skeletons move to `specs/functional/templates/`: `functional-spec.md`, `data-model.md`, `functional-decisions.md`. Copy them into `specs/functional/` and fill them there.
+      - Keeps the blank skeleton available as a reference after the real files are filled in, and separates it from the durable functional source it seeds.
+  - ## Upgrading
+    - MINOR, but it moves files. Move `specs/functional/*.md` into `specs/functional/templates/` if the project has not yet filled them; leave a project's already-filled functional source where it is.
 - # 2.8.0 - 2026-09-04
   - ## Added
     - Functional source:
