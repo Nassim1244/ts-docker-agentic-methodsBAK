@@ -43,7 +43,7 @@
   - `ai-rules/policy_security.md` - threat model, input validation, authorisation, tenant isolation, secrets, data exposure, container hardening.
   - `ai-rules/policy_commits.md` - pre-commit checks, branching, message format, versioning, the release procedure, progress tracking.
   - `ai-rules/decisions.md` - rationale for **product architecture** only, written by `@architect`. Each entry names the policy that owns the corresponding rule. When it may be read: `CLAUDE.md` -> Workflow.
-  - `CHANGELOG.md` - the version history and the rationale for **method** changes, written by `@ai-method`. It is to the method what `ai-rules/decisions.md` is to the architecture, which is why its entries carry a why and not only a what.
+  - `CHANGELOG.md` - the version history and the rationale for **method** changes, written by `@ai-method`. It is to the method what `ai-rules/decisions.md` is to the architecture, which is why an entry that changes a rule carries its why and not only a what.
   - `ai-agents/agent_*.md` - one workflow per agent, canonical.
   - `.claude/agents/*.md` - thin Claude Code wrappers. Frontmatter, then a pointer to the canonical doc. They exist so Claude Code can dispatch; they are not a second place to put rules.
   - `specs/TEMPLATE.md` - the shape of a spec. `specs/init.md` - the bootstrap. `specs/NNN-*.md` - one per feature.

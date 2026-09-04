@@ -32,7 +32,6 @@
   - ## 3 - Write the functional spec
     - Create `specs/NNN-<kebab-name>.md` from `specs/TEMPLATE.md`, using the next unused index.
     - Fill every field under `# ── FUNCTIONAL SPEC ──` as `specs/TEMPLATE.md` specifies, and leave the technical half untouched; it belongs to `@architect`.
-    - Two things the template does not say: aim for three to eight acceptance criteria, and be generous with Out of scope, which is the field that prevents scope creep later.
   - ## 4 - Present at G1
     - Show the user the spec path and a summary of: the goal, the acceptance criteria, and what you put out of scope.
     - State explicitly that this is gate G1 and nothing proceeds until they approve.

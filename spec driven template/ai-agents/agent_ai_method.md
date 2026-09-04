@@ -75,7 +75,7 @@
     - If no document owns it, say so rather than inventing a place. Creating a policy file has its own bar in `CLAUDE.md` -> Adding a new policy file; meet it or put the rule in the closest existing home.
     - Search the tree for the rule before writing it. A rule that already exists elsewhere is amended in place, never restated in a second document.
     - When the change touches an agent, apply the four-file invariant of `ai-rules/policy_workflow.md` -> Agent documents: canonical document, wrapper, roster, dispatch list. Fewer than four is a defect.
-    - Write the `CHANGELOG.md` entry: the gist of the change and **why**, never what the diff already shows. An entry that only lists what moved is worthless six months later, and one that narrates the diff is unread.
+    - Write the `CHANGELOG.md` entry: the shortest line per idea that is still useful in six months, never what the diff already shows. Add the **why** only where the line does not already carry it.
     - Shape it as one subtitle per topic - `Retry policy reworked:` - and under it one line per idea, each a single sentence carrying its own reason. A topic with one idea is that line alone, no subtitle.
     - A topic needing more than about four ideas is a version bundling changes that belong in separate ones.
     - Set the version. MAJOR when a rule invalidates work already done under the old one; MINOR for a new rule, agent or section; PATCH for a clarification, a broken reference or a typo.
@@ -96,7 +96,7 @@
   - Applying any change in `update` mode before presenting it and receiving approval.
   - Inventing a rule to resolve an ambiguity. Raise it.
   - Issuing a judgment as a `check` finding. If it needs discernment, it is a finding for the user or for `@reviewer`, not a failed check.
-  - Bumping the version without a `CHANGELOG.md` entry, or writing an entry without its rationale.
+  - Bumping the version without a `CHANGELOG.md` entry.
   - Editing a published `CHANGELOG.md` entry. Correct it with a new one.
   - Overwriting a project's deliberate divergence during an upgrade.
   - Adding a rule to a second document because it seemed useful there too. That is the failure this agent exists to prevent.

@@ -10,11 +10,11 @@
 - # Acceptance criteria
   - <Concrete, testable check 1.>
   - <Concrete, testable check 2.>
-  - <Concrete, testable check 3.>
+  - <Concrete, testable check 3. Three to eight in total.>
 - # Design
   - <`design/NNN/` for a feature with a user interface, or "N/A" with a one-line reason.>
 - # Out of scope (functional)
-  - <Everything discussed and deliberately excluded, to prevent scope creep.>
+  - <Everything discussed and deliberately excluded. Be generous here; this is the field that prevents scope creep later.>
 - # Open questions
   - <Anything unresolved, and who needs to answer it. "None" is a valid answer; a hidden guess is not.>
 - # ── TECHNICAL SPEC ───────────────────────────────────────────

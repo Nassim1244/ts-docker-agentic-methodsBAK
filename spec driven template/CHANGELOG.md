@@ -2,6 +2,12 @@
   - Versions of the spec-driven template itself, independent of any project built from it. SemVer.
   - How a project catches up on a newer version, and why there is no link back to this repository: `README.md` -> Versioning and back-porting.
   - Most recent version first.
+- # 2.5.3 - 2026-09-04
+  - ## Changed
+    - Acceptance-criteria count and "be generous with Out of scope" moved from `ai-agents/agent_product_owner.md` to `specs/TEMPLATE.md`.
+    - Changelog entries carry a why only where the line does not already give one; a move or a rename is one line.
+  - ## Upgrading
+    - PATCH.
 - # 2.5.2 - 2026-09-04
   - ## Fixed
     - Retry policy reworked:
