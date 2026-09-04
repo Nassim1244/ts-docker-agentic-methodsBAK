@@ -41,7 +41,7 @@
 - # Subagents (Claude Code)
   - When running under Claude Code, you must dispatch each task to the matching subagent in `.claude/agents/`: `product-owner`, `designer`, `architect`, `orchestrator`, `coder`, `tester`, `reviewer`, `committer`, `auditor`, `debugger`, `dependency`, `ai-method`.
   - Do not handle these tasks in the main session - that defeats the context isolation.
-  - Never skip `@tester`. The coder must not author tests; the tester is the sole author of the `tests/` and `e2e/` trees.
+  - Never skip `@tester`. Who owns the `tests/` and `e2e/` trees: `ai-rules/policy_testing.md` -> Ownership.
   - If a subagent cannot be invoked, fails, or returns an error, stop and ask the user how to proceed. Never silently fall back to the main session.
   - When writing a subagent prompt, pass file paths - never read the files yourself and inline their content into the prompt. The subagent must read all referenced files itself. Extracting and transmitting file content defeats context isolation and risks silent omission or interpretation.
 - # Adding a new policy file

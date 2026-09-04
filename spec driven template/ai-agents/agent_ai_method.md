@@ -28,7 +28,8 @@
     - The three counts agree: files on disk, roster entries, dispatch list entries.
   - ## 3 - Wrapper content
     - Apply `ai-rules/policy_workflow.md` -> Agent documents. A wrapper carries a pointer and prohibitions, nothing else.
-    - Flag any wrapper containing: a literal format string, an enumeration of three or more items, a list of files to load, or a numbered or ordered procedure.
+    - Flag any wrapper containing: a literal format string, an enumeration of three or more of the method's documents beyond the two its pointer names, a list of files to load, or a numbered or ordered procedure.
+    - The frontmatter `description:` naming what the agent does - its steps, its checks, the subjects it covers - is routing information, and is what Claude Code matches on to dispatch. Flag a description only where it enumerates documents, which is a load list in disguise.
     - Flag any wrapper naming two or more policy files, which is a load list by another shape.
   - ## 4 - Load lists
     - Grep the method tree for load statements outside an agent's own `Load` section. There should be none.
@@ -53,6 +54,9 @@
     - Report any sentence of twelve words or more appearing near-verbatim in two different documents. One home per rule; a duplicate is where drift starts.
     - Two documents may both say where a rule lives. A sentence that points at a canonical home is not a copy of the rule, and pointing is what the document model asks for.
     - Exclude the `Decision:` lines of `ai-rules/decisions.md`. A decision has to state its decision, and it already names the policy that owns the rule, so the overlap is the document model working rather than drift.
+    - Exclude an agent's preflight refusal line. Four agents refuse in the same words because they are performing the same act, and the rule behind it lives once, in `ai-rules/policy_workflow.md` -> Handoff rules. Wording a deliberate consistency differently to satisfy a word count makes the tree harder to read, not cleaner.
+    - Exclude any document outside the method tree. `docker/` is out of scope by the Scope section above, so half of such a pair can never be resolved from here, and the two texts are written for different readers: the policy states the rule for the agents, the README explains it to the operator running the stack. Check 5 already scopes itself to the method tree, and this is the same restriction for the same reason.
+    - Exclude a prohibition that a wrapper repeats from its canonical document. `ai-rules/policy_workflow.md` -> Agent documents permits that duplication by name and gives the reason: the wrapper is the one text whose reading is guaranteed. It is also the longest verbatim overlap in the tree, so a check that does not name it reports the permitted case before it reports a real one.
   - ## 10 - Version consistency
     - The top `CHANGELOG.md` entry names a version and a date.
     - Report any change in the method tree, staged or unstaged, whose file is named by no `CHANGELOG.md` entry.

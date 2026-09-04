@@ -47,7 +47,7 @@
   - `ai-agents/agent_*.md` - one workflow per agent, canonical.
   - `.claude/agents/*.md` - thin Claude Code wrappers. Frontmatter, then a pointer to the canonical doc. They exist so Claude Code can dispatch; they are not a second place to put rules.
   - `specs/TEMPLATE.md` - the shape of a spec. `specs/init.md` - the bootstrap. `specs/NNN-*.md` - one per feature.
-  - `docker/` - the production and development stacks, an entrypoint and two operating scripts, with their own `README.md`. A skeleton to adapt at bootstrap step 10, not a working configuration.
+  - `docker/` - what it holds: `CLAUDE.md` -> Folder layout. A skeleton to adapt at bootstrap step 10, not a working configuration.
   - `.devcontainer/` - the VS Code development container, adapted at bootstrap step 1b. It and `docker/` are the only code the template ships.
 - # Decision numbering
   - `ai-rules/decisions.md` uses `D-001`, `D-002`, ... - three digits, zero-padded, allocated by `@architect`, append-only.

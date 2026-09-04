@@ -36,7 +36,6 @@
 - # Releases
   - Only on `main`, only with a clean tree, only when every gate has passed.
   - Follow `ai-rules/policy_commits.md` -> Releases step by step. It is a procedure, not a guideline.
-  - State the computed version and the reason for the bump before applying it.
   - The clean-checkout verification is not optional. An image that has never been started is not a release, only a build.
 - # Forbidden
   - Committing when a pre-commit check failed.

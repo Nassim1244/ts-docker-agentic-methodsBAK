@@ -81,7 +81,7 @@
   - The plain `docker-compose.yml` is production. An auto-loaded override file would mean that forgetting a flag runs development configuration on a server; this way, forgetting a flag runs production configuration locally, which is the harmless direction.
   - `node_modules` lives in a named volume shadowing the source bind mount, so an install does not drag thousands of small files across the filesystem boundary.
   - The repository must not sit inside a synced folder. A sync client will copy `node_modules` and `.next` continuously, and touching a live SQLite file corrupts it.
-  - The image is built multi-stage: dependencies, build, runtime. The runtime stage runs as a non-root user and contains no dev dependencies.
+  - The image is built multi-stage: dependencies, build, runtime. What the runtime stage must not contain: `policy_security.md` -> Container and dependency hardening.
   - Migrations run at container start via `prisma migrate deploy`, before the server accepts traffic.
 - # Defaults
   - Composition over inheritance.

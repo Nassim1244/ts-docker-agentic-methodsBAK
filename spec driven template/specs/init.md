@@ -20,7 +20,7 @@
   - Record the answer as a new D-XXX either way. Skipping authentication is a decision, not the absence of one, and the D-XXX is what keeps the debt visible.
 - # 1b - Development container
   - Nothing is installed on the host. Every command from here on - `pnpm`, `prisma`, the checks the agents run - executes inside the development container, so it has to exist before step 2 can scaffold anything.
-  - **ASK** the user to confirm the repository is not inside a synced folder - OneDrive, Dropbox, iCloud. A sync client will copy `node_modules` and `.next` continuously, and one that touches a live SQLite file corrupts it. If it is, move the repository before going further; this gets harder to undo later, not easier.
+  - **ASK** the user to confirm the repository is not inside a synced folder - OneDrive, Dropbox, iCloud. The rule and why it matters: `ai-rules/policy_architecture.md` -> Development environment. If it is, move the repository before going further; this gets harder to undo later, not easier.
   - ## Host prerequisites
     - This is the one step with prerequisites outside the repository, and none of them announce themselves when missing. Confirm all three before opening VS Code.
     - A Docker daemon installed and **running** - Docker Desktop with the WSL2 backend on Windows. "Reopen in Container" fails without naming this as the cause.
@@ -58,7 +58,7 @@
   - Create `src/lib/config.ts`: a Zod schema over `process.env`, parsed once at module load, exporting a typed frozen object (see D-014).
   - At bootstrap it declares at least `NODE_ENV`, `DATABASE_URL` and `LOG_LEVEL`.
   - When step 1 chose to include authentication, it also declares `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`. When authentication was skipped, do not declare them. A required variable nobody can give a meaning to is how a config module starts rotting.
-  - A missing or malformed variable must fail startup with a message naming the variable. Write a test for that.
+  - Startup must fail on a missing or malformed variable, as `ai-rules/policy_architecture.md` -> Configuration requires. Write a test for that.
   - Create `.env.example` listing every variable with a placeholder, and, when authentication is included, a comment on how to generate `BETTER_AUTH_SECRET`. Never a real value.
   - Create `.env` locally. Confirm it is git-ignored.
   - Commit: `feat(config): add validated environment configuration`.
