@@ -10,7 +10,7 @@
     - Staged changes touch `package.json`, `pnpm-lock.yaml`, `tsconfig.json`, `next.config.*` or anything under `docker/`: run all four checks.
     - Staged changes include a shell script: run `shellcheck` on it if available, and state plainly that it was not run if it is not. `docker/` holds the only executables in the tree, and they are the ones an operator runs on a live instance.
     - Docs-only commits (changes confined to `ai-rules/`, `ai-agents/`, `.claude/`, `context/`, `specs/`, `design/`, `CLAUDE.md`, `README.md`, `CHANGELOG.md`, `LICENSE`, `.gitignore`): no pre-commit checks required. Format, lint and type checks have nothing to say about Markdown.
-    - Staged changes touch the method itself (`ai-rules/`, `ai-agents/`, `.claude/`, `.devcontainer/`, `CLAUDE.md`, `README.md`, `specs/TEMPLATE.md`, `specs/init.md`): no machine check applies, but `@ai-method` in `check` mode must have returned PASS. The method governs every feature built afterwards, so it is the one docs change that is not exempt from review.
+    - Staged changes touch the method itself (`ai-rules/`, `ai-agents/`, `.claude/`, `.devcontainer/`, `CLAUDE.md`, `README.md`, `specs/iteration/TEMPLATE.md`, `specs/iteration/README.md`, `specs/init.md`): no machine check applies, but `@ai-method` in `check` mode must have returned PASS. The method governs every feature built afterwards, so it is the one docs change that is not exempt from review.
   - Always invoke tooling through the package manager scripts (`pnpm lint`, `pnpm typecheck`, `pnpm test`). Never call a globally installed `eslint`, `tsc`, `vitest` or `prettier`.
   - Stage only the files belonging to the logical change. No blanket `git add .`.
   - Never commit `node_modules/`, `.next/`, a `.env` file, a database file, coverage output or a secret. `.gitignore` covers this; a deviation is a bug.
@@ -65,7 +65,7 @@
   - Never move or delete a published `v*` tag. A mistake is corrected by a new version, never by retagging.
   - Never release with an uncommitted change, a failing gate, or a migration that has not been applied to a clean database at least once.
 - # Traceability
-  - When implementing a spec, name it in the body: `Implements specs/001-<feature>.md`.
+  - When implementing a spec, name it in the body: `Implements specs/iteration/v1/v01-001-<feature>.md`.
   - When following a decision, cite it: `Per AD-004`.
   - When a commit contains a migration, name it in the body: `Migration: 20260731120000_add_invoice_status`.
 - # Progress tracking
@@ -76,7 +76,7 @@
     - A migration is applied.
     - The roadmap in `context/vision.md` changed.
   - Do not update for: typo fixes, formatting, internal refactors without behavioural change, work-in-progress commits, dependency bumps.
-  - Format: one line per change, dated, citing the spec or decision: `YYYY-MM-DD - <event> - specs/NNN-<name>.md`.
+  - Format: one line per change, dated, citing the spec or decision: `YYYY-MM-DD - <event> - specs/iteration/v<NN>/v<NN>-<NNN>-<name>.md`.
   - Stage the `context/progress.md` change in the same commit when the update is tied to that commit's content; otherwise commit it as `docs: update progress`.
 - # Examples
   - `feat(invoices): add monthly numbering sequence`

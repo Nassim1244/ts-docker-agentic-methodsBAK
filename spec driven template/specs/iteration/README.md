@@ -1,0 +1,18 @@
+- # Iterations
+  - One folder per iteration, one file per feature. `v1/` is the first shipped scope, `v2/` the next, and so on.
+  - The functional source these are derived from lives in `specs/functional/`. A feature spec never restates it; it cites it.
+  - Before specifying an iteration, confirm `specs/functional/` still describes the product as it is now. A feature spec derived from a stale functional source is wrong in a way no gate catches.
+- # Naming
+  - `v<NN>-<NNN>-<short-name>.md` - the iteration, then the feature index within that iteration, then a short kebab-case name.
+  - Both numbers are zero-padded: the iteration to two digits, the feature to three. `v01-001-settings.md`, `v01-002-referential.md`, `v02-001-payments.md`.
+  - **The feature index restarts at `001` in every iteration.** `v02-001` is the first feature of V2, not the ninth feature overall. The iteration prefix is what makes the number unique, which is the point of carrying it.
+  - Order within an iteration is dependency order, not priority order. A feature is numbered after everything it reads.
+- # The index
+  - `v<NN>-<NNN>` is the **index** referred to throughout the method - `design/<index>/`, the traceability line in a commit, the spec reference in a technical spec.
+  - So the design artefacts for `v01-002-referential.md` live in `design/v01-002/`, and its commits carry `Implements specs/iteration/v1/v01-002-referential.md`.
+  - The short name is not part of the index. It exists to make the file readable in a listing, and renaming it breaks nothing.
+- # What does not live here
+  - `specs/init.md` and `specs/001-hello-world.md` are bootstrap artefacts, not iteration features. They stay at the root of `specs/`, and the smoke test is deleted once the first real feature ships (see `README.md` -> Instantiating a new project).
+  - `specs/functional/` holds the durable functional source - what the product does and why. It outlives every iteration and is never numbered as one.
+- # The shape of a file here
+  - `specs/iteration/TEMPLATE.md` is the shape every file in an iteration folder follows. Copy it; do not improvise a structure.

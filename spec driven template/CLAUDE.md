@@ -10,8 +10,9 @@
   - prisma/ - `schema.prisma` and the `migrations/` folder. Owned by the architect (see `ai-agents/agent_architect.md`).
   - tests/ - unit and integration suite, mirrors `src/`.
   - e2e/ - Playwright end-to-end journeys.
-  - specs/ - one .md per feature, follows `specs/TEMPLATE.md`.
-  - design/ - design artefacts per feature, one subfolder per spec index (e.g. `design/001/`, `design/002/`). Owned by the designer (see `ai-agents/agent_designer.md`). This is OPTIONAL.
+  - specs/functional/ - the durable functional source: what the product does, its data model, and the `FD-nnn` decisions behind both. Outlives every iteration. Owned by the user.
+  - specs/iteration/ - one folder per iteration, one .md per feature, following `specs/iteration/TEMPLATE.md`. Naming and the index convention: `specs/iteration/README.md`.
+  - design/ - design artefacts per feature, one subfolder per spec index (e.g. `design/v01-001/`, `design/v01-002/`). Owned by the designer (see `ai-agents/agent_designer.md`). This is OPTIONAL.
   - ai-rules/ - policies and decisions (operational rules and their rationale).
   - ai-agents/ - agent workflows, one per agent: product owner, designer, architect, orchestrator, coder, tester, reviewer, committer, auditor, debugger, dependency, ai-method. These are canonical; `.claude/agents/` holds thin wrappers that point at them.
   - context/ - project state (vision, progress).

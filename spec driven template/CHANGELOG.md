@@ -2,6 +2,22 @@
   - Versions of the spec-driven template itself, independent of any project built from it. SemVer.
   - How a project catches up on a newer version, and why there is no link back to this repository: `README.md` -> Versioning and back-porting.
   - Most recent version first.
+- # 2.8.0 - 2026-09-04
+  - ## Added
+    - Functional source:
+      - `specs/functional/` holds what the product does, its data model and the `FD-nnn` decisions behind both, as three skeletons to fill.
+      - It sits outside the iteration folders because it outlives every one of them.
+      - `@product-owner` loads it and stops when it is silent on a request, naming the document to update first.
+      - `specs/init.md` step 15 reminds the user to fill it and keep it current, since the bootstrap cannot write what describes the product rather than the stack.
+  - ## Changed
+    - Feature specs move into iteration folders:
+      - `specs/NNN-<name>.md` becomes `specs/iteration/v<NN>/v<NN>-<NNN>-<name>.md`, the feature number restarting each iteration.
+      - A flat sequence said nothing about which scope a feature belonged to, and kept climbing across scopes with nothing to do with each other.
+      - The index becomes `v<NN>-<NNN>`, so a design folder is `design/v01-002/`.
+      - `specs/iteration/README.md` is canonical for the naming and index rules; `ai-rules/policy_workflow.md` -> Spec numbering points at it.
+    - `ai-agents/agent_ai_method.md` -> update now says the changelog's topic subtitles group inside the existing sections rather than replacing them, which is where every entry so far read the rule as optional.
+  - ## Upgrading
+    - MINOR, but it moves files.
 - # 2.7.0 - 2026-09-04
   - ## Changed
     - Decisions carry their series as a prefix: functional `FD-001`, architecture `AD-001`, placeholders `FD-XXX` and `AD-XXX`. Bare `D-001` is gone; numbers unchanged.

@@ -27,9 +27,9 @@
   - Adding or changing an agent touches four files: the canonical document, the wrapper, the roster above, and the dispatch list in `CLAUDE.md`. Fewer than four means it drifts.
 - # Sequence for a new feature
   - ## Phase A - Definition (driven by the user)
-    - 1. `@product-owner` interviews the user, challenges scope, writes the FUNCTIONAL SPEC section of `specs/NNN-<name>.md`.
+    - 1. `@product-owner` interviews the user, challenges scope, writes the FUNCTIONAL SPEC section of `specs/iteration/v<NN>/v<NN>-<NNN>-<name>.md`.
       - **G1 - halts. The user approves the functional spec before anything else runs.**
-    - 2. `@designer` runs only if the feature has a user interface. Produces `design/NNN/`.
+    - 2. `@designer` runs only if the feature has a user interface. Produces `design/<index>/`.
       - **G2 - halts. The user approves the design.**
       - Skip for a pure back-end feature, and record the skip in the spec's Design field as "N/A".
     - 3. `@architect` fills the TECHNICAL SPEC section, records any new AD-XXX, and proposes any Prisma schema change and migration.
@@ -71,8 +71,11 @@
   - `@coder` never writes tests. `@tester` never writes production code. `@reviewer` and `@auditor` never write anything.
   - Only `@architect` edits `prisma/schema.prisma` and `prisma/seed.ts`. Only `@committer` runs `git commit`.
 - # Spec numbering
-  - Specs are numbered sequentially from `001`. The number is allocated by `@product-owner` as the next unused index in `specs/`.
-  - The design folder shares the index: `specs/007-payments.md` pairs with `design/007/`.
+  - Feature specs live in `specs/iteration/v<NN>/`, one folder per iteration, and are named `v<NN>-<NNN>-<short-name>.md`. The rules are in `specs/iteration/README.md`; it is canonical and this section does not restate them.
+  - `v<NN>-<NNN>` is the **index**. The feature number restarts at `001` in every iteration, so the iteration prefix is what makes it unique.
+  - The number is allocated by `@product-owner` as the next unused index in the current iteration folder.
+  - The design folder shares the index: `specs/iteration/v1/v01-007-payments.md` pairs with `design/v01-007/`.
+  - The functional source these specs derive from lives in `specs/functional/`. A feature spec cites it; it never restates it.
 - # When to stop and ask
   - The request contradicts an existing AD-XXX.
   - The spec's acceptance criteria cannot be tested as written.

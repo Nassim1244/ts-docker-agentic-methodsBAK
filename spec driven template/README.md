@@ -22,11 +22,15 @@
     - Work through `specs/init.md` in order. Stop at every point marked **ASK**; those are the questions whose answers become AD-XXX entries.
     - Step 1 asks whether the bootstrap includes authentication. Answer it deliberately - it governs steps 4, 8 and 8b, and skipping it is a decision that gets recorded, not a step that gets forgotten.
     - The bootstrap ends by implementing `specs/001-hello-world.md` through the full agent chain. Do not shortcut it because the feature is trivial. The point is to prove the chain, and a chain proven on a trivial feature is far cheaper to debug than one first exercised on a real one.
-  - ## 4 - Delete the smoke test
+  - ## 4 - Fill the functional source
+    - `specs/functional/` ships as three skeletons: `functional-spec.md`, `data-model.md`, `functional-decisions.md`. They describe the product, not the stack, so the bootstrap does not write them and no agent can invent them.
+    - Fill them before specifying the first iteration. `@product-owner` derives every feature spec from them, and stops if they are silent on the request.
+    - Keep them current afterwards. They outlive every iteration, and a feature spec derived from a stale functional source is wrong in a way no gate catches.
+  - ## 5 - Delete the smoke test
     - Once the first real feature ships, delete `specs/001-hello-world.md`, `design/001/`, and the route, component and tests it produced.
     - It is a bootstrap artefact. Leaving it in place means every future reader has to work out whether it is real.
 - # What to fill, what to delete, what never to touch
-  - Fill: `context/vision.md`, and `context/progress.md` as the bootstrap proceeds.
+  - Fill: `context/vision.md`, `specs/functional/`, and `context/progress.md` as the bootstrap proceeds.
   - Fill during the bootstrap: `LICENSE`, `package.json`, `.env.example`, and the AD-XXX entries each **ASK** produces.
   - Delete after the first real feature: `specs/001-hello-world.md`, `design/001/`.
   - Delete on arrival, once read: this file, if you would rather not carry it into the project. Nothing references it.
@@ -46,7 +50,9 @@
   - `CHANGELOG.md` - the version history and the rationale for **method** changes, written by `@ai-method`. It is to the method what `ai-rules/decisions.md` is to the architecture, which is why an entry that changes a rule carries its why and not only a what.
   - `ai-agents/agent_*.md` - one workflow per agent, canonical.
   - `.claude/agents/*.md` - thin Claude Code wrappers. Frontmatter, then a pointer to the canonical doc. They exist so Claude Code can dispatch; they are not a second place to put rules.
-  - `specs/TEMPLATE.md` - the shape of a spec. `specs/init.md` - the bootstrap. `specs/NNN-*.md` - one per feature.
+  - `specs/functional/` - the functional source: `functional-spec.md`, `data-model.md`, `functional-decisions.md`. Ships as three skeletons to fill.
+  - `specs/iteration/README.md` - the iteration layout and the index convention. `specs/iteration/TEMPLATE.md` - the shape of a spec. `specs/iteration/v<NN>/` - one file per feature.
+  - `specs/init.md` - the bootstrap. `specs/001-hello-world.md` - the smoke test. Both stay at the root of `specs/`; neither is an iteration feature.
   - `docker/` - what it holds: `CLAUDE.md` -> Folder layout. A skeleton to adapt at bootstrap step 10, not a working configuration.
   - `.devcontainer/` - the VS Code development container, adapted at bootstrap step 1b. It and `docker/` are the only code the template ships.
 - # Decision numbering

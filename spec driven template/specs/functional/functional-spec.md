@@ -1,0 +1,46 @@
+- # <Product> - Functional Specification
+  - <One paragraph: what the product does, for whom, under what constraints. This document covers the functional scope; the data model is in `data-model.md`.>
+  - <State that this specification is self-contained, and that the reasoning behind each choice lives in `functional-decisions.md`, cited throughout as (FD-nnn).>
+  - <List any domain terms kept in their original language because no clean equivalent exists.>
+- # 1 - Introduction and context
+  - ## Purpose
+    - <What problem this solves, in two or three sentences.>
+  - ## Background
+    - <What exists today, and why it is being replaced or built.>
+  - ## Scope
+    - <In scope, in one list. Out of scope, in another. Be explicit about the second.>
+  - ## Constraints
+    - <Anything non-negotiable that shapes the product: single operator, offline, regulatory, existing data.>
+  - ## Glossary
+    - <Term - definition. One line each. Every term the rest of the document uses without explaining.>
+  - ## Personas
+    - <Who uses this, and what each one is trying to achieve.>
+- # 2 - Business overview
+  - <The domain in plain language, before any feature. Whoever reads only this section should understand the business.>
+  - <The core flows end to end, one short paragraph each.>
+  - <The units the business counts in - money, time, rates - and how they relate.>
+- # 3 - Functional scope (overview)
+  - <A table or list of every module, with its phase marker. One line each; the detail is in section 5.>
+- # 4 - Data model
+  - <One paragraph pointing at `data-model.md`. Do not restate entities here; they drift.>
+- # 5 - Functional modules
+  - ## 5.1 <Module name> *(phase)*
+    - <What it does, what the user sees, what rules apply. Cite (FD-nnn) wherever a rule looks arbitrary.>
+  - ## 5.2 <Module name> *(phase)*
+    - <...>
+- # 6 - Reporting and dashboard *(phase)*
+  - <Indicators, filters, breakdowns. What each figure means and where it comes from.>
+- # 7 - Users and roles
+  - <The role list, and what each may do. If the product has no authentication yet, say so here and state the consequence.>
+- # 8 - Data import and migration *(phase)*
+  - <What existing data has to arrive, in what shape, and what is dropped.>
+- # 9 - Non-functional requirements
+  - <Only the ones with a functional face: retention, volumes, availability, locale, accessibility. The technical ones live in `ai-rules/`.>
+- # 10 - Roadmap and phasing
+  - <What ships in V1, what is designed now and built later, what is deliberately not done at all.>
+  - ## What V1 deliberately does not do
+    - <The list that stops a reader assuming an omission is an oversight.>
+- # 11 - Open questions
+  - <Anything unresolved, and who has to answer it. "None" is a valid answer; a hidden guess is not.>
+- # Appendix A - Internal parameters
+  - <Every configurable constant with its default and its unit. One table.>

@@ -1,0 +1,17 @@
+- # <Product> - Functional decisions
+  - <One paragraph: the decision record behind `functional-spec.md` and `data-model.md`. Those two state what the product does; this one states why, and which alternatives were rejected. They cite it as (FD-nnn).>
+  - <Read it when a rule in the other two documents looks arbitrary, or before reopening a settled question.>
+- # Numbering
+  - Functional decisions are `FD-001`, `FD-002`, ... Architecture decisions live in `ai-rules/decisions.md` as `AD-001`, and business rules in `data-model.md` as `RG-nn`. The prefix is what tells the three series apart; never use a bare `D-`.
+  - Decisions are append-only. Never edit one retroactively - supersede it with a new number and say which one it replaces.
+- # 1 - <Theme>
+  - <One table per theme, three columns: the FD number, the decision in one or two sentences, and what it replaces or resolves.>
+  - | # | Decision | Replaces |
+  - |---|---|---|
+  - | FD-001 | <the decision, stated as a rule> | <the open question, assumption or earlier decision it settles> |
+- # 2 - <Theme>
+  - <...>
+- # Removed from scope
+  - <Decisions that delete something. They are the easiest to forget and the most expensive to rediscover.>
+- # Appendix A - Internal parameters
+  - <The decisions that fixed each default value in the parameter table, with the reasoning.>

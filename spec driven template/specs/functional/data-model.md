@@ -1,0 +1,21 @@
+- # <Product> - Conceptual Data Model
+  - <One paragraph: this is the conceptual model referenced by section 4 of `functional-spec.md`. It is the complete definition of the database for the current scope.>
+  - <State that the reasoning behind each choice lives in `functional-decisions.md`, cited as (FD-nnn).>
+  - <Phase markers: entities marked *(phase N)* are designed now and built later, so nothing has to be retrofitted.>
+- # 1 - Entity-relationship diagram
+  - <The diagram, or a Mermaid block. Entities, relationships, cardinalities. Nothing else.>
+  - <A short note under it naming which entities are conceptual only in the current phase, and what they map onto later.>
+- # 2 - Entity dictionary
+  - <One block or table row per entity: name, purpose in one sentence, its attributes with type and unit.>
+  - <Money, durations and rates carry their storage unit here - integer cents, integer minutes, basis points - not a vague "amount".>
+- # 3 - Cardinalities
+  - <One line per relationship, in the (min,max) form on both sides, with the reading in words.>
+- # 4 - Business rules (RG)
+  - <Numbered `RG-nn`, grouped by theme. Each is a single testable statement about the data, not about the interface.>
+  - ## <Theme>
+    - `RG-01` - <rule>
+    - `RG-02` - <rule>
+- # 5 - Open questions
+  - <Model points still unresolved, and what is blocked until each is answered.>
+- # Appendix A - Internal parameters
+  - <The same table as the functional spec's appendix, or a pointer to it. One home, not two.>
