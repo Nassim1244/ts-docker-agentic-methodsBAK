@@ -20,7 +20,7 @@
 - # ── TECHNICAL SPEC ───────────────────────────────────────────
   - <Filled by @architect after the functional spec is approved. Do not edit by hand.>
 - # Architecture decisions
-  - <Existing D-XXX that apply, and any new D-XXX created for this feature, one line each.>
+  - <Existing AD-XXX that apply, and any new AD-XXX created for this feature, one line each.>
 - # Feature slice
   - <The `src/features/<domain>/` folder, and each file to create or modify with its responsibility in one sentence.>
 - # Data model

@@ -20,10 +20,10 @@
   - `docker/` and `.devcontainer/` ship as skeletons to adapt, and are the only code in the tree.
 - # Root files
   - package.json - pinned dependencies, Node version, and the application `version`, which is the single source of truth for it (see `ai-rules/policy_commits.md` -> Versioning).
-  - pnpm-lock.yaml - committed. Never edited by hand (see D-002).
+  - pnpm-lock.yaml - committed. Never edited by hand (see AD-002).
   - .env.example - every environment variable the app reads, with safe placeholder values. Never contains a real secret. Stays at the root because Next.js loads `.env` from the project root.
   - .dockerignore - stays at the root because Docker resolves it against the build context, which is the root.
-  - LICENSE - chosen at project bootstrap and recorded as a new D-XXX (see `specs/init.md`).
+  - LICENSE - chosen at project bootstrap and recorded as a new AD-XXX (see `specs/init.md`).
 - # Tech stack
   - See `ai-rules/policy_techstack.md`.
 - # Context

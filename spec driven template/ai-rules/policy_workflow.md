@@ -1,12 +1,12 @@
 - # Workflow
   - Read this before starting or resuming any feature, and before dispatching any subagent.
   - Canonical home for: the agent sequence, the gates, retry policy, handoff rules, entry points.
-  - Rationale for the gate design: see D-015.
+  - Rationale for the gate design: see AD-015.
 - # Agent roster
   - Name, role in one line, and the document that governs it. Nothing else. See Agent documents below.
   - `@product-owner` - challenges the request and writes the functional spec. See `ai-agents/agent_product_owner.md`.
   - `@designer` - owns `design/<index>/`. See `ai-agents/agent_designer.md`.
-  - `@architect` - fills the technical spec, records D-XXX, owns `prisma/schema.prisma` and migrations. See `ai-agents/agent_architect.md`.
+  - `@architect` - fills the technical spec, records AD-XXX, owns `prisma/schema.prisma` and migrations. See `ai-agents/agent_architect.md`.
   - `@orchestrator` - drives the implementation chain. See `ai-agents/agent_orchestrator.md`.
   - `@coder` - production code only. See `ai-agents/agent_coder.md`.
   - `@tester` - sole author of `tests/` and `e2e/`. See `ai-agents/agent_tester.md`.
@@ -32,7 +32,7 @@
     - 2. `@designer` runs only if the feature has a user interface. Produces `design/NNN/`.
       - **G2 - halts. The user approves the design.**
       - Skip for a pure back-end feature, and record the skip in the spec's Design field as "N/A".
-    - 3. `@architect` fills the TECHNICAL SPEC section, records any new D-XXX, and proposes any Prisma schema change and migration.
+    - 3. `@architect` fills the TECHNICAL SPEC section, records any new AD-XXX, and proposes any Prisma schema change and migration.
       - **G3 - halts by construction. The architect presents options and waits for the user's answers, including approval of any migration.**
   - ## Phase B - Implementation (driven by the orchestrator)
     - 4. `@orchestrator` reads the completed spec and emits an ordered plan, then dispatches:
@@ -46,7 +46,7 @@
 - # Sequence for a bug
   - 1. `@debugger` reproduces the bug and writes one failing test that captures it.
   - 2. `@orchestrator` takes over from step 5 above: `@coder`, `@tester`, `@reviewer`, `@committer`.
-  - No spec, no design and no architect step, unless the fix requires a schema change or contradicts an existing D-XXX. In that case stop and run `@architect` first.
+  - No spec, no design and no architect step, unless the fix requires a schema change or contradicts an existing AD-XXX. In that case stop and run `@architect` first.
 - # Gates
   - G1 - the functional spec is correct and complete. Human. Halts.
   - G2 - the design is approved. Human. Halts.
@@ -74,9 +74,9 @@
   - Specs are numbered sequentially from `001`. The number is allocated by `@product-owner` as the next unused index in `specs/`.
   - The design folder shares the index: `specs/007-payments.md` pairs with `design/007/`.
 - # When to stop and ask
-  - The request contradicts an existing D-XXX.
+  - The request contradicts an existing AD-XXX.
   - The spec's acceptance criteria cannot be tested as written.
   - A migration would drop or retype a column holding data.
   - A new dependency is needed that is not in `policy_techstack.md`.
-  - A Route Handler is needed outside the closed list in D-003.
+  - A Route Handler is needed outside the closed list in AD-003.
   - Two retries have not cleared a gate.

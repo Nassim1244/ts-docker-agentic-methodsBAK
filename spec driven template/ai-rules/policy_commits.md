@@ -33,7 +33,7 @@
   - build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test.
 - # Scope
   - Optional, one per commit. A feature name or an infrastructure area: `invoices`, `payments`, `auth`, `db`, `ui`, `config`, `docker`, `specs`, `docs`.
-  - Prefer the feature folder name, since the structure is feature-sliced (see D-001).
+  - Prefer the feature folder name, since the structure is feature-sliced (see AD-001).
   - Split the change if more than one scope applies.
 - # Breaking changes
   - Append `!` after the type or scope: `feat(auth)!: require a role on every action`.
@@ -66,13 +66,13 @@
   - Never release with an uncommitted change, a failing gate, or a migration that has not been applied to a clean database at least once.
 - # Traceability
   - When implementing a spec, name it in the body: `Implements specs/001-<feature>.md`.
-  - When following a decision, cite it: `Per D-004`.
+  - When following a decision, cite it: `Per AD-004`.
   - When a commit contains a migration, name it in the body: `Migration: 20260731120000_add_invoice_status`.
 - # Progress tracking
   - After a successful commit, update `context/progress.md` only if the commit changes project state.
   - Update when:
     - A spec moves to a new state (started, completed, blocked, deferred).
-    - A new decision (D-XXX) is recorded.
+    - A new decision (AD-XXX) is recorded.
     - A migration is applied.
     - The roadmap in `context/vision.md` changed.
   - Do not update for: typo fixes, formatting, internal refactors without behavioural change, work-in-progress commits, dependency bumps.
@@ -81,7 +81,7 @@
 - # Examples
   - `feat(invoices): add monthly numbering sequence`
   - `fix(payments): apply tenant scope in listByInvoice`
-  - `docs: add D-007 (integer storage, value objects in domain)`
+  - `docs: add AD-007 (integer storage, value objects in domain)`
   - `feat(db)!: split amount into cents and currency`
 - # Forbidden
   - Trailing period in the subject.

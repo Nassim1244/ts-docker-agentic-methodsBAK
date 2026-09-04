@@ -45,7 +45,7 @@
     - Never flag a gate number that is merely named. Every document explaining why G4 and G7 do not exist has to name them, and a check that reports its own documentation is a check nobody runs twice.
   - ## 7 - Decision numbering
     - `ai-rules/decisions.md` entries are three-digit, sequential, with no gaps and no duplicates.
-    - Report any `D-XXX` cited elsewhere in the tree that does not exist in `ai-rules/decisions.md`.
+    - Report any `AD-XXX` cited elsewhere in the tree that does not exist in `ai-rules/decisions.md`.
   - ## 8 - Stated counts
     - `README.md` states how many agents, policies and decisions exist. Verify each against the tree.
     - These rot silently, which is why they are checked rather than trusted.
