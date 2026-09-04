@@ -75,7 +75,9 @@
     - If no document owns it, say so rather than inventing a place. Creating a policy file has its own bar in `CLAUDE.md` -> Adding a new policy file; meet it or put the rule in the closest existing home.
     - Search the tree for the rule before writing it. A rule that already exists elsewhere is amended in place, never restated in a second document.
     - When the change touches an agent, apply the four-file invariant of `ai-rules/policy_workflow.md` -> Agent documents: canonical document, wrapper, roster, dispatch list. Fewer than four is a defect.
-    - Write the `CHANGELOG.md` entry, including **why**, and what the previous state got wrong. An entry that only lists what moved is worthless six months later.
+    - Write the `CHANGELOG.md` entry: the gist of the change and **why**, never what the diff already shows. An entry that only lists what moved is worthless six months later, and one that narrates the diff is unread.
+    - Shape it as one subtitle per topic - `Retry policy reworked:` - and under it one line per idea, each a single sentence carrying its own reason. A topic with one idea is that line alone, no subtitle.
+    - A topic needing more than about four ideas is a version bundling changes that belong in separate ones.
     - Set the version. MAJOR when a rule invalidates work already done under the old one; MINOR for a new rule, agent or section; PATCH for a clarification, a broken reference or a typo.
     - Run `check` again. Present the diff, the version, and both check results. Wait for approval.
   - ## 2 - Updating a project's copy

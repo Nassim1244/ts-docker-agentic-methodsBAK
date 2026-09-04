@@ -2,6 +2,16 @@
   - Versions of the spec-driven template itself, independent of any project built from it. SemVer.
   - How a project catches up on a newer version, and why there is no link back to this repository: `README.md` -> Versioning and back-porting.
   - Most recent version first.
+- # 2.5.2 - 2026-09-04
+  - ## Fixed
+    - Retry policy reworked:
+      - Who-fixes-what dropped from `ai-rules/policy_workflow.md` and left only in `ai-agents/agent_orchestrator.md`, because the policy sent every retry to `@coder` where the orchestrator routes two of five to `@tester`.
+      - `@reviewer` added to the policy's never-skip line, which only the orchestrator's copy carried.
+      - Never-skip line and retry ceiling dropped from the orchestrator's Forbidden: both restate the policy it points at.
+  - ## Changed
+    - Changelog entries now carry the gist and the why in one line per idea, because they had become a second copy of the diff.
+  - ## Upgrading
+    - PATCH. Nothing changes in substance.
 - # 2.5.1 - 2026-09-03
   - ## Fixed
     - `@ai-method` check 9 excludes documents outside the method tree. It reported `ai-rules/policy_architecture.md` against `docker/README.md`, which is out of scope - the finding could only be cleared by breaking a Forbidden line. The two are not one rule twice: the policy states it for the agents, the README explains it to the operator running the stack. Check 5 already scopes itself this way.

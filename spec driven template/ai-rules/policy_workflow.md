@@ -60,9 +60,9 @@
   - A judgment gate is an agent's verdict. It is only as reliable as the policies backing it, which is why the reviewer must cite the specific rule behind every finding.
   - Known limitation: the machine gates are enforced only by the agents that run them. There is no continuous integration yet, so a commit made outside `@committer` bypasses G5 and G8 entirely. Until CI exists, the gates are a convention, not an enforcement. See `context/vision.md` -> Roadmap -> Later.
 - # Retry policy
-  - On a failed G5 or a CHANGES NEEDED at G6, the orchestrator dispatches `@coder` again with the full failure report attached.
+  - On a failed G5 or a CHANGES NEEDED at G6, the orchestrator dispatches the responsible agent again with the full failure report attached.
   - Maximum two retries. On the third failure the orchestrator halts, reports what was attempted and what still fails, and asks the user how to proceed.
-  - A retry never skips `@tester`. If the failure was a broken test, `@tester` fixes the test; if it was broken behaviour, `@coder` fixes the code. The orchestrator decides which, and says why.
+  - A retry never skips `@tester` or `@reviewer`. Which agent fixes which class of failure is canonical in `ai-agents/agent_orchestrator.md` -> Retry policy. The orchestrator decides, and says why.
   - The orchestrator never edits code itself to make a gate pass.
 - # Handoff rules
   - Pass file paths between agents, never inlined file content. The receiving agent reads what it needs.

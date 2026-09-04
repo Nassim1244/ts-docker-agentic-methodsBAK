@@ -57,7 +57,6 @@
     - Lint, format or type failure -> `@coder`.
     - Policy violation -> `@coder`, citing the exact rule the reviewer named.
     - Missing or irrelevant test -> `@tester`.
-  - A retry never skips `@tester` or `@reviewer`.
 - # Halting
   - Halt and ask the user whenever `policy_workflow.md` -> When to stop and ask applies.
   - Also halt if `@coder` reports that the technical spec is wrong or incomplete. That is an `@architect` problem, not something to work around.
@@ -67,5 +66,4 @@
   - Running `git commit`.
   - Skipping `@tester` or `@reviewer` for any reason.
   - Proceeding past a failed machine gate.
-  - Retrying more than twice.
   - Inlining file content into a subagent prompt instead of passing the path.
