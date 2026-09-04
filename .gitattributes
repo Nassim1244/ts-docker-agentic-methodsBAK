@@ -1,0 +1,3 @@
+# Normalize line endings across machines (repo lives in OneDrive).
+# Text files are stored LF in the repo and checked out LF, regardless of core.autocrlf.
+* text=auto eol=lf
