@@ -1,5 +1,5 @@
 - # Design 001 - Hello world
-  - Supplied with the template. Treated as approved at G2.
+  - Supplied with the template. Treated as approved at G2-design-approval.
   - Serves as the worked example of what `ai-agents/agent_designer.md` expects a design folder to contain. It is short because the feature is trivial; the section headings are the part to copy, not the length.
 - # Screens
   - ## Hello world

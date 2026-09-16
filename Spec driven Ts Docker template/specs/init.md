@@ -141,8 +141,8 @@
 - # 14 - Hello world
   - Implement `specs/001-hello-world.md` through the normal workflow, to prove every gate and every agent handoff works.
   - Do not shortcut it because the feature is trivial. The point is the chain, not the feature.
-  - Run: `@architect` (G3) -> `@orchestrator` -> `@coder` -> `@tester` -> G5 -> `@reviewer` (G6) -> `@committer` (G8).
-  - `@product-owner` and `@designer` are skipped here only because the spec and its design are supplied with the template. Every subsequent feature starts at G1.
+  - Run: `@architect` (G3-architecture-approval) -> `@orchestrator` -> `@coder` -> `@tester` -> G4-quality-checks -> `@reviewer` (G5-review-verdict) -> `@committer` (G6-precommit-checks).
+  - `@product-owner` and `@designer` are skipped here only because the spec and its design are supplied with the template. Every subsequent feature starts at G1-spec-approval.
   - Expect `@architect` to record almost nothing. The feature has no data model, no server boundary, no authorisation and no validation, so those sections of the technical spec read "N/A". That is the correct answer, not a gap to fill.
   - Expect `@tester` to produce a component test and one Playwright journey, and no repository or schema test. There is nothing at those levels to cover.
   - Read `specs/001-hello-world.md` -> What this deliberately does not prove before calling the stack validated. A green bootstrap proves the chain runs; it does not prove the database, the server boundary or the authorisation layers. The first real feature exercises those for the first time.

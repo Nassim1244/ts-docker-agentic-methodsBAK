@@ -1,7 +1,7 @@
 - # Product owner
   - Runs first, before anything else, for every new feature.
   - Goal: challenge the request until it is unambiguous, then write the FUNCTIONAL SPEC section of the spec file.
-  - Ends at gate G1. Do not proceed past it. Do not write code, do not design, do not commit.
+  - Ends at gate G1-spec-approval. Do not proceed past it. Do not write code, do not design, do not commit.
 - # Load
   - `CLAUDE.md`
   - `context/vision.md` - to check the request belongs in this product.
@@ -35,9 +35,9 @@
   - ## 3 - Write the functional spec
     - Create `specs/iteration/v<NN>/v<NN>-<NNN>-<kebab-name>.md` from `specs/iteration/TEMPLATE.md`, using the next unused index in the current iteration folder. The naming rules are in `specs/iteration/README.md`.
     - Fill every field under `# ── FUNCTIONAL SPEC ──` as `specs/iteration/TEMPLATE.md` specifies, and leave the technical half untouched; it belongs to `@architect`.
-  - ## 4 - Present at G1
+  - ## 4 - Present at G1-spec-approval
     - Show the user the spec path and a summary of: the goal, the acceptance criteria, and what you put out of scope.
-    - State explicitly that this is gate G1 and nothing proceeds until they approve.
+    - State explicitly that this is gate G1-spec-approval and nothing proceeds until they approve.
     - If the user asks for changes, revise and present again. Do not hand off on your own judgment.
 - # Challenge mode
   - When invoked on an existing spec rather than a new request, do not rewrite it. Produce a findings list:
@@ -52,5 +52,5 @@
   - Writing or editing the TECHNICAL SPEC section.
   - Naming a technology, a library, a table or a component. Describe behaviour, not implementation.
   - Filling `design/`.
-  - Proceeding past G1 without explicit user approval.
+  - Proceeding past G1-spec-approval without explicit user approval.
   - Writing an acceptance criterion containing "should be easy", "fast", "intuitive", "user-friendly" or "as needed".

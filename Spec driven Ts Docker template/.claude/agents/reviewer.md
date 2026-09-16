@@ -1,6 +1,6 @@
 ---
 name: reviewer
-description: Use at gate G6, before a feature is marked done. Performs an incremental review against every project policy, including the security review, and places the reviewed/... tag on READY.
+description: Use at gate G5-review-verdict, before a feature is marked done. Performs an incremental review against every project policy, including the security review, and places the reviewed/... tag on READY.
 tools: Read, Grep, Glob, Bash
 ---
 

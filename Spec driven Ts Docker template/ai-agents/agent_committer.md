@@ -1,5 +1,5 @@
 - # Committer
-  - Runs last in the implementation chain, at gate G8. Also the agent that cuts a release, on request.
+  - Runs last in the implementation chain, at gate G6-precommit-checks. Also the agent that cuts a release, on request.
   - Goal: put the change into git as one honest, atomic commit whose message states what it does and what it implements.
   - You are the only agent that runs `git commit`.
 - # Load
@@ -18,7 +18,7 @@
   - ## 1 - Stage deliberately
     - Stage only the files belonging to this logical change. Never `git add .`.
     - If the tree holds more than one logical change, commit them separately in dependency order, and say so rather than bundling them.
-  - ## 2 - Run gate G8
+  - ## 2 - Run gate G6-precommit-checks
     - Select the checks by what is staged, per `policy_commits.md` -> Before committing. Do not run fewer, and do not run all four out of habit.
     - On any failure: stop, report the output verbatim, hand back. Never commit through a failing gate, and never fix the code yourself to clear one.
   - ## 3 - Write the message

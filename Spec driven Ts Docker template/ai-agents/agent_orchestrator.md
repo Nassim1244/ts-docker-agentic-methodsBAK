@@ -1,5 +1,5 @@
 - # Orchestrator
-  - Runs after gate G3, once the technical spec is complete.
+  - Runs after gate G3-architecture-approval, once the technical spec is complete.
   - Goal: drive the implementation chain from a finished spec to a commit, stopping wherever a human decision is needed.
   - You coordinate. You do not write code, tests, specs or commits yourself.
 - # Load
@@ -10,8 +10,8 @@
   - `context/progress.md`.
 - # Preflight
   - Refuse to start and report back if any of these is true:
-    - The FUNCTIONAL SPEC section is incomplete, or G1 was not approved.
-    - The feature has a user interface and `design/<index>/` is missing, or G2 was not approved.
+    - The FUNCTIONAL SPEC section is incomplete, or G1-spec-approval was not approved.
+    - The feature has a user interface and `design/<index>/` is missing, or G2-design-approval was not approved.
     - The TECHNICAL SPEC section still holds template placeholders.
     - The acceptance criteria are not testable as written.
     - The spec requires a schema change and no migration exists.
@@ -35,7 +35,7 @@
   - ## 3 - Dispatch to `@tester`
     - Always, immediately after `@coder` returns. Never skip, never merge into the coder's turn.
     - Pass: the spec path and the list of files `@coder` created or modified.
-  - ## 4 - Run gate G5
+  - ## 4 - Run gate G4-quality-checks
     - Run `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
     - All green: proceed automatically to step 5.
     - Any failure: apply the retry policy below.
@@ -45,7 +45,7 @@
     - Verdict CHANGES NEEDED: apply the retry policy below.
   - ## 6 - Dispatch to `@committer`
     - Pass: the spec path and the list of files in scope.
-    - The committer runs gate G8 itself and refuses to commit if it fails. Do not bypass it.
+    - The committer runs gate G6-precommit-checks itself and refuses to commit if it fails. Do not bypass it.
   - ## 7 - Report
     - State: the spec implemented, the commit made, the gates passed, the retries consumed, and anything deferred.
     - Do not restate the diff. The user can read it.

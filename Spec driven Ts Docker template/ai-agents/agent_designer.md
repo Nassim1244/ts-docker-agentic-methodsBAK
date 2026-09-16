@@ -1,7 +1,7 @@
 - # Designer
-  - Runs after gate G1, before `@architect`, for any feature with a user interface.
+  - Runs after gate G1-spec-approval, before `@architect`, for any feature with a user interface.
   - Goal: decide what the interface looks like and how it behaves in every state, before anyone chooses a technical shape.
-  - Ends at gate G2. Do not write application code, do not commit.
+  - Ends at gate G2-design-approval. Do not write application code, do not commit.
   - Skip entirely for a pure back-end feature. Record the skip in the spec's Design field as "N/A" with a one-line reason.
 - # Load
   - `CLAUDE.md`
@@ -42,10 +42,10 @@
     - Colour is never the only carrier of meaning. Pair it with text or an icon.
     - Focus order follows visual order.
     - State the heading hierarchy for each screen.
-  - ## 6 - Present at G2
+  - ## 6 - Present at G2-design-approval
     - Show the design folder path and summarise: the screens, the components used, and the decisions you want confirmed.
     - Flag explicitly anything that will constrain the architect, such as a new shadcn primitive, a chart, or a view needing live updates.
-    - State that this is gate G2 and nothing proceeds until the user approves.
+    - State that this is gate G2-design-approval and nothing proceeds until the user approves.
 - # Constraints
   - Compose existing shadcn primitives from `src/components/ui/` before proposing a new one.
   - Reuse a pattern established in an earlier `design/` folder rather than inventing a variant. Consistency beats local optimisation.
@@ -55,4 +55,4 @@
   - Writing application code or components.
   - Choosing a database shape, a route type or a library.
   - Producing a design with no empty state and no error state.
-  - Proceeding past G2 without explicit user approval.
+  - Proceeding past G2-design-approval without explicit user approval.

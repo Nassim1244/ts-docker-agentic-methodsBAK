@@ -1,6 +1,6 @@
 ---
 name: orchestrator
-description: Use after gate G3 to drive a completed spec through implementation. Plans the work, then dispatches coder, tester, reviewer and committer in sequence, running the machine gates between them and halting on failure.
+description: Use after gate G3-architecture-approval to drive a completed spec through implementation. Plans the work, then dispatches coder, tester, reviewer and committer in sequence, running the machine gates between them and halting on failure.
 tools: Read, Grep, Glob, Bash
 ---
 

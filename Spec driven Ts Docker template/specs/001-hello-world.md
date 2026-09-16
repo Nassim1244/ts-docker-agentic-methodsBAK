@@ -1,6 +1,6 @@
 - # Hello world
 - # ── FUNCTIONAL SPEC ──────────────────────────────────────────
-  - Supplied with the template. Treated as approved at G1.
+  - Supplied with the template. Treated as approved at G1-spec-approval.
   - Deliberately trivial. Its purpose is to prove the project is ready to be coded in, not to deliver product value.
 - # Goal
   - A single page showing the text "Hello world" and a button that changes the text's colour. It exists to prove the toolchain, the container and the agent chain all work end to end before any real feature is specified.
@@ -30,7 +30,7 @@
   - Stated plainly so nobody mistakes a green bootstrap for a validated stack.
   - It does not exercise the database, a repository, a Zod schema, a Server Action, a migration or the authorisation layers.
   - Those are proven by the first real feature, which is the first to run the full chain of `ai-rules/policy_workflow.md`.
-  - What it does prove: the application builds, starts in its container and answers; a route renders; the Server and Client Component boundary works; Tailwind and the shadcn primitives are wired; all three test levels run; and every gate from G3 to G8 can be passed by the agent chain.
+  - What it does prove: the application builds, starts in its container and answers; a route renders; the Server and Client Component boundary works; Tailwind and the shadcn primitives are wired; all three test levels run; and every gate from G3-architecture-approval to G6-precommit-checks can be passed by the agent chain.
 - # Open questions
   - None.
 - # ── TECHNICAL SPEC ───────────────────────────────────────────

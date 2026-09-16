@@ -1,7 +1,7 @@
 - # Workflow
   - Read this before starting or resuming any feature, and before dispatching any subagent.
   - Canonical home for: the agent sequence, the gates, retry policy, handoff rules, entry points.
-  - Rationale for the gate design: see AD-015.
+  - Rationale for the gate design: see AD-016 (supersedes AD-015).
 - # Agent roster
   - Name, role in one line, and the document that governs it. Nothing else. See Agent documents below.
   - `@product-owner` - challenges the request and writes the functional spec. See `ai-agents/agent_product_owner.md`.
@@ -28,39 +28,39 @@
 - # Sequence for a new feature
   - ## Phase A - Definition (driven by the user)
     - 1. `@product-owner` interviews the user, challenges scope, writes the FUNCTIONAL SPEC section of `specs/iteration/v<NN>/v<NN>-<NNN>-<name>.md`.
-      - **G1 - halts. The user approves the functional spec before anything else runs.**
+      - **G1-spec-approval - halts. The user approves the functional spec before anything else runs.**
     - 2. `@designer` runs only if the feature has a user interface. Produces `design/<index>/`.
-      - **G2 - halts. The user approves the design.**
+      - **G2-design-approval - halts. The user approves the design.**
       - Skip for a pure back-end feature, and record the skip in the spec's Design field as "N/A".
     - 3. `@architect` fills the TECHNICAL SPEC section, records any new AD-XXX, and proposes any Prisma schema change and migration.
-      - **G3 - halts by construction. The architect presents options and waits for the user's answers, including approval of any migration.**
+      - **G3-architecture-approval - halts by construction. The architect presents options and waits for the user's answers, including approval of any migration.**
   - ## Phase B - Implementation (driven by the orchestrator)
     - 4. `@orchestrator` reads the completed spec and emits an ordered plan, then dispatches:
     - 5. `@coder` writes production code only.
     - 6. `@tester` writes tests for that feature.
-      - **G5 - machine gate. `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` must pass. Proceeds automatically when green.**
+      - **G4-quality-checks - machine gate. `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` must pass. Proceeds automatically when green.**
     - 7. `@reviewer` checks policy compliance, security and acceptance criteria.
-      - **G6 - judgment gate. Proceeds automatically on READY. On CHANGES NEEDED, see Retry policy.**
+      - **G5-review-verdict - judgment gate. Proceeds automatically on READY. On CHANGES NEEDED, see Retry policy.**
     - 8. `@committer` runs the pre-commit checks and commits.
-      - **G8 - machine gate, inside the committer. See `policy_commits.md` -> Before committing.**
+      - **G6-precommit-checks - machine gate, inside the committer. See `policy_commits.md` -> Before committing.**
 - # Sequence for a bug
   - 1. `@debugger` reproduces the bug and writes one failing test that captures it.
   - 2. `@orchestrator` takes over from step 5 above: `@coder`, `@tester`, `@reviewer`, `@committer`.
   - No spec, no design and no architect step, unless the fix requires a schema change or contradicts an existing AD-XXX. In that case stop and run `@architect` first.
 - # Gates
-  - G1 - the functional spec is correct and complete. Human. Halts.
-  - G2 - the design is approved. Human. Halts.
-  - G3 - the architecture and migration answers are given. Human. Halts by construction.
-  - G5 - format, lint, types and tests are all green. Machine. Proceeds when green.
-  - G6 - the reviewer's verdict. Judgment. Proceeds on READY.
-  - G8 - the pre-commit checks. Machine. Proceeds when green.
-  - There is no G4 or G7. They were the migration approval and the security clearance; the first folded into G3 when `@architect` took ownership of the schema, the second into G6 when `@reviewer` took ownership of the security review.
+  - G1-spec-approval - the functional spec is correct and complete. Human. Halts.
+  - G2-design-approval - the design is approved. Human. Halts.
+  - G3-architecture-approval - the architecture and migration answers are given. Human. Halts by construction.
+  - G4-quality-checks - format, lint, types and tests are all green. Machine. Proceeds when green.
+  - G5-review-verdict - the reviewer's verdict. Judgment. Proceeds on READY.
+  - G6-precommit-checks - the pre-commit checks. Machine. Proceeds when green.
+  - The gates are numbered sequentially, G1 through G6, one per stage of the sequence above. A gate's number is never reused for a different stage; a folded-in stage (the migration approval into G3-architecture-approval, the security clearance into G5-review-verdict) leaves no trace in the numbering, since AD-016 retired the "leave holes" convention that used to preserve one.
   - A human gate means the orchestrator stops and reports, and does not resume until the user answers.
   - A machine gate is a command's exit code. It is objective and reproducible, so the orchestrator may retry it without asking.
   - A judgment gate is an agent's verdict. It is only as reliable as the policies backing it, which is why the reviewer must cite the specific rule behind every finding.
-  - Known limitation: the machine gates are enforced only by the agents that run them. There is no continuous integration yet, so a commit made outside `@committer` bypasses G5 and G8 entirely. Until CI exists, the gates are a convention, not an enforcement. See `context/vision.md` -> Roadmap -> Later.
+  - Known limitation: the machine gates are enforced only by the agents that run them. There is no continuous integration yet, so a commit made outside `@committer` bypasses G4-quality-checks and G6-precommit-checks entirely. Until CI exists, the gates are a convention, not an enforcement. See `context/vision.md` -> Roadmap -> Later.
 - # Retry policy
-  - On a failed G5 or a CHANGES NEEDED at G6, the orchestrator dispatches the responsible agent again with the full failure report attached.
+  - On a failed G4-quality-checks or a CHANGES NEEDED at G5-review-verdict, the orchestrator dispatches the responsible agent again with the full failure report attached.
   - Maximum two retries. On the third failure the orchestrator halts, reports what was attempted and what still fails, and asks the user how to proceed.
   - A retry never skips `@tester` or `@reviewer`. Which agent fixes which class of failure is canonical in `ai-agents/agent_orchestrator.md` -> Retry policy. The orchestrator decides, and says why.
   - The orchestrator never edits code itself to make a gate pass.

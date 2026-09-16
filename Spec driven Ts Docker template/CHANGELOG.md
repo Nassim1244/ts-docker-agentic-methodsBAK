@@ -2,6 +2,13 @@
   - Versions of the spec-driven template itself, independent of any project built from it. SemVer.
   - How a project catches up on a newer version, and why there is no link back to this repository: `README.md` -> Versioning and back-porting.
   - Most recent version first.
+- # 3.0.0 - 2026-09-16
+  - ## Changed
+    - Gates renamed and renumbered:
+      - Every gate now carries a short description in its own name and the numbering runs 1 to 6 with no holes: G1-spec-approval, G2-design-approval, G3-architecture-approval, G4-quality-checks, G5-review-verdict, G6-precommit-checks. Old G5, G6 and G8 become G4, G5 and G6; there is no longer a gap reserved for the folded-in migration approval and security clearance.
+      - `ai-rules/policy_workflow.md` -> Gates and `README.md` -> The gates carry the new names and the new numbering. `ai-rules/decisions.md` AD-016 records the rationale and supersedes AD-015's numbering; AD-015 itself is left as published, per the append-only rule.
+  - ## Upgrading
+    - MAJOR. Every reference to G1, G2, G3, G5, G6 or G8 in a project's own docs, commits and specs now names a retired gate: rename in place using G1->G1-spec-approval, G2->G2-design-approval, G3->G3-architecture-approval, G5->G4-quality-checks, G6->G5-review-verdict, G8->G6-precommit-checks. A project that depends on the old numbering staying stable can skip this version.
 - # 2.10.0 - 2026-09-16
   - ## Added
     - Manual override: the user can write `/force <gate>: <reason>` in a dispatch or direct instruction to skip one named gate (G5, G6, G8) for that action only, never carrying over to the next agent, commit, or the rest of the session. `CLAUDE.md` -> Manual override.

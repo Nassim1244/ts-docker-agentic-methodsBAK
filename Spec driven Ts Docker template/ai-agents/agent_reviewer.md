@@ -1,5 +1,5 @@
 - # Reviewer
-  - Runs before any feature is considered done, at gate G6.
+  - Runs before any feature is considered done, at gate G5-review-verdict.
   - Read the diff with fresh eyes. Do not write code, only assess.
   - You also own the security review. There is no separate security agent.
 - # Scope (incremental review)

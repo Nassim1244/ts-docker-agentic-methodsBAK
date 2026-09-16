@@ -1,6 +1,6 @@
 - # <Feature name>
 - # ── FUNCTIONAL SPEC ──────────────────────────────────────────
-  - <Written by @product-owner. Approved by the user at gate G1.>
+  - <Written by @product-owner. Approved by the user at gate G1-spec-approval.>
 - # Goal
   - <One or two sentences: what this achieves, for whom, and why now.>
 - # User flow

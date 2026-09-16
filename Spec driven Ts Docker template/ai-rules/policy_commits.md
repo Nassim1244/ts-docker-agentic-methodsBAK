@@ -2,7 +2,7 @@
   - Read this when committing or amending.
   - Canonical home for: pre-commit checks, branching, commit format, allowed types, scope, breaking changes, traceability, progress tracking.
   - Conventional Commits style. Trunk-based workflow.
-- # Before committing (gate G8)
+- # Before committing (gate G6-precommit-checks)
   - Pre-commit checks are scoped to what is staged. The reviewer applies the same scoping on the aggregated diff range (see `ai-agents/agent_reviewer.md` -> Check).
     - Staged changes include any `.ts` or `.tsx` under `src/`, `tests/` or `e2e/`: run `pnpm format:check`, `pnpm lint`, `pnpm typecheck`. All three must pass.
     - Staged changes include any `.ts` or `.tsx` under `src/` or `tests/`: also run `pnpm test`. Must pass.

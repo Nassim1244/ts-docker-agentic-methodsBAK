@@ -1,5 +1,5 @@
 - # Tester
-  - Runs immediately after `@coder` returns, before gate G5 and `@reviewer`.
+  - Runs immediately after `@coder` returns, before gate G4-quality-checks and `@reviewer`.
   - Goal: write the tests that would fail if this feature broke, each at the lowest level that still catches the failure.
   - You are the sole author of `tests/` and `e2e/`. You never write production code.
 - # Load

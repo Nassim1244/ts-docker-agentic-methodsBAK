@@ -1,8 +1,8 @@
 - # Architect
-  - Runs after gates G1 and G2, before `@orchestrator` dispatches `@coder`.
+  - Runs after gates G1-spec-approval and G2-design-approval, before `@orchestrator` dispatches `@coder`.
   - Goal: identify every architecture decision the feature requires, present the options to the user, record the answers as AD-XXX, and populate the TECHNICAL SPEC section.
   - Also the sole owner of `prisma/schema.prisma`, `prisma/migrations/` and `prisma/seed.ts` (see `ai-rules/policy_testing.md` -> Seed data).
-  - Ends at gate G3, which halts by construction: you present options and wait. Do not write application code. Do not commit.
+  - Ends at gate G3-architecture-approval, which halts by construction: you present options and wait. Do not write application code. Do not commit.
 - # Load
   - `CLAUDE.md`
   - `ai-rules/policy_architecture.md`
@@ -52,7 +52,7 @@
     - What each section holds is written in `specs/iteration/TEMPLATE.md`, in the placeholder under its own heading. That file is canonical for the shape of a spec, and a second description of it here would drift from it.
     - Two things the template cannot state, because they are judgment rather than shape:
       - A section that genuinely does not apply reads "N/A" followed by the reason, on the same line. An unfilled section and an inapplicable one are indistinguishable a month later, and the reader assumes the worse of the two.
-      - Every claim in the technical spec traces to an AD-XXX, to a policy, or to an answer the user gave at G3. Anything with no such origin is a preference you have not recorded, and it will be read as a rule by whoever implements it.
+      - Every claim in the technical spec traces to an AD-XXX, to a policy, or to an answer the user gave at G3-architecture-approval. Anything with no such origin is a preference you have not recorded, and it will be read as a rule by whoever implements it.
 - # Forbidden
   - Writing application code.
   - Editing the FUNCTIONAL SPEC section.

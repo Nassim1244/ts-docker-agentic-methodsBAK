@@ -1,15 +1,15 @@
 - # Spec-driven template
-  - A working method for building a self-hosted web application with Claude Code: twelve agents, seven policies, fifteen architecture decisions and a gated workflow that stops for a human where a wrong answer is expensive.
+  - A working method for building a self-hosted web application with Claude Code: twelve agents, seven policies, sixteen architecture decisions and a gated workflow that stops for a human where a wrong answer is expensive.
   - Copy this folder into an empty repository, run `specs/init.md`, and you have a containerised application with the whole chain proven before the first real feature is specified.
   - Version and history: `CHANGELOG.md`.
 - # What this template is
   - Instructions, not code, with one deliberate exception: `docker/` and `.devcontainer/` ship skeletons, because container configuration is the one part that barely varies between projects and the one where a mistake is silent and expensive.
   - Opinionated and stack-specific. Next.js with the App Router, TypeScript, Prisma, SQLite, Better Auth, Tailwind, shadcn/ui, Vitest, Playwright, Docker Compose behind an existing Caddy instance.
-  - It is **not** stack-agnostic, and pretending otherwise would be the fastest way to ruin it. `ai-rules/policy_architecture.md` is built around Server Actions and the App Router; `ai-rules/decisions.md` AD-001 to AD-015 assume Prisma and SQLite; `specs/init.md` scaffolds a Next.js project. On a Python service or a CLI, the workflow and the gates transfer, and almost nothing else does.
+  - It is **not** stack-agnostic, and pretending otherwise would be the fastest way to ruin it. `ai-rules/policy_architecture.md` is built around Server Actions and the App Router; `ai-rules/decisions.md` AD-001 to AD-016 assume Prisma and SQLite; `specs/init.md` scaffolds a Next.js project. On a Python service or a CLI, the workflow and the gates transfer, and almost nothing else does.
   - What makes it worth copying is not the stack. It is that every rule is specific enough for `@reviewer` to cite it and refuse a change, which is what separates a policy from a wish.
 - # What it guarantees, and what it does not
   - It guarantees that a feature cannot reach a commit without: an approved functional spec, an approved design when it has an interface, a technical spec with its decisions recorded, tests written by someone other than the author, and a review that names the rule behind every finding.
-  - It does not guarantee that any of this actually ran. There is no continuous integration, so gates G5 and G8 are enforced only by the agents that run them. A commit made outside `@committer` bypasses both. This is a known limit, not an oversight - see Known limits below.
+  - It does not guarantee that any of this actually ran. There is no continuous integration, so gates G4-quality-checks and G6-precommit-checks are enforced only by the agents that run them. A commit made outside `@committer` bypasses both. This is a known limit, not an oversight - see Known limits below.
 - # Instantiating a new project
   - ## 1 - Copy
     - Copy the whole folder into the new repository, including the hidden `.claude/` directory. Without `.claude/agents/`, subagent dispatch does not work and every task silently collapses into the main session, which defeats the context isolation the workflow depends on.
@@ -60,10 +60,10 @@
   - Keep the `AD-` prefix even when a project's own upstream documents number decisions of their own. Two series sharing one prefix is a real source of confusion, and a distinct prefix - not a differing digit count - is what tells them apart at a glance. A functional decision record uses `FD-001`, `FD-002`, ... in the same three-digit form.
   - When a project arrives with an existing functional decision record, state the convention in `CLAUDE.md` on day one: which series lives where, and that no unprefixed `D-` form is used.
 - # The gates
-  - G1 functional spec, G2 design, G3 architecture: human, and they halt. A wrong answer here is judgment, gets more expensive the later it is caught, and a machine cannot detect it.
-  - G5 build and tests, G8 pre-commit: machine. An exit code. The orchestrator may retry without asking.
-  - G6 review: judgment, and proceeds on READY.
-  - There is no G4 and no G7, deliberately. G4 was migration approval, which folded into G3 when `@architect` took ownership of the schema. G7 was security clearance, which folded into G6 when `@reviewer` took ownership of the security review. The numbering is left with holes rather than renumbered, so that a reference to G6 in an old commit or an old spec still means what it meant. Do not close the gaps.
+  - G1-spec-approval functional spec, G2-design-approval design, G3-architecture-approval architecture: human, and they halt. A wrong answer here is judgment, gets more expensive the later it is caught, and a machine cannot detect it.
+  - G4-quality-checks build and tests, G6-precommit-checks pre-commit: machine. An exit code. The orchestrator may retry without asking.
+  - G5-review-verdict review: judgment, and proceeds on READY.
+  - Numbered sequentially, G1 through G6, one per stage: migration approval and security clearance were never gates of their own, they fold into G3-architecture-approval and G5-review-verdict respectively, owned by `@architect` and `@reviewer`. See AD-016 for why the numbering no longer leaves holes for them.
 - # Agents
   - Twelve agents, each with a canonical workflow in `ai-agents/` and a Claude Code wrapper in `.claude/agents/`.
   - Definition, driven by the user: `@product-owner`, `@designer`, `@architect`.
@@ -74,7 +74,7 @@
   - Each agent has a canonical document in `ai-agents/` and a Claude Code wrapper in `.claude/agents/`. What may appear in a wrapper, and what may not, is ruled by `ai-rules/policy_workflow.md` -> Agent documents. Read it before editing one; the short version is that a wrapper carries a pointer and hard prohibitions, never a procedure or a format.
   - To add an agent: write `ai-agents/agent_<name>.md` in the shape of the existing ones - Runs / Goal / Load / Preflight / Procedure / Forbidden - then the wrapper, then add it to the roster in `ai-rules/policy_workflow.md` and to the dispatch list in `CLAUDE.md`. Four files, or it drifts.
 - # Known limits
-  - **No continuous integration.** G5 and G8 are conventions until a pipeline runs them. This is the largest gap in the template and the first thing to close on a project that will have more than one contributor.
+  - **No continuous integration.** G4-quality-checks and G6-precommit-checks are conventions until a pipeline runs them. This is the largest gap in the template and the first thing to close on a project that will have more than one contributor.
   - **No operations policy.** Backup of the database file, tested restore, retention, and the upgrade procedure for a self-hosted instance are not covered anywhere. On a project holding financial data, write one before going live rather than after.
   - **No internationalisation.** The template assumes one interface language and one locale, declared as a single constant (see `ai-rules/policy_coding_guidelines.md` -> Value objects). A genuinely multilingual product needs a decision and a library, and both are out of scope here.
   - **One runner.** The workflow assumes Claude Code and its subagent dispatch. The canonical docs in `ai-agents/` are plain Markdown and would port, but nothing has been tried elsewhere.

@@ -40,9 +40,9 @@
     - Exclude any path under `specs/iteration/v*/` or `specs/functional/`. Feature specs are project content, and the method tree names them only as examples or placeholders, so an unresolved one is expected rather than broken.
     - Exclude `CHANGELOG.md` entirely. It records the past, and the past had different paths: an entry naming a file that has since moved is accurate history, not a broken link. Editing a published entry to satisfy this check would falsify the record.
   - ## 6 - Gate references
-    - The defined gates are G1, G2, G3, G5, G6 and G8. Take that set as given rather than grepping the Gates section, which names G4 and G7 in the sentence explaining their absence. Their numbers are never reused.
+    - The defined gates are G1-spec-approval, G2-design-approval, G3-architecture-approval, G4-quality-checks, G5-review-verdict and G6-precommit-checks. Take that set as given rather than grepping the Gates section. Numbered sequentially since AD-016; a number is never reused for a different stage.
     - Flag a gate number only where it stands in an instruction: preceded by "at", "gate", "past", "before", "after", "reach" or "through", or followed by a dash introducing its definition. Those are the positions a live reference occupies.
-    - Never flag a gate number that is merely named. Every document explaining why G4 and G7 do not exist has to name them, and a check that reports its own documentation is a check nobody runs twice.
+    - Flag a bare `G<n>` with no descriptive suffix wherever it names one of the six live gates - the suffix is part of the name, not decoration, and a bare number is the form that drifts back to meaning nothing on its own.
   - ## 7 - Decision numbering
     - `ai-rules/decisions.md` entries are three-digit, sequential, with no gaps and no duplicates.
     - Report any `AD-XXX` cited elsewhere in the tree that does not exist in `ai-rules/decisions.md`.

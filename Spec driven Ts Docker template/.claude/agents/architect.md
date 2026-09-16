@@ -1,6 +1,6 @@
 ---
 name: architect
-description: Use after gates G1 and G2, before implementation. Presents architecture decision options to the user, records new AD-XXX entries in ai-rules/decisions.md, owns prisma/schema.prisma and migrations, and populates the TECHNICAL SPEC section of the spec file.
+description: Use after gates G1-spec-approval and G2-design-approval, before implementation. Presents architecture decision options to the user, records new AD-XXX entries in ai-rules/decisions.md, owns prisma/schema.prisma and migrations, and populates the TECHNICAL SPEC section of the spec file.
 tools: Read, Write, Edit, Grep, Glob, Bash
 ---
 
