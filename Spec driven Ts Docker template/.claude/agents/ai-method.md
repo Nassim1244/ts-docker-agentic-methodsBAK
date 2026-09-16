@@ -1,6 +1,6 @@
 ---
 name: ai-method
-description: Use to change or verify the method itself - the policies, agent documents, CLAUDE.md, README, CHANGELOG, spec template and bootstrap. Two modes named by the caller. check runs mechanical coherence checks over the method tree. update edits the method in place, or brings a project's copy up to a newer template version. Not for application code.
+description: Use to change or verify the method itself - the documents that define how this project is built. Two modes named by the caller. check runs mechanical coherence checks over the method tree. update edits the method in place, or brings a project's copy up to a newer template version. Not for application code.
 tools: Read, Write, Edit, Grep, Glob, Bash
 ---
 
