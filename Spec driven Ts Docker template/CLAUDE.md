@@ -45,6 +45,12 @@
   - Never skip `@tester`. Who owns the `tests/` and `e2e/` trees: `ai-rules/policy_testing.md` -> Ownership.
   - If a subagent cannot be invoked, fails, or returns an error, stop and ask the user how to proceed. Never silently fall back to the main session.
   - When writing a subagent prompt, pass file paths - never read the files yourself and inline their content into the prompt. The subagent must read all referenced files itself. Extracting and transmitting file content defeats context isolation and risks silent omission or interpretation.
+- # Manual override
+  - This file is read first by every agent (see Load in each `ai-agents/*.md`), so it is the one place an override is guaranteed to be seen - this section is not restated anywhere else.
+  - The user can write `/force <gate>: <reason>` in a dispatch or a direct instruction to skip one named gate for that action only. It never carries over to the next agent, the next commit, or the rest of the session.
+  - Forceable: G5, G6, G8 - the machine and judgment gates. Never forceable: G1, G2, G3 - those are the user's own halts, so there is nothing to force. Also never forceable: anything in `ai-rules/policy_security.md`, and the hard bans in `ai-rules/policy_commits.md` -> Forbidden (force-push to `main`, amending a pushed commit, committing a secret).
+  - A `/force` with no reason is invalid. The agent stops and asks for one instead of proceeding.
+  - An agent that honors a `/force` must say so plainly in its report: which check it skipped, and the stated reason. A forced gate is never silent.
 - # Adding a new policy file
   - Add only when an existing doc holds 30+ lines of rules referenced by 2+ other docs.
 - # Definition of done

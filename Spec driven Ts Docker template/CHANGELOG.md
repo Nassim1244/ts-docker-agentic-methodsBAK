@@ -2,6 +2,11 @@
   - Versions of the spec-driven template itself, independent of any project built from it. SemVer.
   - How a project catches up on a newer version, and why there is no link back to this repository: `README.md` -> Versioning and back-porting.
   - Most recent version first.
+- # 2.10.0 - 2026-09-16
+  - ## Added
+    - Manual override: the user can write `/force <gate>: <reason>` in a dispatch or direct instruction to skip one named gate (G5, G6, G8) for that action only, never carrying over to the next agent, commit, or the rest of the session. `CLAUDE.md` -> Manual override.
+  - ## Upgrading
+    - MINOR, additive. A project with an already-bootstrapped copy gains the capability by copying the updated `CLAUDE.md` -> Manual override section.
 - # 2.9.0 - 2026-09-04
   - ## Changed
     - Functional source:
