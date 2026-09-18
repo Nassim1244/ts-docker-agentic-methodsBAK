@@ -8,6 +8,7 @@ name: CHANGEME-project
 
 services:
   app:
+    container_name: synfactu
     build:
       # The build context is the repository root, not this folder.
       # .dockerignore is resolved against the context, so it lives there too.
