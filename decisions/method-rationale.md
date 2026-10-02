@@ -108,7 +108,7 @@ Append-only. A superseded decision keeps its section here, and a `Superseded by 
   - Bringing batch to Synfactu then becomes a smaller diff, and the stripping is needed for the fork anyway.
   - After the v4.0.0 tag, gated is frozen. The observations made while using gated in Synfactu are kept in `journal/backlog-gated.md` for a possible later update.
 - **Amends MD-001**: while gated is frozen, the rule that a shared-rule change is applied to every template in the same commit is suspended. Shared changes land in batch and get a line in `backlog-gated.md`.
-- **Journal**: two backlogs (`backlog-batch.md` and `backlog-gated.md`) and one `progress.md`. Each progress entry starts with `[batch-nnn]` or `[gated-nnn]`.
+- **Journal**: two backlogs (`backlog-batch.md` and `backlog-gated.md`) and one `progress.md`. Each progress entry starts with `[batch-nnn]` or `[gated-nnn]`. Later the same day (workbench-v0.2.0), `progress.md` was replaced by `journal/roadmap.md` and the root `workbench-changelog.md`, with workbench tags replacing the entry counters.
 - **Rejected**:
   - Forking batch from the current template: the 2.11 to 4.1.0 changes would have to be imported again, and the diff to Synfactu grows.
   - Forking batch straight from Synfactu: gated would keep an untested state, and the stripping would happen without a named, tagged base.

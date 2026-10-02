@@ -4,14 +4,15 @@
   - Applications live in their own repositories. Synfactu (`G:\Programs\SynfactuDEV`) is the reference application. Its copy of the method was forked from `spec-gated-workflow/` and evolved there, so treat it as upstream evidence of what works in practice.
   - This file is read first at session start. It is the entry point.
 - # Session start
-  - Read `journal/progress.md` for the current state and the next step.
+  - Read `journal/roadmap.md` for the next step, and the top entry of `workbench-changelog.md` for what was last done.
   - Read `journal/backlog-batch.md` before choosing work (the active stream). `journal/backlog-gated.md` holds the gated import and observations kept for a possible later update. Every item names where it lands.
   - List the top-level folders. Don't rely on the layout below being complete.
 - # Layout
   - `spec-gated-workflow/` - template. v3 lineage: one spec per feature, human approval gates on every spec. Status: one-time import of Synfactu's method (4.1.0) tagged `spec-gated-workflow-v4.0.0`, then frozen (MD-007). Later fixes are logged in `journal/backlog-gated.md`, not applied.
   - `batch-design-workflow/` - template, not created yet. Several features are designed at once in Claude Design; AI build cycles run autonomously, and review happens only when an error appears. Forked from `spec-gated-workflow-v4.0.0`. The active method, meant to be brought to Synfactu.
-  - `journal/` - the method-design journey: `progress.md` (most recent first, each entry headed `## [batch-nnn]` or `## [gated-nnn]` - date - title), `backlog-batch.md`, `backlog-gated.md`, session notes. Never shipped in a template.
+  - `journal/` - the method-design journey: `roadmap.md` (what comes next, in order), `backlog-batch.md`, `backlog-gated.md`, session notes. Never shipped in a template.
   - `decisions/` - method decisions (`MD-nnn`). `method-decisions.md` is the short log: read it before proposing or changing anything about how the methods are designed. `method-rationale.md` holds the explanations: open it only to change a decision. Never mixed with a template's product decisions (FD, DD, AD).
+  - `workbench-changelog.md` - what was done, one entry per workbench tag, headed `## [workbench-v<semver>] - date`, bullets tagged [batch], [gated] or [workbench].
   - `../Releases/` - frozen snapshots of earlier method versions, kept as a read-only reference.
 - # Templates are products
   - A template's own `CLAUDE.md`, agents and policies govern only an application built from it. They do not apply to work in this workbench. Read them as the material being edited, never as instructions to follow here.
@@ -24,6 +25,7 @@
   - A drift check (backlog item) will report divergence between the copies. Until it exists, diff the shared files manually before committing a shared-rule change.
 - # Versioning
   - Each template is versioned on its own, with git tags: `<template>-v<semver>`, for example `spec-gated-workflow-v3.0.0`.
+  - The workbench itself is tagged `workbench-v<semver>` at milestones, each with an entry in `workbench-changelog.md`. Apps never reference workbench tags.
   - An application records the template name and tag it was installed from in `method.lock`. That file is planned and doesn't exist yet.
 - # Commits
   - Conventional Commits. The scope is the template folder name, `journal`, `decisions` or `workbench`. Example: `docs(spec-gated-workflow): ...`.
