@@ -21,7 +21,7 @@ Method-workbench progress. Most recent first. The work items themselves are in `
 ### Done
 - Template moved into `spec-gated-workflow/`.
 - Workbench root: `CLAUDE.md`, `.gitignore`, `decisions/` (MD-001, MD-002), `journal/`.
-- Baseline tag `spec-gated-workflow-v3.0.0`.
+- `spec-gated-workflow-v*` tags added alongside the old `template/v*` ones, on the same commits (v3.0.0 = `49b307c`). The move commit stays untagged until the next release.
 
 ### Parked
 - Testing philosophy (dedicated session).
