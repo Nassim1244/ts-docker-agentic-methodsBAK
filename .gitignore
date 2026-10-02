@@ -1,0 +1,23 @@
+# Workbench root only. Each template carries its own .gitignore, which applies inside its folder and ships with it.
+
+# Secrets - never commit a real value
+.env
+.env.*
+*.pem
+*.key
+
+# Dependencies and output of workbench scripts (install, drift check)
+node_modules/
+*.log
+
+# OS and editor
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Claude Code - local-only settings, never shared
+.claude/settings.local.json
