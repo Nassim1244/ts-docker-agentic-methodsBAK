@@ -1,6 +1,33 @@
 # Progress
 
-Method-workbench progress. Most recent first. The work items themselves are in `backlog.md`.
+Method-workbench progress. Most recent first. The work items themselves are in `backlog-batch.md` and `backlog-gated.md`. From batch-001 on, each entry is headed `## [batch-nnn]` or `## [gated-nnn]` - date - title.
+
+## [batch-001] - 2026-10-02 - Cloud, concurrency and Synfactu AD triage (grill session)
+
+### Decided
+- **MD-003 Cloud sessions in both templates**:
+  - Branches are `cloud/<type>/<x>`, and statements scoped to one environment start with `Local session only:` or `Cloud session only:`.
+  - Gated takes Synfactu 4.1.0 as it is: one unmerged session per spec.
+  - Batch keeps local sessions on trunk. A cloud session works one feature on its own branch, and only one session can claim a feature (keyed on `Refs:`). The branch rebases onto main and fast-forwards. The gates run again only if main moved.
+- **MD-004**: a minimal cloud setup script (Node/pnpm, frozen install, `prisma generate`), enough for the gates. No Docker or e2e in the cloud.
+- **MD-005**: the architect computes the batch schema up front and can be called back. A migration on a session branch gets an automatic architect check before merging, plus `Risk: schema`.
+- **MD-006 AD triage**:
+  - Kept as template rules and AD lines in the template's own numbering: AD-023, AD-031 (with AD-033 as its exception), AD-034, AD-035, AD-020, and AD-025 to AD-028 merged into one line.
+  - AD-018 stays Synfactu-only.
+  - The template's init money step was found to carry Synfactu's billing bias and becomes conditional.
+- **MD-007 Batch is the target**, to be brought to Synfactu.
+  - Gated takes a one-time import of Synfactu's method 4.1.0, tagged v4.0.0, then is frozen. Batch forks from that tag.
+  - Later shared fixes land in batch only and are logged in `backlog-gated.md`.
+- **Journal**: the backlog is split into `backlog-batch.md` and `backlog-gated.md`. One `progress.md` is kept, with ID-prefixed entries.
+
+### Done
+- MD-003 to MD-007 logged, with rationale.
+- `backlog.md` replaced by `backlog-batch.md` and `backlog-gated.md`.
+- Root `CLAUDE.md` updated: journal layout, gated frozen after import, shared-rule handling.
+
+### Next
+- Grill the testing philosophy: the ratio between testing everything and relying on user feedback.
+- Import Synfactu's method into `spec-gated-workflow/` (`backlog-gated.md` → Import), tag v4.0.0, then fork `batch-design-workflow/`.
 
 ## 2026-10-02 - v4 direction (grill session)
 

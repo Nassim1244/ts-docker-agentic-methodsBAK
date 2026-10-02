@@ -5,12 +5,12 @@
   - This file is read first at session start. It is the entry point.
 - # Session start
   - Read `journal/progress.md` for the current state and the next step.
-  - Read `journal/backlog.md` before choosing work. Every item names where it lands.
+  - Read `journal/backlog-batch.md` before choosing work (the active stream). `journal/backlog-gated.md` holds the gated import and observations kept for a possible later update. Every item names where it lands.
   - List the top-level folders. Don't rely on the layout below being complete.
 - # Layout
-  - `spec-gated-workflow/` - template. v3 lineage: one spec per feature, human approval gates on every spec. Status: maintained. Bugfixes and shared-rule sync only, no new features.
-  - `batch-design-workflow/` - template, not created yet. Several features are designed at once in Claude Design; AI build cycles run autonomously, and review happens only when an error appears. Forked from `spec-gated-workflow/` once that one is fixed.
-  - `journal/` - the method-design journey: `progress.md` (most recent first), `backlog.md`, session notes. Never shipped in a template.
+  - `spec-gated-workflow/` - template. v3 lineage: one spec per feature, human approval gates on every spec. Status: one-time import of Synfactu's method (4.1.0) tagged `spec-gated-workflow-v4.0.0`, then frozen (MD-007). Later fixes are logged in `journal/backlog-gated.md`, not applied.
+  - `batch-design-workflow/` - template, not created yet. Several features are designed at once in Claude Design; AI build cycles run autonomously, and review happens only when an error appears. Forked from `spec-gated-workflow-v4.0.0`. The active method, meant to be brought to Synfactu.
+  - `journal/` - the method-design journey: `progress.md` (most recent first, each entry headed `## [batch-nnn]` or `## [gated-nnn]` - date - title), `backlog-batch.md`, `backlog-gated.md`, session notes. Never shipped in a template.
   - `decisions/` - method decisions (`MD-nnn`). `method-decisions.md` is the short log: read it before proposing or changing anything about how the methods are designed. `method-rationale.md` holds the explanations: open it only to change a decision. Never mixed with a template's product decisions (FD, DD, AD).
   - `../Releases/` - frozen snapshots of earlier method versions, kept as a read-only reference.
 - # Templates are products
@@ -20,7 +20,7 @@
   - Each template carries its own `CHANGELOG.md` for its own versions.
 - # Shared rules
   - Some rules must stay identical across templates: security and data sovereignty, Prisma and architecture ownership, commits and versioning, tech stack and Docker.
-  - They are copied into each template, not linked, so each template stays self-contained. A change to a shared rule is applied to every template in the same commit.
+  - They are copied into each template, not linked, so each template stays self-contained. While `spec-gated-workflow/` is frozen, a shared-rule change lands in `batch-design-workflow/` only and gets a line in `journal/backlog-gated.md` (MD-007).
   - A drift check (backlog item) will report divergence between the copies. Until it exists, diff the shared files manually before committing a shared-rule change.
 - # Versioning
   - Each template is versioned on its own, with git tags: `<template>-v<semver>`, for example `spec-gated-workflow-v3.0.0`.
